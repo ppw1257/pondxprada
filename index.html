@@ -282,8 +282,64 @@
     }
     .ig-hashtag { color: var(--gold); }
 
+    /* ── Goals Section ── */
     .goals-section { border-top: 1px solid var(--border); padding: 14px; }
     .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+
+    /* NEW: 3-column goal card layout for public view */
+    .goals-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .goal-card {
+      background: var(--offwhite);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 6px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .goal-card-icon { font-size: 15px; line-height: 1; }
+    .goal-card-type {
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .goal-card-num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+    .goal-card-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .goal-card-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--black), var(--gold));
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+    .goal-card-label {
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* keep old goal-row for backward compat */
     .goal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .goal-row:last-child { margin-bottom: 0; }
     .goal-icon { font-size: 14px; width: 20px; text-align: center; }
@@ -422,6 +478,17 @@
     #adminView .goal-input { width: 100%; text-align: center; font-family: var(--font-display); font-size: 22px; font-weight: 300; border: none; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--black); padding: 4px 2px; outline: none; transition: border-color 0.15s; }
     #adminView .goal-input:focus { border-color: var(--gold); }
     #adminView .goal-label { font-size: 10px; color: var(--muted); margin-top: 5px; letter-spacing: 0.08em; }
+
+    /* Admin: show preview of formatted number */
+    #adminView .goal-preview {
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-top: 3px;
+      min-height: 16px;
+    }
+
     #adminView .form-row { margin-bottom: 14px; }
     #adminView .form-label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     #adminView .form-input, #adminView .form-select, #adminView .form-textarea { width: 100%; background: var(--offwhite); border: 1px solid var(--border); border-radius: 2px; padding: 10px 12px; font-size: 14px; color: var(--black); font-family: var(--font-body); outline: none; transition: border-color 0.15s; appearance: none; }
@@ -630,7 +697,7 @@
   </div>
   <div class="card">
     <div style="padding:14px 16px 10px; border-bottom:1px solid var(--border)">
-      <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">Set the goal for each action you want fans to complete</div>
+      <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">ใส่ตัวเลขเต็ม — จะแสดงเป็นแบบย่อ (1K, 500K, 1M) ให้แฟนคลับดูเอง</div>
     </div>
     <div class="goals-grid" id="goalsGrid"></div>
     <div style="padding:14px 16px; border-top:1px solid var(--border)">
@@ -795,6 +862,20 @@
 <div id="toast" class="toast" style="display:none"></div>
 
 <script>
+// ─── Number formatter: 1000000 → 1M, 500000 → 500K, 1200 → 1.2K ───────────
+function formatNum(n) {
+  n = parseInt(n) || 0;
+  if (n >= 1000000) {
+    var v = n / 1000000;
+    return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'M';
+  }
+  if (n >= 1000) {
+    var v = n / 1000;
+    return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'K';
+  }
+  return n.toString();
+}
+
 const comments = [
   "Wow!! Pond looked incredible in Milan, hope to see more Prada looks from him!",
   "Pond in Prada is so handsome, truly a worthy honored guest!",
@@ -912,6 +993,15 @@ document.addEventListener('input', e => {
     const prev = document.getElementById('adminUsernamePreview');
     if (prev) prev.innerHTML = 'Displayed as: <strong>@' + (e.target.value.replace(/^@/,'') || 'pondnaravit') + '</strong>';
   }
+  // Admin goals: show live formatted preview
+  if (e.target.classList.contains('goal-input')) {
+    const key = e.target.id.replace('goal_', '');
+    const previewEl = document.getElementById('goal_preview_' + key);
+    if (previewEl) {
+      const n = parseInt(e.target.value) || 0;
+      previewEl.textContent = n > 0 ? '→ แสดงเป็น: ' + formatNum(n) : '';
+    }
+  }
   if (['fCaption','fLabel'].includes(e.target.id)) renderPreview();
 });
 document.addEventListener('change', e => {
@@ -975,19 +1065,41 @@ const icons = {
   starFilled:`<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
 };
 
+// ─── Goals HTML for PUBLIC view — uses formatNum() for compact display ───────
 function goalsHTML(post) {
-  const gL = (post && post.goalLikes) ? parseInt(post.goalLikes) : (adminGoals.likes || 200);
-  const gC = (post && post.goalComments) ? parseInt(post.goalComments) : (adminGoals.comments || 50);
-  const gS = (post && post.goalShares) ? parseInt(post.goalShares) : (adminGoals.shares || 30);
+  const gL = (post && post.goalLikes)    ? parseInt(post.goalLikes)    : (adminGoals.likes    || 0);
+  const gC = (post && post.goalComments) ? parseInt(post.goalComments) : (adminGoals.comments || 0);
+  const gS = (post && post.goalShares)   ? parseInt(post.goalShares)   : (adminGoals.shares   || 0);
   const likes = post ? (parseInt(post.likes) || 0) : 0;
-  const pctL = Math.min(100, Math.round((likes / gL) * 100));
+  const pctL = gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0;
+
   if (!gL && !gC && !gS) return '';
+
+  const cards = [
+    gL ? `<div class="goal-card">
+            <span class="goal-card-icon">❤️</span>
+            <span class="goal-card-type">Likes</span>
+            <span class="goal-card-num">${formatNum(gL)}</span>
+            <div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div>
+          </div>` : '',
+    gC ? `<div class="goal-card">
+            <span class="goal-card-icon">💬</span>
+            <span class="goal-card-type">Comments</span>
+            <span class="goal-card-num">${formatNum(gC)}</span>
+            <div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div>
+          </div>` : '',
+    gS ? `<div class="goal-card">
+            <span class="goal-card-icon">↗️</span>
+            <span class="goal-card-type">Shares</span>
+            <span class="goal-card-num">${formatNum(gS)}</span>
+            <div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div>
+          </div>` : '',
+  ].filter(Boolean).join('');
+
   return `
     <div class="goals-section">
-      <div class="goals-label">Engagement Goals</div>
-      ${gL ? `<div class="goal-row"><span class="goal-icon">L</span><div class="goal-track"><div class="goal-fill" style="width:${pctL}%"></div></div><span class="goal-num">${gL.toLocaleString()}</span></div>` : ''}
-      ${gC ? `<div class="goal-row"><span class="goal-icon">C</span><div class="goal-track"><div class="goal-fill" style="width:0%"></div></div><span class="goal-num">${gC.toLocaleString()}</span></div>` : ''}
-      ${gS ? `<div class="goal-row"><span class="goal-icon">S</span><div class="goal-track"><div class="goal-fill" style="width:0%"></div></div><span class="goal-num">${gS.toLocaleString()}</span></div>` : ''}
+      <div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div>
+      <div class="goals-cards">${cards}</div>
     </div>`;
 }
 
@@ -1009,13 +1121,21 @@ function cardChecklistHTML(postId) {
   const pct = Math.round((doneCount / 4) * 100);
   const allDone = doneCount === 4;
 
-  const chips = items.map(item => `
-    <div class="card-check-item ${s[item.key] ? 'done' : ''}" id="cci-${item.key}-${postId}">
-      <div class="cci-tick">${s[item.key] ? '✓' : ''}</div>
+  const chips = items.map(item => {
+    // Map each action to the right handler
+    let handler = '';
+    if (item.key === 'liked')     handler = `onclick="checklistAction('${postId}','liked',this)"`;
+    if (item.key === 'commented') handler = `onclick="checklistComment('${postId}')"`;
+    if (item.key === 'shared')    handler = `onclick="checklistShare('${postId}')"`;
+    if (item.key === 'saved')     handler = `onclick="checklistAction('${postId}','saved',this)"`;
+    const isDone = s[item.key];
+    return `
+    <div class="card-check-item ${isDone ? 'done' : ''}" id="cci-${item.key}-${postId}" ${handler} style="cursor:pointer">
+      <div class="cci-tick">${isDone ? '✓' : ''}</div>
       <span class="cci-icon">${item.icon}</span>
-      <span class="cci-label">${s[item.key] ? item.doneLabel : item.label}</span>
-    </div>
-  `).join('');
+      <span class="cci-label">${isDone ? item.doneLabel : item.label}</span>
+    </div>`;
+  }).join('');
 
   const summary = allDone
     ? `<div class="card-checklist-summary all-done-bar">
@@ -1193,6 +1313,37 @@ function generatePosts() {
   updateProgressTracker();
 }
 
+// ─── Checklist row handlers ──────────────────────────────────────────────────
+function checklistAction(postId, key) {
+  const s = getState(postId);
+  if (s[key]) return; // already done
+  s[key] = true;
+  if (key === 'liked') {
+    spawnConfetti();
+    logFanAction(postId, 'like');
+    showToast('Liked! ❤️');
+    // sync the ig-action-btn heart button too
+    const igBtn = document.querySelector('.ig-action-btn[title="Like"]');
+    if (igBtn) { igBtn.innerHTML = icons.heartFilled; igBtn.classList.add('liked'); }
+  }
+  if (key === 'saved') {
+    logFanAction(postId, 'save');
+    showToast('Saved! 🔖');
+    const igBtn = document.querySelector('.ig-action-btn[title="Save"]');
+    if (igBtn) { igBtn.innerHTML = icons.bookmarkFilled; igBtn.classList.add('saved'); }
+  }
+  updateProgressTracker();
+  checkAllDone(postId);
+}
+
+function checklistComment(postId) {
+  openCommentModal(postId);
+}
+
+function checklistShare(postId) {
+  openShareModal(postId);
+}
+
 function toggleLike(postId, btn) {
   const s = getState(postId);
   s.liked = !s.liked;
@@ -1316,9 +1467,9 @@ const GOALS_KEY = 'pond_goals';
 const PLATFORMS = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 const MEDIA_LABELS = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
 const GOAL_DEFS = [
-  { key:'likes', icon:'heart', label:'Likes' },
+  { key:'likes',    icon:'heart',   label:'Likes' },
   { key:'comments', icon:'comment', label:'Comments' },
-  { key:'shares', icon:'share', label:'Shares' },
+  { key:'shares',   icon:'share',   label:'Shares' },
 ];
 
 let posts = [];
@@ -1426,18 +1577,23 @@ function setFocusUI(val) {
   }
 }
 
+// ─── Admin goals grid — shows full number in input, formatted preview below ──
 function renderGoals() {
   const grid = document.getElementById('goalsGrid');
-  grid.innerHTML = GOAL_DEFS.map(d => `
+  grid.innerHTML = GOAL_DEFS.map(d => {
+    const val = goals[d.key] || 0;
+    return `
     <div class="goal-cell">
       <div class="goal-icon">${icons[d.icon]}</div>
       <div class="goal-platform">${d.label}</div>
       <div class="goal-input-wrap">
-        <input type="number" class="goal-input" id="goal_${d.key}" value="${goals[d.key]}" min="0">
+        <input type="number" class="goal-input" id="goal_${d.key}" value="${val}" min="0"
+          oninput="document.getElementById('goal_preview_${d.key}').textContent = this.value > 0 ? '→ ' + formatNum(parseInt(this.value)||0) : ''">
       </div>
-      <div class="goal-label">Goal</div>
-    </div>
-  `).join('');
+      <div class="goal-preview" id="goal_preview_${d.key}">${val > 0 ? '→ ' + formatNum(val) : ''}</div>
+      <div class="goal-label">แสดงแบบย่อ</div>
+    </div>`;
+  }).join('');
 }
 
 function renderPosts() {
