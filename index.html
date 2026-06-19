@@ -1094,6 +1094,24 @@
       </div>
     </div>
 
+    <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">🎯 เป้าหมาย Engagement โพสต์นี้</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div>
+          <label class="form-label" style="text-align:center;display:block">🖤 Likes</label>
+          <input type="number" class="form-input" id="fGoalLikes" placeholder="200" min="0" style="text-align:center">
+        </div>
+        <div>
+          <label class="form-label" style="text-align:center;display:block">💬 Comments</label>
+          <input type="number" class="form-input" id="fGoalComments" placeholder="50" min="0" style="text-align:center">
+        </div>
+        <div>
+          <label class="form-label" style="text-align:center;display:block">📤 Shares</label>
+          <input type="number" class="form-input" id="fGoalShares" placeholder="30" min="0" style="text-align:center">
+        </div>
+      </div>
+    </div>
+
     <div class="form-row">
       <label class="form-label">รูปภาพ Thumbnail</label>
 
@@ -1317,30 +1335,36 @@ const icons = {
 };
 
 function goalsHTML(post) {
-  const g = adminGoals;
-  const likes = post ? (post.likes || 0) : 0;
-  // We only have likes data from admin; comments/shares shown as 0 progress unless post has them
-  const pctL = Math.min(100, Math.round((likes / (g.likes || 200)) * 100));
-  const pctC = 0; // no real data yet
+  // ใช้ goal ของโพสต์นี้ก่อน ถ้าไม่มีค่อย fallback ไป global adminGoals
+  const gL = (post && post.goalLikes)    ? parseInt(post.goalLikes)    : (adminGoals.likes    || 200);
+  const gC = (post && post.goalComments) ? parseInt(post.goalComments) : (adminGoals.comments || 50);
+  const gS = (post && post.goalShares)   ? parseInt(post.goalShares)   : (adminGoals.shares   || 30);
+  const likes = post ? (parseInt(post.likes) || 0) : 0;
+  const pctL = Math.min(100, Math.round((likes / gL) * 100));
+  const pctC = 0;
   const pctS = 0;
+
+  // ถ้าโพสต์ไม่ได้ตั้งเป้าเลย ไม่แสดง bar
+  if (!gL && !gC && !gS) return '';
+
   return `
     <div class="goals-section">
-      <div class="goals-label">เป้าหมาย engagement</div>
-      <div class="goal-row">
+      <div class="goals-label">🎯 เป้าหมาย engagement</div>
+      ${gL ? `<div class="goal-row">
         <span class="goal-icon">🖤</span>
         <div class="goal-track"><div class="goal-fill" style="width:${pctL}%"></div></div>
-        <span class="goal-num">${g.likes}</span>
-      </div>
-      <div class="goal-row">
+        <span class="goal-num">${gL.toLocaleString()}</span>
+      </div>` : ''}
+      ${gC ? `<div class="goal-row">
         <span class="goal-icon">💬</span>
         <div class="goal-track"><div class="goal-fill" style="width:${pctC}%"></div></div>
-        <span class="goal-num">${g.comments}</span>
-      </div>
-      <div class="goal-row">
+        <span class="goal-num">${gC.toLocaleString()}</span>
+      </div>` : ''}
+      ${gS ? `<div class="goal-row">
         <span class="goal-icon">📤</span>
         <div class="goal-track"><div class="goal-fill" style="width:${pctS}%"></div></div>
-        <span class="goal-num">${g.shares}</span>
-      </div>
+        <span class="goal-num">${gS.toLocaleString()}</span>
+      </div>` : ''}
     </div>`;
 }
 
@@ -2080,6 +2104,9 @@ function openAddModal() {
   document.getElementById('fCaption').value = '';
   document.getElementById('fTime').value = new Date().toISOString().slice(0,16);
   document.getElementById('fLikes').value = '';
+  document.getElementById('fGoalLikes').value = '';
+  document.getElementById('fGoalComments').value = '';
+  document.getElementById('fGoalShares').value = '';
   resetImagePicker(null, EMOJIS[0]);
   setFocusUI(false);
   renderPreview();
@@ -2098,6 +2125,9 @@ function openEditModal(id) {
   document.getElementById('fCaption').value = p.caption || '';
   document.getElementById('fTime').value = p.time ? p.time.slice(0,16) : '';
   document.getElementById('fLikes').value = p.likes || '';
+  document.getElementById('fGoalLikes').value = p.goalLikes || '';
+  document.getElementById('fGoalComments').value = p.goalComments || '';
+  document.getElementById('fGoalShares').value = p.goalShares || '';
   resetImagePicker(p.image || null, p.emoji || EMOJIS[0]);
   setFocusUI(p.focused || false);
   renderPreview();
@@ -2134,6 +2164,9 @@ function savePost() {
   const label = document.getElementById('fLabel').value.trim();
   const time = document.getElementById('fTime').value;
   const likes = parseInt(document.getElementById('fLikes').value) || 0;
+  const goalLikes = parseInt(document.getElementById('fGoalLikes').value) || 0;
+  const goalComments = parseInt(document.getElementById('fGoalComments').value) || 0;
+  const goalShares = parseInt(document.getElementById('fGoalShares').value) || 0;
   const focused = isFocused;
   // image: use selectedImageData if tab is upload/url; else null (emoji mode)
   const image = (imgTabMode !== 'emoji' && selectedImageData) ? selectedImageData : null;
@@ -2143,13 +2176,14 @@ function savePost() {
   if (editingId) {
     const idx = posts.findIndex(p => p.id === editingId);
     if (idx >= 0) {
-      posts[idx] = { ...posts[idx], caption, platform, mediaType, type, label, time, likes, emoji: selectedEmoji, image, focused };
+      posts[idx] = { ...posts[idx], caption, platform, mediaType, type, label, time, likes, goalLikes, goalComments, goalShares, emoji: selectedEmoji, image, focused };
     }
     showToast('✅ แก้ไขโพสต์แล้ว');
   } else {
     posts.push({
       id: 'p_' + Date.now(),
       caption, platform, mediaType, type, label, time, likes,
+      goalLikes, goalComments, goalShares,
       emoji: selectedEmoji,
       image,
       focused,
