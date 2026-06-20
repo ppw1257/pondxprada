@@ -905,7 +905,9 @@ function getFilteredPosts() {
       return p.post_type === pageFilter || p.type === pageFilter;
     })
     .sort((a, b) => {
-      // เรียงตามเวลาโพสต์ ใหม่สุดก่อน
+      // โฟกัสขึ้นก่อน แล้วเรียงตามเวลาโพสต์ ใหม่สุดก่อน
+      if (a.focused && !b.focused) return -1;
+      if (!a.focused && b.focused) return 1;
       const aT = new Date(a.time || a.post_time || a.createdAt || a.created_at || 0).getTime();
       const bT = new Date(b.time || b.post_time || b.createdAt || b.created_at || 0).getTime();
       if (aT !== bT) return bT - aT;
