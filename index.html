@@ -122,7 +122,7 @@
     .goal-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: 6px; padding: 8px 5px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .goal-card-icon { font-size: 13px; line-height: 1; }
     .goal-card-type { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
-    .goal-card-num { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--black); line-height: 1; }
+    .goal-card-num { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--black); line-height: 1; }
     .goal-card-bar { width: 100%; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; margin-top: 4px; }
     .goal-card-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 2px; transition: width 0.6s ease; }
 
@@ -336,12 +336,12 @@
         <span class="chip-label">Like</span>
         <div class="chip-check"></div>
       </div>
-      <div class="action-chip" id="chip-commented">
+      <div class="action-chip" id="chip-commented" onclick="chipOpenComment()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconCommented"></span>
         <span class="chip-label">Comment</span>
         <div class="chip-check"></div>
       </div>
-      <div class="action-chip" id="chip-shared">
+      <div class="action-chip" id="chip-shared" onclick="chipOpenShare()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconShared"></span>
         <span class="chip-label">Share</span>
         <div class="chip-check"></div>
@@ -550,6 +550,17 @@
       </div>
     </div>
 
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Comments (actual)</label>
+        <input type="number" class="form-input" id="fComments" placeholder="0" min="0">
+      </div>
+      <div>
+        <label class="form-label">Shares (actual)</label>
+        <input type="number" class="form-input" id="fShares" placeholder="0" min="0">
+      </div>
+    </div>
+
     <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
       <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Engagement Goals for This Post</div>
       <div class="form-row-3">
@@ -730,7 +741,7 @@ async function loadFromScript() {
     const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
     const dp = await rp.json();
     if (dp.ok && Array.isArray(dp.posts)) {
-      posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0 }));
+      posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0, comments: parseInt(p.comments) || 0, shares: parseInt(p.shares) || 0 }));
       saveLocalData();
     }
     const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
@@ -829,13 +840,17 @@ function goalsHTML(post) {
   const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
   const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
   const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
-  const likes = parseInt(post?.likes || 0);
-  const pctL  = gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0;
+  const likes    = parseInt(post?.likes    || 0);
+  const comments = parseInt(post?.comments || 0);
+  const shares   = parseInt(post?.shares   || 0);
+  const pctL = gL ? Math.min(100, Math.round((likes    / gL) * 100)) : 0;
+  const pctC = gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0;
+  const pctS = gS ? Math.min(100, Math.round((shares   / gS) * 100)) : 0;
   if (!gL && !gC && !gS) return '';
   const cards = [
-    gL ? `<div class="goal-card"><span class="goal-card-type">Likes</span><span class="goal-card-num">${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div></div>` : '',
-    gC ? `<div class="goal-card"><span class="goal-card-type">Comments</span><span class="goal-card-num">${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div></div>` : '',
-    gS ? `<div class="goal-card"><span class="goal-card-type">Shares</span><span class="goal-card-num">${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div></div>` : '',
+    gL ? `<div class="goal-card"><span class="goal-card-type">Likes</span><span class="goal-card-num">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div></div>` : '',
+    gC ? `<div class="goal-card"><span class="goal-card-type">Comments</span><span class="goal-card-num">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctC}%"></div></div></div>` : '',
+    gS ? `<div class="goal-card"><span class="goal-card-type">Shares</span><span class="goal-card-num">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctS}%"></div></div></div>` : '',
   ].filter(Boolean).join('');
   return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
 }
@@ -916,7 +931,7 @@ function buildFocused(idx) {
             ${state.saved ? icons.bookmarkFilled : icons.bookmark}
           </button>
         </div>
-        ${post.likes ? `<div class="ig-likes">${parseInt(post.likes).toLocaleString()} likes</div>` : ''}
+        ${post.likes ? `<div class="ig-likes">${formatNum(post.likes)} likes</div>` : ''}
         ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
       </div>`;
@@ -935,9 +950,9 @@ function buildFocused(idx) {
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="tw-actions">
-          <div class="tw-action">${icons.msgCircle}</div>
-          <div class="tw-action">${icons.repeat}</div>
-          <div class="tw-action">${icons.heart} ${post.likes ? `<span>${parseInt(post.likes).toLocaleString()}</span>` : ''}</div>
+          <div class="tw-action">${icons.msgCircle} ${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</div>
+          <div class="tw-action">${icons.repeat} ${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</div>
+          <div class="tw-action">${icons.heart} ${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</div>
         </div>
         ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
@@ -956,7 +971,7 @@ function buildFocused(idx) {
           </div>
         </div>
         <div class="media-frame" style="aspect-ratio:1.4/1" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
-        ${post.likes ? `<div class="fb-reactions" style="padding:6px 11px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">${parseInt(post.likes).toLocaleString()} reactions</div>` : ''}
+        ${(post.likes || post.comments || post.shares) ? `<div class="fb-reactions" style="padding:6px 11px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">${post.likes ? formatNum(post.likes) + ' reactions' : ''}${post.comments ? (post.likes ? ' · ' : '') + formatNum(post.comments) + ' comments' : ''}${post.shares ? ((post.likes || post.comments) ? ' · ' : '') + formatNum(post.shares) + ' shares' : ''}</div>` : ''}
         <div class="fb-actions">
           <button class="fb-act" onclick="toggleLike('${postId}',this)">${icons.thumbup} Like</button>
           <button class="fb-act" onclick="openCommentModal('${postId}')">${icons.msgCircle} Comment</button>
@@ -974,7 +989,7 @@ function buildFocused(idx) {
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="yt-info">
           <div class="yt-title">${post.label || post.caption || ''}</div>
-          <div class="yt-meta">${post.likes ? parseInt(post.likes).toLocaleString() + ' views' : ''}${t ? (post.likes ? ' · ' : '') + t : ''}</div>
+          <div class="yt-meta">${post.likes ? formatNum(post.likes) + ' views' : ''}${t ? (post.likes ? ' · ' : '') + t : ''}</div>
         </div>
         <div class="yt-actions">
           <div class="yt-action">${icons.thumbup}</div>
@@ -995,8 +1010,9 @@ function buildFocused(idx) {
         </div>
         <div class="tk-overlay" style="justify-content:flex-end">
           <div class="tk-right">
-            <div class="tk-btn">${icons.heart}${post.likes ? `<span>${parseInt(post.likes).toLocaleString()}</span>` : ''}</div>
-            <div class="tk-btn">${icons.comment}</div>
+            <div class="tk-btn">${icons.heart}${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</div>
+            <div class="tk-btn">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</div>
+            <div class="tk-btn">${icons.shareArrow}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</div>
             <div class="tk-btn">${icons.music}</div>
           </div>
         </div>
@@ -1119,6 +1135,21 @@ function checkAllDone(postId) {
 // ─── Comment Modal ───────────────────────────────────────────────────────────
 const comments = [];
 
+function getCurrentFocusedPostId() {
+  const filtered = getFilteredPosts();
+  const post = filtered[focusedIndex] || null;
+  return post ? post.id : null;
+}
+function chipOpenComment() {
+  const id = getCurrentFocusedPostId();
+  if (!id) { showToast('No post selected'); return; }
+  openCommentModal(id);
+}
+function chipOpenShare() {
+  const id = getCurrentFocusedPostId();
+  if (!id) { showToast('No post selected'); return; }
+  openShareModal(id);
+}
 function openCommentModal(postId) {
   currentPostId = postId;
   randomizeComment();
@@ -1246,7 +1277,7 @@ function renderPosts() {
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
           </div>
-          <div class="post-time">${t}${p.likes ? ` · ${parseInt(p.likes).toLocaleString()} likes` : ''}${p.post_url ? ` · <a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>` : ''}</div>
+          <div class="post-time">${t}${p.likes ? ` · ${formatNum(p.likes)} likes` : ''}${p.comments ? ` · ${formatNum(p.comments)} comments` : ''}${p.shares ? ` · ${formatNum(p.shares)} shares` : ''}${p.post_url ? ` · <a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>` : ''}</div>
         </div>
         <div class="post-actions">
           <button class="icon-btn${p.focused?' star-on':''}" onclick="toggleFocus('${p.id}')" title="${p.focused?'Unset focus':'Set as focus'}">
@@ -1401,6 +1432,8 @@ function openAddModal() {
   document.getElementById('fPostUrl').value = '';
   document.getElementById('fTime').value = new Date().toISOString().slice(0,16);
   document.getElementById('fLikes').value = '';
+  document.getElementById('fComments').value = '';
+  document.getElementById('fShares').value = '';
   document.getElementById('fGoalLikes').value = '';
   document.getElementById('fGoalComments').value = '';
   document.getElementById('fGoalShares').value = '';
@@ -1421,6 +1454,8 @@ function openEditModal(id) {
   document.getElementById('fPostUrl').value   = p.post_url || p.postUrl || '';
   document.getElementById('fTime').value      = (p.time || p.post_time || '').slice(0,16);
   document.getElementById('fLikes').value     = p.likes || '';
+  document.getElementById('fComments').value  = p.comments || '';
+  document.getElementById('fShares').value    = p.shares || '';
   document.getElementById('fGoalLikes').value    = p.goalLikes    || p.goal_likes    || '';
   document.getElementById('fGoalComments').value = p.goalComments || p.goal_comments || '';
   document.getElementById('fGoalShares').value   = p.goalShares   || p.goal_shares   || '';
@@ -1449,6 +1484,8 @@ function savePost() {
     post_url:     document.getElementById('fPostUrl').value.trim(),
     time:         document.getElementById('fTime').value,
     likes:        parseInt(document.getElementById('fLikes').value) || 0,
+    comments:     parseInt(document.getElementById('fComments').value) || 0,
+    shares:       parseInt(document.getElementById('fShares').value) || 0,
     goalLikes:    parseInt(document.getElementById('fGoalLikes').value)    || 0,
     goalComments: parseInt(document.getElementById('fGoalComments').value) || 0,
     goalShares:   parseInt(document.getElementById('fGoalShares').value)   || 0,
