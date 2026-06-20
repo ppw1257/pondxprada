@@ -68,6 +68,9 @@
     .action-chip.done .chip-label { color: var(--green); }
     .action-chip .chip-check { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 9px; }
     .action-chip.done .chip-check { background: var(--green); border-color: var(--green); color: #fff; }
+    .chip-count { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--black); line-height: 1; margin-top: 1px; letter-spacing: 0.02em; }
+    .chip-count .chip-count-total { color: var(--muted); font-size: 11px; font-weight: 400; }
+    .action-chip.done .chip-count { color: var(--green); }
     .progress-complete-msg { text-align: center; font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: 0.05em; padding: 4px 0 0; display: none; }
     .progress-complete-msg.visible { display: block; }
 
@@ -355,21 +358,25 @@
       <div class="action-chip" id="chip-liked">
         <span class="chip-icon" id="chipIconLiked"></span>
         <span class="chip-label">Like</span>
+        <div class="chip-count" id="chipCount-liked">0<span class="chip-count-total">/0</span></div>
         <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-commented" onclick="chipOpenComment()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconCommented"></span>
         <span class="chip-label">Comment</span>
+        <div class="chip-count" id="chipCount-commented">0<span class="chip-count-total">/0</span></div>
         <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-shared" onclick="chipOpenShare()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconShared"></span>
         <span class="chip-label">Share</span>
+        <div class="chip-count" id="chipCount-shared">0<span class="chip-count-total">/0</span></div>
         <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-saved">
         <span class="chip-icon" id="chipIconSaved"></span>
         <span class="chip-label">Save</span>
+        <div class="chip-count" id="chipCount-saved">0<span class="chip-count-total">/0</span></div>
         <div class="chip-check"></div>
       </div>
     </div>
@@ -585,6 +592,26 @@
     </div>
 
     <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px">Required Tasks for This Post</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">เลือกว่าโพสต์นี้ต้องให้แฟนทำอะไรบ้าง (จะนับรวมเป็น Total Tasks)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="fReqLike" checked style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer"> Like
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="fReqComment" checked style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer"> Comment
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="fReqShare" checked style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer"> Share
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:13px">
+          <input type="checkbox" id="fReqSave" checked style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer"> Save
+        </label>
+      </div>
+    </div>
+
+    <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
+
       <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Engagement Goals for This Post</div>
       <div class="form-row-3">
         <div>
@@ -734,7 +761,32 @@ function getState(id) {
   if (!postStates.has(id)) postStates.set(id, { liked:false, saved:false, commented:false, shared:false });
   return postStates.get(id);
 }
-function isAllDone(id) { const s = getState(id); return s.liked && s.saved && s.commented && s.shared; }
+function isAllDone(id) {
+  const s = getState(id);
+  const p = posts.find(x => x.id === id);
+  const req = getRequired(p);
+  return Object.keys(req).every(k => !req[k] || s[k]);
+}
+
+// Per-post required actions. Backward-compat: if no flags set, all are required.
+function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
+function getRequired(p) {
+  if (!p) return { liked:true, commented:true, shared:true, saved:true };
+  const has = ['requireLike','requireComment','requireShare','requireSave','require_like','require_comment','require_share','require_save']
+    .some(k => p[k] !== undefined);
+  if (!has) return { liked:true, commented:true, shared:true, saved:true };
+  return {
+    liked:    _truthy(p.requireLike    ?? p.require_like),
+    commented:_truthy(p.requireComment ?? p.require_comment),
+    shared:   _truthy(p.requireShare   ?? p.require_share),
+    saved:    _truthy(p.requireSave    ?? p.require_save),
+  };
+}
+function requiredCount(p) {
+  const r = getRequired(p);
+  return (r.liked?1:0)+(r.commented?1:0)+(r.shared?1:0)+(r.saved?1:0);
+}
+
 
 // ─── Username ────────────────────────────────────────────────────────────────
 let currentUsername = 'pondnaravit';
@@ -833,32 +885,39 @@ function getFilteredPosts() {
 // ─── Progress tracker ────────────────────────────────────────────────────────
 function updateProgressTracker() {
   const filtered = getFilteredPosts();
-  const post   = filtered[focusedIndex] || null;
-  if (!post) return;
-  const postId = post.id;
-  const s = getState(postId);
+  const total = filtered.length;
 
   const items = [
-    { key:'liked',     chipId:'chip-liked' },
-    { key:'commented', chipId:'chip-commented' },
-    { key:'shared',    chipId:'chip-shared' },
-    { key:'saved',     chipId:'chip-saved' },
+    { key:'liked',     chipId:'chip-liked',     countId:'chipCount-liked' },
+    { key:'commented', chipId:'chip-commented', countId:'chipCount-commented' },
+    { key:'shared',    chipId:'chip-shared',    countId:'chipCount-shared' },
+    { key:'saved',     chipId:'chip-saved',     countId:'chipCount-saved' },
   ];
-  let doneCount = 0;
-  items.forEach(({ key, chipId }) => {
+
+  let doneSum = 0;
+  let totalTasks = 0;
+  items.forEach(({ key, chipId, countId }) => {
     const chip = document.getElementById(chipId);
     if (!chip) return;
-    const done = s[key];
-    if (done) doneCount++;
-    chip.classList.toggle('done', done);
+    // Only posts that REQUIRE this action count towards total
+    const requiringPosts = filtered.filter(p => getRequired(p)[key]);
+    const totalN = requiringPosts.length;
+    const doneN  = requiringPosts.reduce((n, p) => n + (getState(p.id)[key] ? 1 : 0), 0);
+    doneSum    += doneN;
+    totalTasks += totalN;
+    const allDone = totalN > 0 && doneN === totalN;
+    chip.classList.toggle('done', allDone);
+    chip.style.opacity = totalN === 0 ? '0.4' : '';
     const check = chip.querySelector('.chip-check');
-    if (check) check.innerHTML = done ? '✓' : '';
+    if (check) check.innerHTML = allDone ? '✓' : '';
+    const countEl = document.getElementById(countId);
+    if (countEl) countEl.innerHTML = doneN + '<span class="chip-count-total">/' + totalN + '</span>';
   });
 
-  const pct = Math.round((doneCount / 4) * 100);
+  const pct = totalTasks ? Math.round((doneSum / totalTasks) * 100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressPct').innerHTML = pct + '<span>%</span>';
-  document.getElementById('progressCompleteMsg').classList.toggle('visible', pct === 100);
+  document.getElementById('progressCompleteMsg').classList.toggle('visible', pct === 100 && totalTasks > 0);
 
   const chipMap = { chipIconLiked:'heart', chipIconCommented:'comment', chipIconShared:'share', chipIconSaved:'bookmark' };
   Object.keys(chipMap).forEach(elId => {
@@ -866,6 +925,7 @@ function updateProgressTracker() {
     if (el) el.innerHTML = icons[chipMap[elId]];
   });
 }
+
 
 // ─── HTML builders ───────────────────────────────────────────────────────────
 function getMediaContent(post) {
@@ -932,15 +992,19 @@ function updateGoalDisplay(postId) {
 function cardChecklistHTML(postId, post) {
   const s = getState(postId);
   const postUrl = post?.post_url || post?.postUrl || '';
-  const items = [
+  const req = getRequired(post);
+  const allItems = [
     { key:'liked',     icon:icons.heart,    label:'Like',    doneLabel:'Liked',     handler:`onclick="checklistAction('${postId}','liked')"` },
     { key:'commented', icon:icons.comment,  label:'Comment', doneLabel:'Commented', handler:`onclick="openCommentModal('${postId}')"` },
     { key:'shared',    icon:icons.share,    label:'Share',   doneLabel:'Shared',    handler:`onclick="openShareModal('${postId}')"` },
     { key:'saved',     icon:icons.bookmark, label:'Save',    doneLabel:'Saved',     handler:`onclick="checklistAction('${postId}','saved')"` },
   ];
+  const items = allItems.filter(i => req[i.key]);
+  const reqN = items.length || 1;
   const doneCount = items.filter(i => s[i.key]).length;
-  const pct = Math.round((doneCount / 4) * 100);
-  const allDone = doneCount === 4;
+  const pct = Math.round((doneCount / reqN) * 100);
+  const allDone = doneCount === items.length && items.length > 0;
+
 
   const chips = items.map(item => {
     const done = s[item.key];
@@ -957,7 +1021,8 @@ function cardChecklistHTML(postId, post) {
 
   const summary = allDone
     ? `<div class="card-checklist-summary all-done-bar"><span class="checklist-summary-text">All actions completed!</span><div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div></div>`
-    : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/4 done (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
+    : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/${items.length} done (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
+
 
   return `<div id="cklwrap-${postId}"><div class="card-checklist" id="ccl-${postId}">${chips}</div>${summary}</div>`;
 }
@@ -1430,7 +1495,9 @@ function renderGoals() {
 
 function renderPosts() {
   const list = document.getElementById('postList');
-  document.getElementById('postCount').textContent = posts.length + ' posts';
+  const totalTasks = posts.reduce((n, p) => n + requiredCount(p), 0);
+  document.getElementById('postCount').textContent = posts.length + ' posts · ' + totalTasks + ' tasks';
+
   if (!posts.length) {
     list.innerHTML = `<div class="empty"><div class="empty-text">No posts yet</div></div>`;
     return;
@@ -1457,8 +1524,10 @@ function renderPosts() {
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
           </div>
+          ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
           <div class="post-time">${t}${p.likes ? ` · ${formatNum(p.likes)} likes` : ''}${p.comments ? ` · ${formatNum(p.comments)} comments` : ''}${p.shares ? ` · ${formatNum(p.shares)} shares` : ''}${p.post_url ? ` · <a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>` : ''}</div>
         </div>
+
         <div class="post-actions">
           <button class="icon-btn${p.focused?' star-on':''}" onclick="toggleFocus('${p.id}')" title="${p.focused?'Unset focus':'Set as focus'}">
             <svg viewBox="0 0 24 24" fill="${p.focused?'var(--gold)':'none'}" stroke="${p.focused?'var(--gold)':'currentColor'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -1617,6 +1686,11 @@ function openAddModal() {
   document.getElementById('fGoalLikes').value = '';
   document.getElementById('fGoalComments').value = '';
   document.getElementById('fGoalShares').value = '';
+  document.getElementById('fReqLike').checked = true;
+  document.getElementById('fReqComment').checked = true;
+  document.getElementById('fReqShare').checked = true;
+  document.getElementById('fReqSave').checked = true;
+
   resetImagePicker(null);
   setFocusUI(false);
   renderPreview();
@@ -1639,7 +1713,13 @@ function openEditModal(id) {
   document.getElementById('fGoalLikes').value    = p.goalLikes    || p.goal_likes    || '';
   document.getElementById('fGoalComments').value = p.goalComments || p.goal_comments || '';
   document.getElementById('fGoalShares').value   = p.goalShares   || p.goal_shares   || '';
+  const r = getRequired(p);
+  document.getElementById('fReqLike').checked    = r.liked;
+  document.getElementById('fReqComment').checked = r.commented;
+  document.getElementById('fReqShare').checked   = r.shared;
+  document.getElementById('fReqSave').checked    = r.saved;
   resetImagePicker(p.image || p.image_url || null);
+
   setFocusUI(p.focused || false);
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
@@ -1669,10 +1749,15 @@ function savePost() {
     goalLikes:    parseInt(document.getElementById('fGoalLikes').value)    || 0,
     goalComments: parseInt(document.getElementById('fGoalComments').value) || 0,
     goalShares:   parseInt(document.getElementById('fGoalShares').value)   || 0,
+    requireLike:    document.getElementById('fReqLike').checked,
+    requireComment: document.getElementById('fReqComment').checked,
+    requireShare:   document.getElementById('fReqShare').checked,
+    requireSave:    document.getElementById('fReqSave').checked,
     image:        selectedImageData || null,
     image_url:    selectedImageData || null,
     focused:      isFocused,
   };
+
   if (editingId) {
     const idx = posts.findIndex(p => p.id === editingId);
     if (idx >= 0) posts[idx] = { ...posts[idx], ...record };
