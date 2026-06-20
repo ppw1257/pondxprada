@@ -859,16 +859,25 @@ function saveLocalData() {
   try { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); } catch(e) {}
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSJKOLPlPrLWdwrLDzAT8qknV34XC65VpBr5LW91mxKjPAs5ZQgQyEaXCtlq4MeLCV/exec';
+// ⚠️ ใส่ URL ของ Web app deployment ใหม่ที่นี่ (จาก Apps Script → Deploy → New deployment)
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBT-gcLmdKm9kSS1iMhsvQ5HvKXxvO5x1t37DfgrrLvi3uduGN2bB8TmqklB_X1BKo/exec';
 
 async function loadFromScript() {
-  if (!APPS_SCRIPT_URL) { loadLocalData(); generatePosts(); return; }
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
+    loadLocalData(); generatePosts();
+    showToast('⚠️ ยังไม่ได้ตั้งค่า Apps Script URL — ใช้ข้อมูลในเครื่องชั่วคราว');
+    return;
+  }
   try {
     const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
     const dp = await rp.json();
     if (dp.ok && Array.isArray(dp.posts)) {
       posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0, comments: parseInt(p.comments) || 0, shares: parseInt(p.shares) || 0 }));
       saveLocalData();
+    } else if (!dp.ok) {
+      console.error('loadFromScript: server returned error', dp.error);
+      showToast('⚠️ โหลดข้อมูลจาก Sheet ไม่สำเร็จ: ' + (dp.error || 'unknown error'));
+      loadLocalData();
     }
     const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
     const dg = await rg.json();
@@ -876,13 +885,20 @@ async function loadFromScript() {
       goals = { likes: parseInt(dg.goals.likes)||0, comments: parseInt(dg.goals.comments)||0, shares: parseInt(dg.goals.shares)||0 };
       localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
     }
-  } catch(err) { loadLocalData(); }
+  } catch(err) {
+    console.error('loadFromScript failed', err);
+    showToast('⚠️ เชื่อมต่อ Sheet ไม่ได้ — แสดงข้อมูลที่เคยบันทึกในเครื่องนี้แทน');
+    loadLocalData();
+  }
   generatePosts();
 }
 
 async function saveToScript() {
   saveLocalData();
-  if (!APPS_SCRIPT_URL) return;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
+    showToast('⚠️ ยังไม่ได้ตั้งค่า Apps Script URL — บันทึกได้แค่ในเครื่องนี้ ไม่ขึ้น Sheet');
+    return;
+  }
   // ดึงข้อมูลล่าสุดจากชีทก่อน merge เพื่อกัน overwrite ของแอดมินคนอื่น
   try {
     const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
@@ -895,15 +911,23 @@ async function saveToScript() {
       posts = Array.from(map.values());
       saveLocalData();
     }
-  } catch(e) {}
+  } catch(e) { console.error('saveToScript: merge fetch failed', e); }
   // ส่งเป็น text/plain เพื่อเลี่ยง CORS preflight ของ Apps Script
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action:'savePosts', posts })
     });
-  } catch(e) { console.error('saveToScript failed', e); }
+    const result = await res.json();
+    if (!result.ok) {
+      console.error('saveToScript: server returned error', result.error);
+      showToast('⚠️ บันทึกขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
+    }
+  } catch(e) {
+    console.error('saveToScript failed', e);
+    showToast('⚠️ บันทึกขึ้น Sheet ไม่สำเร็จ — เช็คอินเทอร์เน็ตหรือ Apps Script URL');
+  }
 }
 
 async function saveGoals() {
@@ -912,14 +936,23 @@ async function saveGoals() {
     goals[d.key] = v;
   });
   try { localStorage.setItem(GOALS_KEY, JSON.stringify(goals)); } catch(e) {}
-  if (APPS_SCRIPT_URL) {
+  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
     try {
-      await fetch(APPS_SCRIPT_URL, {
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action:'saveGoals', goals })
       });
-    } catch(e) { console.error('saveGoals failed', e); }
+      const result = await res.json();
+      if (!result.ok) {
+        showToast('⚠️ บันทึก Goals ขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
+        return;
+      }
+    } catch(e) {
+      console.error('saveGoals failed', e);
+      showToast('⚠️ บันทึก Goals ขึ้น Sheet ไม่สำเร็จ');
+      return;
+    }
   }
   showToast('Goals saved');
 }
@@ -1845,7 +1878,7 @@ async function enterAdmin() {
   document.getElementById('publicView').style.display = 'none';
   document.getElementById('adminView').style.display  = 'block';
   window.scrollTo(0, 0);
-  loadLocalData();
+  await loadFromScript();
   const inp = document.getElementById('adminUsernameInput');
   if (inp) { inp.value = currentUsername; updateUsernamePreview(currentUsername); }
   renderGoals(); renderPosts();
