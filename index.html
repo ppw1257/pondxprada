@@ -1022,7 +1022,7 @@ function buildFocused(idx) {
           <div>
             <div class="ig-username">@${getPostUsername(post)}</div>
             ${post.focused ? '<div style="margin-top:2px"><span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700">Focus</span></div>' : ''}
-            <div class="ig-location">${t ? 'Milan, Italy · ' + t : 'Milan, Italy'}${mediaLabel ? ' · ' + mediaLabel : ''}</div>
+            <div class="ig-location">Milan, Italy${mediaLabel ? ' · ' + mediaLabel : ''}</div>
             ${post.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
           </div>
           <button class="ig-more" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')" title="Open original post"`:''}>${postUrl ? icons.extLink : '···'}</button>
@@ -1051,7 +1051,6 @@ function buildFocused(idx) {
           <div class="avatar">P</div>
           <div class="tw-info">
             <div class="tw-name">@${getPostUsername(post)}</div>
-            <div class="tw-handle">${t}</div>
           </div>
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
@@ -1072,7 +1071,7 @@ function buildFocused(idx) {
           <div class="avatar">P</div>
           <div>
             <div class="fb-user">@${getPostUsername(post)}</div>
-            <div class="fb-time">${t ? t + ' · Public' : 'Public'}</div>
+            <div class="fb-time">Public</div>
           </div>
         </div>
         <div class="media-frame" style="aspect-ratio:1.4/1" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
@@ -1093,7 +1092,7 @@ function buildFocused(idx) {
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="yt-info">
           <div class="yt-title">${post.label || post.caption || ''}</div>
-          <div class="yt-meta">${post.likes ? formatNum(post.likes) + ' views' : ''}${t ? (post.likes ? ' · ' : '') + t : ''}</div>
+          <div class="yt-meta">${post.likes ? formatNum(post.likes) + ' views' : ''}</div>
         </div>
         <div class="yt-actions">
           <button class="yt-action${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.thumbup}</span></button>
@@ -1548,7 +1547,6 @@ function renderPosts() {
     const postType = p.post_type || p.type || '';
     const typeLabel = postType && postType !== 'all' ? postType.charAt(0).toUpperCase() + postType.slice(1) : '';
     const mediaLabel = MEDIA_LABELS[p.mediaType || p.media_type] || '';
-    const t = (p.time || p.post_time) ? new Date(p.time || p.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '—';
     return `
       <div class="post-item${p.focused?' focus-ring':''}">
         <div class="post-thumb">${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
@@ -1561,7 +1559,7 @@ function renderPosts() {
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
           </div>
           ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
-          <div class="post-time">${t}${p.likes ? ` · ${formatNum(p.likes)} likes` : ''}${p.comments ? ` · ${formatNum(p.comments)} comments` : ''}${p.shares ? ` · ${formatNum(p.shares)} shares` : ''}${p.post_url ? ` · <a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>` : ''}</div>
+          ${(() => { const parts = []; if (p.likes) parts.push(`${formatNum(p.likes)} likes`); if (p.comments) parts.push(`${formatNum(p.comments)} comments`); if (p.shares) parts.push(`${formatNum(p.shares)} shares`); if (p.post_url) parts.push(`<a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>`); return parts.length ? `<div class="post-time">${parts.join(' · ')}</div>` : ''; })()}
         </div>
 
         <div class="post-actions">
