@@ -125,15 +125,6 @@
     .card-checklist-summary.all-done-bar .checklist-mini-fill { background: linear-gradient(90deg, var(--green), #52d68a); }
 
     /* ── Goals ── */
-    .goals-section { border-top: 1px solid var(--border); padding: 11px; }
-    .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    .goals-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .goal-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: 2px; padding: 8px 5px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .goal-card-icon { font-size: 13px; line-height: 1; }
-    .goal-card-type { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
-    .goal-card-num { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--black); line-height: 1; letter-spacing: -0.02em; }
-    .goal-card-bar { width: 100%; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; margin-top: 4px; }
-    .goal-card-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 2px; transition: width 0.6s ease; }
 
     /* ── Thumb Grid ── */
     .grid-label { font-family: var(--font-display); font-style: normal; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 14px; }
@@ -357,7 +348,8 @@
     #adminView .empty-text { font-family: var(--font-display); font-size: 13px; font-weight: 500; font-style: normal; letter-spacing: 0.06em; }
     #adminView .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
     #adminView .save-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-
+    #adminView .username-card { background: var(--card); border: 1px solid var(--border); border-radius: 2px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    #adminView .username-card-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; font-family: var(--font-display); font-style: normal; flex-shrink: 0; }
     #adminView .btn-danger { background: var(--red); color: #fff; }
     #adminView .btn-danger:hover { background: #a93226; }
     #adminView .confirm-text { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 20px; }
@@ -500,8 +492,33 @@
 
 <div class="admin-body">
 
-  <!-- Goals -->
+  <!-- Username -->
   <div class="section-head" style="margin-top:0">
+    <div class="section-title">Display Username</div>
+  </div>
+  <div class="username-card">
+    <div class="username-card-avatar">P</div>
+    <div style="flex:1">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="position:relative;flex:1">
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
+          <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
+            style="padding-left:26px"
+            oninput="updateUsernamePreview(this.value)"
+            onkeydown="if(event.key==='Enter')saveAdminUsername()">
+        </div>
+        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Save
+        </button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
+    </div>
+  </div>
+
+  <!-- Goals -->
+  <div class="section-head">
     <div class="section-title">Engagement Goals</div>
     <div class="save-status"><span class="save-dot"></span>Auto-saved</div>
   </div>
@@ -635,24 +652,7 @@
       </div>
     </div>
 
-    <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
 
-      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Engagement Goals for This Post</div>
-      <div class="form-row-3">
-        <div>
-          <label class="form-label" style="text-align:center;display:block">Likes</label>
-          <input type="number" class="form-input" id="fGoalLikes" placeholder="200" min="0" style="text-align:center">
-        </div>
-        <div>
-          <label class="form-label" style="text-align:center;display:block">Comments</label>
-          <input type="number" class="form-input" id="fGoalComments" placeholder="50" min="0" style="text-align:center">
-        </div>
-        <div>
-          <label class="form-label" style="text-align:center;display:block">Shares</label>
-          <input type="number" class="form-input" id="fGoalShares" placeholder="30" min="0" style="text-align:center">
-        </div>
-      </div>
-    </div>
 
     <!-- Thumbnail -->
     <div class="form-row">
@@ -1032,56 +1032,7 @@ function focusBannerHTML(post) {
   return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
 }
 
-function goalsHTML(post) {
-  const postId = post?.id || '';
-  const s = postId ? getState(postId) : { liked:false, commented:false, shared:false };
-  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
-  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
-  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
-  const likes    = parseInt(post?.likes    || 0) + (s.liked ? 1 : 0);
-  const comments = parseInt(post?.comments || 0) + (s.commented ? 1 : 0);
-  const shares   = parseInt(post?.shares   || 0) + (s.shared ? 1 : 0);
-  const pctL = gL ? Math.min(100, Math.round((likes    / gL) * 100)) : 0;
-  const pctC = gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0;
-  const pctS = gS ? Math.min(100, Math.round((shares   / gS) * 100)) : 0;
-  if (!gL && !gC && !gS) return '';
-  const cards = [
-    gL ? `<div class="goal-card" id="goal-likes-${postId}"><span class="goal-card-type">Likes</span><span class="goal-card-num" id="goal-likes-num-${postId}">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-likes-fill-${postId}" style="width:${pctL}%"></div></div></div>` : '',
-    gC ? `<div class="goal-card" id="goal-comments-${postId}"><span class="goal-card-type">Comments</span><span class="goal-card-num" id="goal-comments-num-${postId}">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-comments-fill-${postId}" style="width:${pctC}%"></div></div></div>` : '',
-    gS ? `<div class="goal-card" id="goal-shares-${postId}"><span class="goal-card-type">Shares</span><span class="goal-card-num" id="goal-shares-num-${postId}">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-shares-fill-${postId}" style="width:${pctS}%"></div></div></div>` : '',
-  ].filter(Boolean).join('');
-  return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
-}
 
-function updateGoalDisplay(postId) {
-  const post = posts.find(p => p.id === postId);
-  if (!post) return;
-  const s = getState(postId);
-  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
-  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
-  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
-  const baseLikes    = parseInt(post.likes    || 0);
-  const baseComments = parseInt(post.comments || 0);
-  const baseShares   = parseInt(post.shares   || 0);
-  const likes    = baseLikes    + (s.liked ? 1 : 0);
-  const comments = baseComments + (s.commented ? 1 : 0);
-  const shares   = baseShares   + (s.shared ? 1 : 0);
-
-  const numL = document.getElementById(`goal-likes-num-${postId}`);
-  const fillL = document.getElementById(`goal-likes-fill-${postId}`);
-  if (numL) numL.textContent = `${formatNum(likes)} / ${formatNum(gL)}`;
-  if (fillL) fillL.style.width = `${gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0}%`;
-
-  const numC = document.getElementById(`goal-comments-num-${postId}`);
-  const fillC = document.getElementById(`goal-comments-fill-${postId}`);
-  if (numC) numC.textContent = `${formatNum(comments)} / ${formatNum(gC)}`;
-  if (fillC) fillC.style.width = `${gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0}%`;
-
-  const numS = document.getElementById(`goal-shares-num-${postId}`);
-  const fillS = document.getElementById(`goal-shares-fill-${postId}`);
-  if (numS) numS.textContent = `${formatNum(shares)} / ${formatNum(gS)}`;
-  if (fillS) fillS.style.width = `${gS ? Math.min(100, Math.round((shares / gS) * 100)) : 0}%`;
-}
 
 function cardChecklistHTML(postId, post) {
   const s = getState(postId);
@@ -1168,7 +1119,7 @@ function buildFocused(idx) {
         </div>
         ${post.likes ? `<div class="ig-likes">${formatNum(post.likes)} likes</div>` : ''}
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
+
       </div>`;
   }
 
@@ -1190,7 +1141,7 @@ function buildFocused(idx) {
           <button class="tw-action${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
+
       </div>`;
   }
 
@@ -1213,7 +1164,7 @@ function buildFocused(idx) {
           <button class="fb-act" onclick="openShareModal('${postId}')">${icons.shareArrow} Share</button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
+
       </div>`;
   }
 
@@ -1232,7 +1183,7 @@ function buildFocused(idx) {
           <button class="yt-action" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow} <span>Share</span></button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
+
       </div>`;
   }
 
@@ -1256,7 +1207,7 @@ function buildFocused(idx) {
           </div>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
+
       </div>`;
   }
   return '';
@@ -1402,7 +1353,7 @@ function toggleLike(postId, btn) {
   saveStates();
   syncHeaderButtons(postId);
   if (s.liked) { spawnConfetti(); showToast('Liked!'); }
-  updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 function toggleSave(postId, btn) {
   const s = getState(postId);
@@ -1420,7 +1371,7 @@ function checklistAction(postId, key) {
   syncHeaderButtons(postId);
   if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
   if (key === 'saved') showToast('Saved!');
-  updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
@@ -1537,7 +1488,7 @@ function confirmPickedComment() {
     saveStates();
     updateProgressTracker();
     refreshChecklist(currentPostId);
-    updateGoalDisplay(currentPostId);
+   
     checkAllDone(currentPostId);
   }
   showToast('Copied! เอาไปวางในแอปได้เลย');
@@ -1566,7 +1517,7 @@ function markShared() {
     saveStates();
     updateProgressTracker();
     refreshChecklist(currentSharePostId);
-    updateGoalDisplay(currentSharePostId);
+   
     checkAllDone(currentSharePostId);
   }
 }
@@ -1802,9 +1753,6 @@ function openAddModal() {
   document.getElementById('fLikes').value = '';
   document.getElementById('fComments').value = '';
   document.getElementById('fShares').value = '';
-  document.getElementById('fGoalLikes').value = '';
-  document.getElementById('fGoalComments').value = '';
-  document.getElementById('fGoalShares').value = '';
   document.getElementById('fReqLike').checked = true;
   document.getElementById('fReqComment').checked = true;
   document.getElementById('fReqShare').checked = true;
@@ -1829,9 +1777,6 @@ function openEditModal(id) {
   document.getElementById('fLikes').value     = p.likes || '';
   document.getElementById('fComments').value  = p.comments || '';
   document.getElementById('fShares').value    = p.shares || '';
-  document.getElementById('fGoalLikes').value    = p.goalLikes    || p.goal_likes    || '';
-  document.getElementById('fGoalComments').value = p.goalComments || p.goal_comments || '';
-  document.getElementById('fGoalShares').value   = p.goalShares   || p.goal_shares   || '';
   const r = getRequired(p);
   document.getElementById('fReqLike').checked    = r.liked;
   document.getElementById('fReqComment').checked = r.commented;
@@ -1866,9 +1811,6 @@ function savePost() {
     likes:        parseInt(document.getElementById('fLikes').value) || 0,
     comments:     parseInt(document.getElementById('fComments').value) || 0,
     shares:       parseInt(document.getElementById('fShares').value) || 0,
-    goalLikes:    parseInt(document.getElementById('fGoalLikes').value)    || 0,
-    goalComments: parseInt(document.getElementById('fGoalComments').value) || 0,
-    goalShares:   parseInt(document.getElementById('fGoalShares').value)   || 0,
     requireLike:    document.getElementById('fReqLike').checked,
     requireComment: document.getElementById('fReqComment').checked,
     requireShare:   document.getElementById('fReqShare').checked,
@@ -1899,7 +1841,8 @@ async function enterAdmin() {
   document.getElementById('adminView').style.display  = 'block';
   window.scrollTo(0, 0);
   loadLocalData();
-
+  const inp = document.getElementById('adminUsernameInput');
+  if (inp) { inp.value = currentUsername; updateUsernamePreview(currentUsername); }
   renderGoals(); renderPosts();
 }
 function exitAdmin() {
