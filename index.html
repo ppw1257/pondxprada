@@ -373,7 +373,9 @@
     <button class="modal-close" onclick="closeCommentModal()">✕</button>
     <div class="modal-title">Random Comment</div>
     <div class="comment-filter-row">
-      <button class="c-pill active" onclick="randomizeComment()">Shuffle</button>
+      <button class="c-pill active" data-style="sweet" onclick="setCommentStyle('sweet',this)">Sweet</button>
+      <button class="c-pill" data-style="cool" onclick="setCommentStyle('cool',this)">Cool</button>
+      <button class="c-pill" data-style="hype" onclick="setCommentStyle('hype',this)">Hype</button>
     </div>
     <div class="comment-box" id="randomComment"></div>
     <div class="modal-actions">
@@ -782,6 +784,10 @@ function getFilteredPosts() {
       return p.post_type === pageFilter || p.type === pageFilter;
     })
     .sort((a, b) => {
+      // Completed posts drop to the bottom
+      const aDone = isAllDone(a.id);
+      const bDone = isAllDone(b.id);
+      if (aDone !== bDone) return aDone ? 1 : -1;
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
       return new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0);
@@ -1127,13 +1133,54 @@ function checklistAction(postId, key) {
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 function checkAllDone(postId) {
-  if (isAllDone(postId)) {
-    setTimeout(() => { generatePosts(); showToast('All actions completed! Thank you!'); }, 300);
-  }
+  if (!isAllDone(postId)) return;
+  setTimeout(() => {
+    // Re-sort so the completed post drops to the bottom, then focus the
+    // next post that still needs actions (if any).
+    focusedIndex = 0;
+    generatePosts();
+    const filtered = getFilteredPosts();
+    const nextIdx = filtered.findIndex(p => !isAllDone(p.id));
+    if (nextIdx >= 0) {
+      focusedIndex = nextIdx;
+      generatePosts();
+    }
+    showToast('โพสต์นี้ทำครบแล้ว! ✓ ย้ายลงด้านล่าง');
+    spawnConfetti();
+  }, 350);
 }
 
 // ─── Comment Modal ───────────────────────────────────────────────────────────
-const comments = [];
+const commentBank = {
+  sweet: [
+    'หล่อมากค่ะพี่ปอนด์ ภูมิใจสุดๆ 🤍',
+    'สวยงามทุกช็อต ดูแล้วใจฟู',
+    'ปอนด์ทำได้ดีมาก ขอเป็นกำลังใจให้เสมอนะคะ',
+    'ภาพนี้สวยจนหยุดเลื่อนเลยค่ะ',
+    'ขอบคุณที่ทำให้คนไทยภูมิใจนะคะพี่ปอนด์',
+  ],
+  cool: [
+    'Iconic. ตัวจริงเรื่อง presence บนรันเวย์',
+    'Visual top-tier — Prada เลือกไม่ผิดจริงๆ',
+    'Effortlessly elegant. ปอนด์คือ moment',
+    'Fit นี้คือคลาส. หนังโฆษณาเดินได้',
+    'Main character energy ทุกเฟรม',
+  ],
+  hype: [
+    'POND NARAVIT IS THAT GIRL 🔥🔥🔥',
+    'GO OFF KING!! Milan ลุกเป็นไฟ 🚀',
+    'BEST DRESSED OF THE WEEK ไม่ต้องเถียง',
+    'หยุดโลกไว้ตรงนี้ — ปอนด์ x Prada =💥',
+    'WE ARE SO PROUD OF YOU PONDDDD!!',
+  ],
+};
+let commentStyle = 'sweet';
+function setCommentStyle(style, btn) {
+  commentStyle = style;
+  document.querySelectorAll('#commentModal .c-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  randomizeComment();
+}
 
 function getCurrentFocusedPostId() {
   const filtered = getFilteredPosts();
@@ -1152,6 +1199,8 @@ function chipOpenShare() {
 }
 function openCommentModal(postId) {
   currentPostId = postId;
+  commentStyle = 'sweet';
+  document.querySelectorAll('#commentModal .c-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
   randomizeComment();
   document.getElementById('commentModal').style.display = 'flex';
 }
@@ -1160,11 +1209,16 @@ function closeCommentModal() {
   currentPostId = null;
 }
 function randomizeComment() {
-  if (!comments.length) {
-    document.getElementById('randomComment').textContent = 'No comments available — add some via the Admin panel.';
+  const list = commentBank[commentStyle] || [];
+  if (!list.length) {
+    document.getElementById('randomComment').textContent = 'No comments available.';
     return;
   }
-  currentComment = comments[Math.floor(Math.random() * comments.length)];
+  let next = list[Math.floor(Math.random() * list.length)];
+  if (list.length > 1 && next === currentComment) {
+    next = list[(list.indexOf(next) + 1) % list.length];
+  }
+  currentComment = next;
   document.getElementById('randomComment').textContent = currentComment;
 }
 function copyAndClose() {
