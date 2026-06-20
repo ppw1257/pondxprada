@@ -488,33 +488,8 @@
 
 <div class="admin-body">
 
-  <!-- Username -->
-  <div class="section-head" style="margin-top:0">
-    <div class="section-title">Display Username</div>
-  </div>
-  <div class="username-card">
-    <div class="username-card-avatar">P</div>
-    <div style="flex:1">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div style="position:relative;flex:1">
-          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
-          <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
-            style="padding-left:26px"
-            oninput="updateUsernamePreview(this.value)"
-            onkeydown="if(event.key==='Enter')saveAdminUsername()">
-        </div>
-        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Save
-        </button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
-    </div>
-  </div>
-
   <!-- Goals -->
-  <div class="section-head">
+  <div class="section-head" style="margin-top:0">
     <div class="section-title">Engagement Goals</div>
     <div class="save-status"><span class="save-dot"></span>Auto-saved</div>
   </div>
@@ -551,6 +526,31 @@
   <div class="modal-box" style="text-align:left;max-height:90vh;overflow-y:auto;width:420px">
     <button class="modal-close" onclick="closePostModal()">✕</button>
     <div class="modal-title" id="modalTitle">Add New Post</div>
+
+    <!-- Username -->
+    <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Display Username</div>
+      <div class="username-card" style="border:none;padding:0;background:transparent">
+        <div class="username-card-avatar">P</div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="position:relative;flex:1">
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
+              <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
+                style="padding-left:26px"
+                oninput="updateUsernamePreview(this.value)"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();saveAdminUsername();}">
+            </div>
+            <button type="button" class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Save
+            </button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
+        </div>
+      </div>
+    </div>
 
     <div class="form-row">
       <label class="form-label">Platform</label>
@@ -1781,6 +1781,8 @@ function toggleFocus(id) {
 function openAddModal() {
   editingId = null;
   document.getElementById('modalTitle').textContent = 'Add New Post';
+  const unameInp = document.getElementById('adminUsernameInput');
+  if (unameInp) { unameInp.value = currentUsername; updateUsernamePreview(currentUsername); }
   document.getElementById('fPlatform').value = 'ig';
   document.getElementById('fMediaType').value = 'photo';
   document.getElementById('fType').value = 'all';
@@ -1807,6 +1809,8 @@ function openEditModal(id) {
   const p = posts.find(x => x.id === id); if (!p) return;
   editingId = id;
   document.getElementById('modalTitle').textContent = 'Edit Post';
+  const unameInp = document.getElementById('adminUsernameInput');
+  if (unameInp) { unameInp.value = currentUsername; updateUsernamePreview(currentUsername); }
   document.getElementById('fPlatform').value  = p.platform || 'ig';
   document.getElementById('fMediaType').value = p.mediaType || p.media_type || 'photo';
   document.getElementById('fType').value      = p.post_type || p.type || 'all';
