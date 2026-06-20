@@ -1265,20 +1265,8 @@ function generatePosts() {
     divider.style.display   = 'none';
     gridLabel.style.display = filtered.length ? 'block' : 'none';
     gridLabel.textContent   = 'เลือกโพสต์ที่จะช่วยปั่น';
-    document.getElementById('progressFill').style.width = '0%';
-    document.getElementById('progressPct').innerHTML = '0<span>%</span>';
-    document.getElementById('progressCompleteMsg').classList.remove('visible');
-    // Reset chip icons when nothing is focused
-    const chipMap = { chipIconLiked:'heart', chipIconCommented:'comment', chipIconShared:'share', chipIconSaved:'bookmark' };
-    Object.keys(chipMap).forEach(elId => {
-      const el = document.getElementById(elId);
-      if (el) el.innerHTML = icons[chipMap[elId]];
-      const chip = document.getElementById(elId.replace('chipIcon','chip-').toLowerCase().replace('chip-l','chip-l'));
-    });
-    ['chip-liked','chip-commented','chip-shared','chip-saved'].forEach(id => {
-      const chip = document.getElementById(id);
-      if (chip) { chip.classList.remove('done'); const c = chip.querySelector('.chip-check'); if (c) c.innerHTML = ''; }
-    });
+    // Show aggregate progress across ALL posts when on grid view
+    updateProgressTracker();
     return;
   }
 
