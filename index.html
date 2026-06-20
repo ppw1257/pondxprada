@@ -67,8 +67,6 @@
     .action-chip.done .chip-icon { filter: none; }
     .action-chip .chip-label { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; color: var(--muted); transition: color 0.2s; }
     .action-chip.done .chip-label { color: var(--green); }
-    .action-chip .chip-check { width: 14px; height: 14px; border-radius: 2px; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 9px; }
-    .action-chip.done .chip-check { background: var(--green); border-color: var(--green); color: #fff; border-radius: 2px; }
     .chip-count { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--black); line-height: 1; margin-top: 1px; letter-spacing: -0.01em; }
     .chip-count .chip-count-total { color: var(--muted); font-size: 11px; font-weight: 400; }
     .action-chip.done .chip-count { color: var(--green); }
@@ -409,25 +407,21 @@
         <span class="chip-icon" id="chipIconLiked"></span>
         <span class="chip-label">Like</span>
         <div class="chip-count" id="chipCount-liked">0<span class="chip-count-total">/0</span></div>
-        <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-commented" onclick="chipOpenComment()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconCommented"></span>
         <span class="chip-label">Comment</span>
         <div class="chip-count" id="chipCount-commented">0<span class="chip-count-total">/0</span></div>
-        <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-shared" onclick="chipOpenShare()" style="cursor:pointer">
         <span class="chip-icon" id="chipIconShared"></span>
         <span class="chip-label">Share</span>
         <div class="chip-count" id="chipCount-shared">0<span class="chip-count-total">/0</span></div>
-        <div class="chip-check"></div>
       </div>
       <div class="action-chip" id="chip-saved">
         <span class="chip-icon" id="chipIconSaved"></span>
         <span class="chip-label">Save</span>
         <div class="chip-count" id="chipCount-saved">0<span class="chip-count-total">/0</span></div>
-        <div class="chip-check"></div>
       </div>
     </div>
 
@@ -638,27 +632,11 @@
 
     <!-- Thumbnail -->
     <div class="form-row">
-      <label class="form-label">Thumbnail Image</label>
-      <div style="display:flex;gap:0;margin-bottom:10px;border:1px solid var(--border);border-radius:3px;overflow:hidden">
-        <button type="button" id="imgTabUpload" onclick="switchImgTab('upload')" style="flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--black);color:#fff">Upload Image</button>
-        <button type="button" id="imgTabUrl"    onclick="switchImgTab('url')"    style="flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--offwhite);color:var(--muted)">Paste URL</button>
-      </div>
-      <div id="imgPanelUpload">
-        <label id="uploadDropzone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px;border:2px dashed var(--border);border-radius:3px;cursor:pointer;background:var(--offwhite)" ondragover="event.preventDefault();this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleImgDrop(event)">
-          <span style="font-size:12px;color:var(--muted);text-align:center">Click to choose, or drag & drop<br><span style="font-size:10px">JPG, PNG, WEBP — up to 5MB</span></span>
-          <input type="file" id="fImgFile" accept="image/*" style="display:none" onchange="handleImgFile(this)">
-        </label>
-        <div id="uploadPreviewWrap" style="display:none;margin-top:8px;position:relative">
-          <img id="uploadPreviewImg" style="width:100%;max-height:200px;object-fit:cover;border-radius:3px;border:1px solid var(--border)">
-          <button type="button" onclick="clearImage()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">✕</button>
-        </div>
-      </div>
-      <div id="imgPanelUrl" style="display:none">
-        <input type="text" class="form-input" id="fImgUrl" placeholder="https://example.com/image.jpg" oninput="handleImgUrl(this.value)">
-        <div id="urlPreviewWrap" style="display:none;margin-top:8px;position:relative">
-          <img id="urlPreviewImg" style="width:100%;max-height:200px;object-fit:cover;border-radius:3px;border:1px solid var(--border)" onerror="this.parentElement.style.display='none';showToast('Could not load image — check the URL')">
-          <button type="button" onclick="clearImage()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">✕</button>
-        </div>
+      <label class="form-label">Thumbnail Image (URL)</label>
+      <input type="text" class="form-input" id="fImgUrl" placeholder="https://example.com/image.jpg" oninput="handleImgUrl(this.value)">
+      <div id="urlPreviewWrap" style="display:none;margin-top:8px;position:relative">
+        <img id="urlPreviewImg" style="width:100%;max-height:200px;object-fit:cover;border-radius:3px;border:1px solid var(--border)" onerror="this.parentElement.style.display='none';showToast('Could not load image — check the URL')">
+        <button type="button" onclick="clearImage()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">✕</button>
       </div>
     </div>
 
@@ -963,8 +941,6 @@ function updateProgressTracker() {
     const allDone = totalN > 0 && doneN === totalN;
     chip.classList.toggle('done', allDone);
     chip.style.opacity = totalN === 0 ? '0.4' : '';
-    const check = chip.querySelector('.chip-check');
-    if (check) check.innerHTML = allDone ? '✓' : '';
     const countEl = document.getElementById(countId);
     if (countEl) countEl.innerHTML = doneN + '<span class="chip-count-total">/' + totalN + '</span>';
   });
@@ -1572,7 +1548,6 @@ let editingId   = null;
 let deletingId  = null;
 let isFocused   = false;
 let selectedImageData = null;
-let imgTabMode  = 'upload';
 
 
 function renderPosts() {
@@ -1624,36 +1599,7 @@ function renderPosts() {
   }).join('');
 }
 
-// Image picker
-function switchImgTab(mode) {
-  imgTabMode = mode;
-  document.getElementById('imgTabUpload').style.cssText = `flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:${mode==='upload'?'var(--black)':'var(--offwhite)'};color:${mode==='upload'?'#fff':'var(--muted)'}`;
-  document.getElementById('imgTabUrl').style.cssText    = `flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:${mode==='url'?'var(--black)':'var(--offwhite)'};color:${mode==='url'?'#fff':'var(--muted)'}`;
-  document.getElementById('imgPanelUpload').style.display = mode==='upload' ? 'block' : 'none';
-  document.getElementById('imgPanelUrl').style.display    = mode==='url'    ? 'block' : 'none';
-  renderPreview();
-}
-function handleImgFile(input) {
-  const file = input.files[0]; if (!file) return;
-  if (file.size > 5*1024*1024) { showToast('Image is larger than 5MB'); return; }
-  const reader = new FileReader();
-  reader.onload = e => {
-    selectedImageData = e.target.result;
-    document.getElementById('uploadPreviewImg').src = selectedImageData;
-    document.getElementById('uploadPreviewWrap').style.display = 'block';
-    document.getElementById('uploadDropzone').style.display = 'none';
-    renderPreview();
-  };
-  reader.readAsDataURL(file);
-}
-function handleImgDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadDropzone').style.borderColor = 'var(--border)';
-  const file = e.dataTransfer.files[0];
-  if (!file || !file.type.startsWith('image/')) return;
-  document.getElementById('fImgFile').files = e.dataTransfer.files;
-  handleImgFile(document.getElementById('fImgFile'));
-}
+// Image picker (URL only)
 function handleImgUrl(val) {
   const url = val.trim();
   if (!url) { selectedImageData = null; document.getElementById('urlPreviewWrap').style.display = 'none'; renderPreview(); return; }
@@ -1664,36 +1610,18 @@ function handleImgUrl(val) {
 }
 function clearImage() {
   selectedImageData = null;
-  document.getElementById('fImgFile').value = '';
-  document.getElementById('uploadPreviewWrap').style.display = 'none';
-  document.getElementById('uploadDropzone').style.display = 'flex';
   document.getElementById('fImgUrl').value = '';
   document.getElementById('urlPreviewWrap').style.display = 'none';
   renderPreview();
 }
 function resetImagePicker(existingImg) {
-  selectedImageData = null;
-  document.getElementById('fImgFile').value = '';
-  document.getElementById('fImgUrl').value = '';
-  document.getElementById('uploadPreviewWrap').style.display = 'none';
-  document.getElementById('uploadDropzone').style.display = 'flex';
-  document.getElementById('urlPreviewWrap').style.display = 'none';
+  selectedImageData = existingImg || null;
+  document.getElementById('fImgUrl').value = existingImg || '';
   if (existingImg) {
-    if (existingImg.startsWith('data:')) {
-      switchImgTab('upload');
-      selectedImageData = existingImg;
-      document.getElementById('uploadPreviewImg').src = existingImg;
-      document.getElementById('uploadPreviewWrap').style.display = 'block';
-      document.getElementById('uploadDropzone').style.display = 'none';
-    } else {
-      switchImgTab('url');
-      selectedImageData = existingImg;
-      document.getElementById('fImgUrl').value = existingImg;
-      document.getElementById('urlPreviewImg').src = existingImg;
-      document.getElementById('urlPreviewWrap').style.display = 'block';
-    }
+    document.getElementById('urlPreviewImg').src = existingImg;
+    document.getElementById('urlPreviewWrap').style.display = 'block';
   } else {
-    switchImgTab('upload');
+    document.getElementById('urlPreviewWrap').style.display = 'none';
   }
 }
 
