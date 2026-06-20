@@ -171,6 +171,10 @@
     .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.12); }
     .thumb-item.completed .thumb-media { opacity: 0.4; filter: grayscale(60%); }
     .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 20px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.9); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .thumb-platform-badge { position: absolute; top: 6px; right: 6px; z-index: 4; background: rgba(10,10,10,0.72); color: #fff; font-size: 8px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 3px; line-height: 1.4; pointer-events: none; }
+    .thumb-info-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: linear-gradient(transparent, rgba(0,0,0,0.78)); padding: 16px 6px 5px; display: flex; flex-direction: column; gap: 1px; pointer-events: none; }
+    .thumb-account { font-size: 9px; font-weight: 700; color: #fff; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .thumb-media-type { font-size: 8px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255,255,255,0.78); }
 
     /* ── Platform-specific cards ── */
     .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; padding: 13px; }
@@ -290,12 +294,14 @@
     #adminView .post-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
     #adminView .post-item:last-child { border-bottom: none; }
     #adminView .post-item:hover { background: var(--offwhite); }
-    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
+    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; position: relative; }
+    #adminView .post-thumb-badge { position: absolute; bottom: 2px; right: 2px; background: rgba(10,10,10,0.75); color: #fff; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; padding: 1px 4px; border-radius: 2px; line-height: 1.4; }
     #adminView .post-meta { flex: 1; min-width: 0; }
     #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
     #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
     #adminView .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
+    #adminView .tag-account { background: #fff; color: var(--black); border: 1px solid var(--border); font-weight: 600; }
     #adminView .tag-type { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
     #adminView .tag-media { background: #f0faf4; color: #1a7a44; border: 1px solid #b2dfc5; }
     #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 700; }
@@ -729,6 +735,7 @@ function formatNum(n) {
 }
 
 const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const PLATFORM_BADGE = { ig:'IG', twitter:'X', fb:'f', youtube:'YT', tiktok:'TikTok' };
 const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
 const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 const GOAL_DEFS     = [
@@ -1221,6 +1228,9 @@ function buildThumb(idx) {
   const postId = post.id;
   const done   = isAllDone(postId);
   const isFocus = !!post.focused;
+  const platform = post.platform || 'ig';
+  const platformBadge = PLATFORM_BADGE[platform] || platform;
+  const mediaLabel = MEDIA_LABELS[post.mediaType || post.media_type] || '';
   const thumbInner = (post.image || post.image_url)
     ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="thumbImgError(this)">`
     : icons.camera;
@@ -1230,6 +1240,11 @@ function buildThumb(idx) {
          style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
       <div class="thumb-media">${thumbInner}</div>
       <div class="thumb-overlay"></div>
+      <div class="thumb-platform-badge">${platformBadge}</div>
+      <div class="thumb-info-bar">
+        <span class="thumb-account">Pond Naravit</span>
+        ${mediaLabel ? `<span class="thumb-media-type">${mediaLabel}</span>` : ''}
+      </div>
       ${isFocus && !done ? `<div style="position:absolute;top:10px;left:10px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;letter-spacing:0.12em;z-index:4;box-shadow:0 1px 3px rgba(0,0,0,0.25)">FOCUS</div>` : ''}
     </div>`;
 }
@@ -1572,10 +1587,14 @@ function renderPosts() {
     const t = (p.time || p.post_time) ? new Date(p.time || p.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '—';
     return `
       <div class="post-item${p.focused?' focus-ring':''}">
-        <div class="post-thumb">${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
+        <div class="post-thumb">
+          ${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}
+          <span class="post-thumb-badge">${PLATFORM_BADGE[p.platform]||p.platform}</span>
+        </div>
         <div class="post-meta">
           ${p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : ''}
           <div class="post-tags">
+            <span class="tag tag-account">Pond Naravit</span>
             <span class="tag tag-platform">${PLATFORMS[p.platform]||p.platform}</span>
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
