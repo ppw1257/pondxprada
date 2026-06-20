@@ -33,8 +33,6 @@
     .header-title { font-family: var(--font-display); font-size: 26px; font-weight: 300; color: #fff; letter-spacing: 0.04em; line-height: 1.1; }
     .header-title em { font-style: italic; color: var(--gold-light); }
     .header-sub { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-top: 6px; }
-    .header-username-row { display: flex; align-items: center; gap: 5px; justify-content: center; margin-bottom: 4px; }
-    .header-username-text { font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); }
 
     /* ── Tabs & Filters ── */
     .tab-bar { background: var(--black); border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: center; gap: 2px; padding: 10px 16px; }
@@ -92,7 +90,6 @@
     .media-frame-wide { aspect-ratio: 16/9; }
     .media-frame-tall { aspect-ratio: 9/16; max-height: 420px; }
     .play-overlay { position: absolute; width: 48px; height: 48px; background: rgba(255,255,255,0.18); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,255,255,0.4); }
-    .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.72); color: #fff; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; }
     .ig-actions { display: flex; align-items: center; gap: 11px; padding: 9px 11px 6px; }
     .ig-action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); transition: color 0.15s; }
     .ig-action-btn:hover { color: var(--black); }
@@ -102,7 +99,6 @@
     .ig-action-btn.saved { color: var(--black); }
     .ig-save { margin-left: auto; }
     .ig-likes { padding: 0 11px 4px; font-size: 12px; font-weight: 600; }
-    .ig-caption { padding: 0 11px 11px; font-size: 12px; color: var(--black); line-height: 1.5; }
 
     /* ── Card Checklist ── */
     .card-checklist { display: flex; border-top: 1px solid var(--border); background: var(--offwhite); }
@@ -129,7 +125,6 @@
     .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
     .goals-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .goal-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: 6px; padding: 8px 5px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .goal-card-icon { font-size: 13px; line-height: 1; }
     .goal-card-type { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
     .goal-card-num { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--black); line-height: 1; }
     .goal-card-bar { width: 100%; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; margin-top: 4px; }
@@ -182,7 +177,6 @@
     .tw-header { display: flex; gap: 8px; margin-bottom: 10px; }
     .tw-info .tw-name { font-size: 13px; font-weight: 700; }
     .tw-info .tw-handle { font-size: 11px; color: var(--muted); }
-    .tw-text { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
     .tw-actions { display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
     .tw-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tw-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
@@ -192,7 +186,6 @@
     .fb-header { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px solid var(--border); }
     .fb-user { font-size: 12px; font-weight: 600; }
     .fb-time { font-size: 10px; color: var(--muted); }
-    .fb-text { padding: 10px 11px; font-size: 13px; line-height: 1.5; }
     .fb-reactions { padding: 6px 11px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; gap: 8px; }
     .fb-actions { display: flex; border-top: 1px solid var(--border); }
     .fb-act { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; background: none; border: none; border-right: 1px solid var(--border); transition: background 0.15s; }
@@ -212,8 +205,6 @@
 
     .tk-card { background: #0a0a0a; border-radius: 3px; overflow: hidden; position: relative; }
     .tk-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 16px 11px 11px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .tk-left .tk-username { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
-    .tk-left .tk-desc { font-size: 11px; color: rgba(255,255,255,0.82); line-height: 1.4; }
     .tk-right { display: flex; flex-direction: column; gap: 13px; align-items: center; }
     .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 9px; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tk-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
@@ -297,7 +288,6 @@
     #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; position: relative; }
     #adminView .post-thumb-badge { position: absolute; bottom: 2px; right: 2px; background: rgba(10,10,10,0.75); color: #fff; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; padding: 1px 4px; border-radius: 2px; line-height: 1.4; }
     #adminView .post-meta { flex: 1; min-width: 0; }
-    #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
     #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
     #adminView .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
@@ -828,8 +818,6 @@ function requiredCount(p) {
 let currentUsername = 'pondnaravit';
 try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
 
-function getUsername() { return currentUsername; }
-
 function updateUsernamePreview(val) {
   const clean = val.replace(/^@/, '') || 'pondnaravit';
   const el = document.getElementById('adminUsernamePreview');
@@ -1032,27 +1020,6 @@ function getMediaContent(post) {
 
 function focusBannerHTML(post) {
   return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
-}
-
-function goalsHTML(post) {
-  const postId = post?.id || '';
-  const s = postId ? getState(postId) : { liked:false, commented:false, shared:false };
-  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
-  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
-  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
-  const likes    = parseInt(post?.likes    || 0) + (s.liked ? 1 : 0);
-  const comments = parseInt(post?.comments || 0) + (s.commented ? 1 : 0);
-  const shares   = parseInt(post?.shares   || 0) + (s.shared ? 1 : 0);
-  const pctL = gL ? Math.min(100, Math.round((likes    / gL) * 100)) : 0;
-  const pctC = gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0;
-  const pctS = gS ? Math.min(100, Math.round((shares   / gS) * 100)) : 0;
-  if (!gL && !gC && !gS) return '';
-  const cards = [
-    gL ? `<div class="goal-card" id="goal-likes-${postId}"><span class="goal-card-type">Likes</span><span class="goal-card-num" id="goal-likes-num-${postId}">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-likes-fill-${postId}" style="width:${pctL}%"></div></div></div>` : '',
-    gC ? `<div class="goal-card" id="goal-comments-${postId}"><span class="goal-card-type">Comments</span><span class="goal-card-num" id="goal-comments-num-${postId}">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-comments-fill-${postId}" style="width:${pctC}%"></div></div></div>` : '',
-    gS ? `<div class="goal-card" id="goal-shares-${postId}"><span class="goal-card-type">Shares</span><span class="goal-card-num" id="goal-shares-num-${postId}">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-shares-fill-${postId}" style="width:${pctS}%"></div></div></div>` : '',
-  ].filter(Boolean).join('');
-  return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
 }
 
 function updateGoalDisplay(postId) {
