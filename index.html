@@ -430,10 +430,8 @@
   <div class="modal-box">
     <button class="modal-close" onclick="closeCommentModal()">✕</button>
     <div class="modal-title">Random Comment</div>
-    <div class="comment-filter-row">
-      <button class="c-pill active" data-style="sweet" onclick="setCommentStyle('sweet',this)">Sweet</button>
-      <button class="c-pill" data-style="cool" onclick="setCommentStyle('cool',this)">Cool</button>
-      <button class="c-pill" data-style="hype" onclick="setCommentStyle('hype',this)">Hype</button>
+    <div class="comment-filter-row" style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:600">
+      Pool: <span id="commentPoolCount" style="color:var(--gold);margin-left:4px">0</span>&nbsp;·&nbsp;Picked: <span id="commentPickedCount" style="color:var(--gold);margin-left:4px">0</span>
     </div>
     <div class="comment-pick-list" id="commentPickList"></div>
     <div class="modal-actions">
@@ -1289,36 +1287,95 @@ function checkAllDone(postId) {
   }, 400);
 }
 
-// ─── Comment Modal ───────────────────────────────────────────────────────────
-const commentBank = {
-  sweet: [
-    'หล่อมากค่ะพี่ปอนด์ ภูมิใจสุดๆ 🤍',
-    'สวยงามทุกช็อต ดูแล้วใจฟู',
-    'ปอนด์ทำได้ดีมาก ขอเป็นกำลังใจให้เสมอนะคะ',
-    'ภาพนี้สวยจนหยุดเลื่อนเลยค่ะ',
-    'ขอบคุณที่ทำให้คนไทยภูมิใจนะคะพี่ปอนด์',
-  ],
-  cool: [
-    'Iconic. ตัวจริงเรื่อง presence บนรันเวย์',
-    'Visual top-tier — Prada เลือกไม่ผิดจริงๆ',
-    'Effortlessly elegant. ปอนด์คือ moment',
-    'Fit นี้คือคลาส. หนังโฆษณาเดินได้',
-    'Main character energy ทุกเฟรม',
-  ],
-  hype: [
-    'POND NARAVIT IS THAT GIRL 🔥🔥🔥',
-    'GO OFF KING!! Milan ลุกเป็นไฟ 🚀',
-    'BEST DRESSED OF THE WEEK ไม่ต้องเถียง',
-    'หยุดโลกไว้ตรงนี้ — ปอนด์ x Prada =💥',
-    'WE ARE SO PROUD OF YOU PONDDDD!!',
-  ],
-};
-let commentStyle = 'sweet';
-function setCommentStyle(style, btn) {
-  commentStyle = style;
-  document.querySelectorAll('#commentModal .c-pill').forEach(p => p.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  randomizeComment();
+// ─── Comment Modal (pool-based generator, merged from Comment Picker) ────────
+const COMMENT_TONES = ["Praising Prada","Adoring Pond","Grateful Fan","Brand Love","Pure Pride","Emotional","Iconic Moment"];
+const COMMENT_EMOJIS = ["🖤","✨","🔥","🇹🇭","🇮🇹","💫","👑","🙌","💯","😍","🌍","🫶","🙏","💕","🤍","🖤✨","🇹🇭✨","💯🖤","👑✨","🙏🖤","🔥🖤","✨🇹🇭","🌟","💎","🫰"];
+const PRADA_PRAISE = [
+  "Prada has always defined what luxury means",
+  "Prada's legacy speaks for itself",
+  "The house of Prada sets the standard every season",
+  "Prada's vision is unlike anything else in fashion",
+  "No brand carries prestige quite like Prada",
+  "Prada continues to lead the fashion world with grace",
+  "Prada's craftsmanship and taste are second to none",
+  "The Prada universe is one of elegance and intention",
+  "Prada has always understood true sophistication",
+  "The brilliance of Prada never stops inspiring us",
+  "Prada remains the pinnacle of Italian fashion excellence",
+  "There is a reason the whole world looks to Prada every season",
+  "Prada's eye for beauty is simply unmatched",
+  "Prada proves season after season why they are the greatest",
+  "The world of Prada is built on excellence and nothing less",
+];
+const POND_PRAISE = [
+  "Pond Naravit is everything a fashion icon should be",
+  "Pond Naravit carries himself with an elegance that is rare and real",
+  "The presence of Pond Naravit is impossible to ignore",
+  "Pond Naravit radiates a charm that the camera simply cannot contain",
+  "Pond Naravit is the definition of effortless grace",
+  "There is something magnetic about Pond Naravit that draws every eye",
+  "Pond Naravit's beauty goes far beyond what words can describe",
+  "Pond Naravit belongs in the highest rooms of fashion and tonight proved it",
+  "The elegance Pond Naravit brings is timeless and extraordinary",
+  "Pond Naravit made every single moment at Milan unforgettable",
+  "Pond Naravit is not just handsome — he is a genuine icon",
+  "The world is finally seeing what Thailand has always known about Pond Naravit",
+  "Pond Naravit's style, grace, and presence are on another level entirely",
+  "Watching Pond Naravit at Milan Fashion Week is watching greatness in motion",
+  "Pond Naravit is the kind of person that fashion was invented for",
+];
+const GRATITUDE = [
+  "thank you Prada for choosing Pond Naravit",
+  "thank you Prada for seeing what we see in Pond Naravit",
+  "thank you Prada for giving Pond Naravit this stage",
+  "thank you Prada for inviting Pond Naravit to SS27",
+  "thank you Prada for recognizing that Pond Naravit belongs here",
+  "thank you Prada for making this dream real for Pond Naravit and all of us",
+  "thank you Prada for placing Pond Naravit exactly where he deserves to be",
+  "we are so grateful to Prada for choosing Pond Naravit for SS27 Milan",
+  "Prada we thank you from the bottom of our hearts for Pond Naravit",
+  "from every fan: thank you Prada for believing in Pond Naravit",
+];
+const LOCATION = [
+  "at Prada SS27 Milan","at Milan Fashion Week SS27","at the Prada SS27 show in Milan",
+  "on the front row at Prada Milan","at Prada Milan Fashion Week","at SS27 in Milan",
+  "at the Prada show in Milan","at Prada SS27",
+];
+function _crnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function _ccap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+const COMMENT_STRUCTURES = [
+  () => `${_crnd(PRADA_PRAISE)} — and ${_crnd(GRATITUDE)} ${_crnd(LOCATION)} {e}`,
+  () => `${_crnd(POND_PRAISE)} ${_crnd(LOCATION)} — ${_crnd(GRATITUDE)} {e}`,
+  () => `${_ccap(_crnd(GRATITUDE))} ${_crnd(LOCATION)}. ${_crnd(POND_PRAISE)} {e}`,
+  () => `${_crnd(PRADA_PRAISE)}, and Pond Naravit proved it ${_crnd(LOCATION)} — ${_crnd(GRATITUDE)} {e}`,
+  () => `${_crnd(POND_PRAISE)}. ${_ccap(_crnd(GRATITUDE))} ${_crnd(LOCATION)} {e}`,
+  () => `Dear Prada: ${_crnd(GRATITUDE)} ${_crnd(LOCATION)}. ${_crnd(POND_PRAISE)} {e}`,
+  () => `${_crnd(PRADA_PRAISE)}. That is why we ${_crnd(GRATITUDE)} ${_crnd(LOCATION)} {e}`,
+  () => `We are in awe of Pond Naravit ${_crnd(LOCATION)}, and ${_crnd(GRATITUDE)} for this moment {e}`,
+  () => `${_ccap(_crnd(GRATITUDE))} ${_crnd(LOCATION)}. The world now sees that ${_crnd(POND_PRAISE).toLowerCase()} {e}`,
+  () => `${_crnd(PRADA_PRAISE)}, just as Pond Naravit showed us all ${_crnd(LOCATION)} {e}`,
+];
+let commentPool = [];          // generated pool { text, tone }
+let commentUsed = new Set();   // indexes already picked
+let commentPickCount = 0;
+
+function ensureCommentPool(min = 200){
+  const seen = new Set(commentPool.map(c => c.text));
+  let attempts = 0;
+  while (commentPool.length < min && attempts < min * 30){
+    attempts++;
+    const fn = _crnd(COMMENT_STRUCTURES);
+    let text = fn().replace('{e}', Math.random() > 0.3 ? _crnd(COMMENT_EMOJIS) : '').trim();
+    text = text.replace(/\s+/g,' ');
+    if (!seen.has(text)){ seen.add(text); commentPool.push({ text, tone: _crnd(COMMENT_TONES) }); }
+  }
+  updateCommentPoolStats();
+}
+function updateCommentPoolStats(){
+  const a = document.getElementById('commentPoolCount');
+  const b = document.getElementById('commentPickedCount');
+  if (a) a.textContent = commentPool.length.toLocaleString();
+  if (b) b.textContent = commentPickCount.toLocaleString();
 }
 
 function getCurrentFocusedPostId() {
@@ -1338,8 +1395,7 @@ function chipOpenShare() {
 }
 function openCommentModal(postId) {
   currentPostId = postId;
-  commentStyle = 'sweet';
-  document.querySelectorAll('#commentModal .c-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
+  ensureCommentPool(200);
   shuffleCommentOptions();
   document.getElementById('commentModal').style.display = 'flex';
 }
@@ -1347,15 +1403,24 @@ function closeCommentModal() {
   document.getElementById('commentModal').style.display = 'none';
   currentPostId = null;
 }
-let currentPickOptions = [];
+// no-op kept for backwards-compat with any leftover onclick references
+function setCommentStyle() { shuffleCommentOptions(); }
+
+let currentPickOptions = [];   // [{idx, text, tone}]
 function shuffleCommentOptions() {
-  const list = (commentBank[commentStyle] || []).slice();
-  // Fisher-Yates, take first 3
-  for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [list[i], list[j]] = [list[j], list[i]];
+  ensureCommentPool(200);
+  if (commentUsed.size >= commentPool.length) commentUsed.clear();
+  const picks = [];
+  const localUsed = new Set();
+  let guard = 0;
+  while (picks.length < 3 && guard < 500 && (commentUsed.size + localUsed.size) < commentPool.length){
+    guard++;
+    const idx = Math.floor(Math.random() * commentPool.length);
+    if (commentUsed.has(idx) || localUsed.has(idx)) continue;
+    localUsed.add(idx);
+    picks.push({ idx, ...commentPool[idx] });
   }
-  currentPickOptions = list.slice(0, 3);
+  currentPickOptions = picks;
   currentComment = '';
   renderCommentPicks();
   const btn = document.getElementById('commentConfirmBtn');
@@ -1368,20 +1433,22 @@ function renderCommentPicks() {
     wrap.innerHTML = '<div class="comment-box">No comments available.</div>';
     return;
   }
-  wrap.innerHTML = '<div class="comment-pick-hint">เลือก 1 ข้อความ</div>' +
+  wrap.innerHTML = '<div class="comment-pick-hint">เลือก 1 ข้อความ · Pool ' + commentPool.length.toLocaleString() + '</div>' +
     currentPickOptions.map((c, i) =>
-      `<div class="comment-pick" data-idx="${i}" onclick="pickComment(${i})">${c}</div>`
+      `<div class="comment-pick" data-idx="${i}" onclick="pickComment(${i})">${c.text}<div style="margin-top:6px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${c.tone}</div></div>`
     ).join('');
 }
 function pickComment(i) {
-  currentComment = currentPickOptions[i] || '';
+  const opt = currentPickOptions[i];
+  if (!opt) return;
+  currentComment = opt.text;
+  commentUsed.add(opt.idx);
   document.querySelectorAll('#commentPickList .comment-pick').forEach((el, idx) => {
     el.classList.toggle('picked', idx === i);
   });
   const btn = document.getElementById('commentConfirmBtn');
   if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
 }
-// kept for backwards-compat with any onclick still referencing it
 function randomizeComment() { shuffleCommentOptions(); }
 function copyAndClose() { confirmPickedComment(); }
 function confirmPickedComment() {
