@@ -604,6 +604,16 @@
         <input type="number" class="form-input" id="fShares" placeholder="0" min="0">
       </div>
     </div>
+
+    <!-- Required Actions -->
+    <div class="form-row">
+      <label class="form-label">Required Actions</label>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqLike" checked> Like</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqComment" checked> Comment</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqShare" checked> Share</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqSave" checked> Save</label>
+      </div>
     </div>
 
     <!-- Thumbnail -->
@@ -762,6 +772,22 @@ function getRequired(p) {
 function requiredCount(p) {
   const r = getRequired(p);
   return (r.liked?1:0)+(r.commented?1:0)+(r.shared?1:0)+(r.saved?1:0);
+}
+function setRequiredFields(required) {
+  const fields = [
+    ['fReqLike', 'liked'],
+    ['fReqComment', 'commented'],
+    ['fReqShare', 'shared'],
+    ['fReqSave', 'saved'],
+  ];
+  fields.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = !!required[key];
+  });
+}
+function getRequiredField(id, fallback = true) {
+  const el = document.getElementById(id);
+  return el ? el.checked : fallback;
 }
 
 
@@ -1712,10 +1738,7 @@ function openAddModal() {
   document.getElementById('fLikes').value = '';
   document.getElementById('fComments').value = '';
   document.getElementById('fShares').value = '';
-  document.getElementById('fReqLike').checked = true;
-  document.getElementById('fReqComment').checked = true;
-  document.getElementById('fReqShare').checked = true;
-  document.getElementById('fReqSave').checked = true;
+  setRequiredFields({ liked:true, commented:true, shared:true, saved:true });
 
   resetImagePicker(null);
   setFocusUI(false);
@@ -1737,10 +1760,7 @@ function openEditModal(id) {
   document.getElementById('fComments').value  = p.comments || '';
   document.getElementById('fShares').value    = p.shares || '';
   const r = getRequired(p);
-  document.getElementById('fReqLike').checked    = r.liked;
-  document.getElementById('fReqComment').checked = r.commented;
-  document.getElementById('fReqShare').checked   = r.shared;
-  document.getElementById('fReqSave').checked    = r.saved;
+  setRequiredFields(r);
   resetImagePicker(p.image || p.image_url || null);
 
   setFocusUI(p.focused || false);
@@ -1770,10 +1790,10 @@ function savePost() {
     likes:        parseInt(document.getElementById('fLikes').value) || 0,
     comments:     parseInt(document.getElementById('fComments').value) || 0,
     shares:       parseInt(document.getElementById('fShares').value) || 0,
-    requireLike:    document.getElementById('fReqLike').checked,
-    requireComment: document.getElementById('fReqComment').checked,
-    requireShare:   document.getElementById('fReqShare').checked,
-    requireSave:    document.getElementById('fReqSave').checked,
+    requireLike:    getRequiredField('fReqLike'),
+    requireComment: getRequiredField('fReqComment'),
+    requireShare:   getRequiredField('fReqShare'),
+    requireSave:    getRequiredField('fReqSave'),
     image:        selectedImageData || null,
     image_url:    selectedImageData || null,
     focused:      isFocused,
