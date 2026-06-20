@@ -1255,11 +1255,12 @@ function setPlatform(p) {
 }
 
 function setPageFilter(f) {
-  pageFilter = f;
+  // กดซ้ำ = ยกเลิก filter กลับมาแสดงทั้งหมด
+  pageFilter = (pageFilter === f) ? 'all' : f;
   focusedIndex = null;
   ['Focus','Airport','Show','After'].forEach(k => {
     const el = document.getElementById('pf'+k);
-    if (el) el.classList.toggle('active', f === k.toLowerCase());
+    if (el) el.classList.toggle('active', pageFilter === k.toLowerCase());
   });
   generatePosts();
 }
