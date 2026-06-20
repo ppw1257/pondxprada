@@ -1110,17 +1110,17 @@ function buildFocused(idx) {
         ${focusBannerHTML(post)}
         <div class="media-frame media-frame-tall" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}
           <div class="play-overlay">${icons.play}</div>
-        </div>
-        <div class="tk-overlay" style="justify-content:space-between;align-items:flex-end">
-          <div class="tk-left">
-            <div class="tk-username">@${getPostUsername(post)}</div>
-            ${post.label ? `<div class="tk-desc">${post.label}</div>` : ''}
-          </div>
-          <div class="tk-right">
-            <button class="tk-btn${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
-            <button class="tk-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</button>
-            <button class="tk-btn" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</button>
-            <div class="tk-btn">${icons.music}</div>
+          <div class="tk-overlay" style="justify-content:space-between;align-items:flex-end">
+            <div class="tk-left">
+              <div class="tk-username">@${getPostUsername(post)}</div>
+              ${post.label ? `<div class="tk-desc">${post.label}</div>` : ''}
+            </div>
+            <div class="tk-right">
+              <button class="tk-btn${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
+              <button class="tk-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</button>
+              <button class="tk-btn" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</button>
+              <div class="tk-btn">${icons.music}</div>
+            </div>
           </div>
         </div>
         ${cardChecklistHTML(postId, post)}
@@ -1139,7 +1139,7 @@ function buildThumb(idx) {
   const thumbInner = (post.image || post.image_url)
     ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="thumbImgError(this)">`
     : icons.camera;
-  const platLabel = { ig:'IG', twitter:'X', fb:'FB', youtube:'YT', tiktok:'TK' }[post.platform||'ig'] || 'IG';
+  const platLabel = { ig:'IG', twitter:'X', fb:'FB', youtube:'YT', tiktok:'TT' }[post.platform||'ig'] || 'IG';
   const mediaLabel = (post.mediaType||post.media_type||'photo').toUpperCase();
   const uname = getPostUsername(post);
   const doneCheck = done ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:34px;height:34px;border-radius:50%;background:rgba(39,174,96,0.92);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">\u2713</div></div>` : '';
