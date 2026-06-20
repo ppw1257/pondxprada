@@ -357,8 +357,7 @@
     #adminView .empty-text { font-family: var(--font-display); font-size: 13px; font-weight: 500; font-style: normal; letter-spacing: 0.06em; }
     #adminView .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
     #adminView .save-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-    #adminView .username-card { background: var(--card); border: 1px solid var(--border); border-radius: 2px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-    #adminView .username-card-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; font-family: var(--font-display); font-style: normal; flex-shrink: 0; }
+
     #adminView .btn-danger { background: var(--red); color: #fff; }
     #adminView .btn-danger:hover { background: #a93226; }
     #adminView .confirm-text { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 20px; }
@@ -501,33 +500,8 @@
 
 <div class="admin-body">
 
-  <!-- Username -->
-  <div class="section-head" style="margin-top:0">
-    <div class="section-title">Display Username</div>
-  </div>
-  <div class="username-card">
-    <div class="username-card-avatar">P</div>
-    <div style="flex:1">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div style="position:relative;flex:1">
-          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
-          <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
-            style="padding-left:26px"
-            oninput="updateUsernamePreview(this.value)"
-            onkeydown="if(event.key==='Enter')saveAdminUsername()">
-        </div>
-        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Save
-        </button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
-    </div>
-  </div>
-
   <!-- Goals -->
-  <div class="section-head">
+  <div class="section-head" style="margin-top:0">
     <div class="section-title">Engagement Goals</div>
     <div class="save-status"><span class="save-dot"></span>Auto-saved</div>
   </div>
@@ -1925,8 +1899,7 @@ async function enterAdmin() {
   document.getElementById('adminView').style.display  = 'block';
   window.scrollTo(0, 0);
   loadLocalData();
-  const inp = document.getElementById('adminUsernameInput');
-  if (inp) { inp.value = currentUsername; updateUsernamePreview(currentUsername); }
+
   renderGoals(); renderPosts();
 }
 function exitAdmin() {
