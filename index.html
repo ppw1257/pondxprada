@@ -27,12 +27,8 @@
     html, body { height: 100%; background: var(--offwhite); }
     body { font-family: var(--font-body); color: var(--black); overflow-x: hidden; }
 
-    .site-header {
-      background: var(--black);
-      padding: 20px 24px 16px;
-      text-align: center;
-      position: relative;
-    }
+    /* ── Header ── */
+    .site-header { background: var(--black); padding: 20px 24px 16px; text-align: center; }
     .header-eyebrow { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
     .header-title { font-family: var(--font-display); font-size: 26px; font-weight: 300; color: #fff; letter-spacing: 0.04em; line-height: 1.1; }
     .header-title em { font-style: italic; color: var(--gold-light); }
@@ -40,313 +36,97 @@
     .header-username-row { display: flex; align-items: center; gap: 5px; justify-content: center; margin-bottom: 4px; }
     .header-username-text { font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); }
 
+    /* ── Tabs & Filters ── */
     .tab-bar { background: var(--black); border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: center; gap: 2px; padding: 10px 16px; }
     .tab-btn { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.5); padding: 6px 14px; border-radius: 2px; font-family: var(--font-body); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; }
     .tab-btn.active { background: var(--gold); border-color: var(--gold); color: var(--black); font-weight: 600; }
     .tab-btn:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
 
-    .filter-bar { display: flex; justify-content: center; gap: 8px; padding: 14px 16px; background: var(--warm-white); border-bottom: 1px solid var(--border); }
-    .filter-pill { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 14px; border-radius: 40px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; }
-    .filter-pill.active { background: var(--black); border-color: var(--black); color: #fff; }
-    .filter-pill:hover:not(.active) { border-color: var(--black); color: var(--black); }
+    .filter-bar { display: flex; justify-content: center; gap: 8px; padding: 4px 16px 20px; background: var(--black); flex-wrap: wrap; }
+    .filter-pill { background: transparent; border: 1px solid rgba(255,255,255,0.16); color: rgba(255,255,255,0.55); padding: 6px 16px; border-radius: 40px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; }
+    .filter-pill.active { background: var(--gold); border-color: var(--gold); color: var(--black); font-weight: 600; }
+    .filter-pill:hover:not(.active) { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
 
+    /* ── Progress Banner ── */
     .platform-label { text-align: center; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); padding: 16px 0 8px; }
-
-    .progress-banner {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-    .progress-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .progress-title {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 600;
-    }
-    .progress-pct {
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--black);
-      line-height: 1;
-    }
-    .progress-pct span {
-      font-size: 11px;
-      color: var(--muted);
-      font-family: var(--font-body);
-      font-weight: 400;
-    }
-    .progress-track {
-      height: 4px;
-      background: rgba(0,0,0,0.08);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--black) 0%, var(--gold) 100%);
-      border-radius: 4px;
-      transition: width 0.5s cubic-bezier(.4,0,.2,1);
-    }
-    .progress-actions {
-      display: flex;
-      gap: 6px;
-    }
-    .action-chip {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      padding: 6px 4px;
-      border-radius: 6px;
-      border: 1.5px solid var(--border);
-      background: var(--offwhite);
-      transition: all 0.2s;
-      cursor: default;
-    }
-    .action-chip.done {
-      border-color: var(--green);
-      background: #f0fff5;
-    }
+    .progress-banner { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 12px 16px; max-width: 380px; margin: 0 auto; }
+    .progress-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .progress-title { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .progress-pct { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--black); line-height: 1; }
+    .progress-pct span { font-size: 11px; color: var(--muted); font-family: var(--font-body); font-weight: 400; }
+    .progress-track { height: 4px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--black) 0%, var(--gold) 100%); border-radius: 4px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+    .progress-actions { display: flex; gap: 6px; }
+    .action-chip { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 4px; border-radius: 6px; border: 1.5px solid var(--border); background: var(--offwhite); transition: all 0.2s; cursor: default; }
+    .action-chip.done { border-color: var(--green); background: #f0fff5; }
+    .action-chip .chip-icon { font-size: 16px; filter: grayscale(80%) opacity(0.5); transition: filter 0.2s; }
     .action-chip.done .chip-icon { filter: none; }
-    .action-chip .chip-icon {
-      font-size: 16px;
-      filter: grayscale(80%) opacity(0.5);
-      transition: filter 0.2s;
-    }
-    .action-chip.done .chip-icon { filter: none; }
-    .action-chip .chip-label {
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--muted);
-      transition: color 0.2s;
-    }
+    .action-chip .chip-label { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; color: var(--muted); transition: color 0.2s; }
     .action-chip.done .chip-label { color: var(--green); }
-    .action-chip .chip-check {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      border: 1.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-      font-size: 9px;
-    }
-    .action-chip.done .chip-check {
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
-    }
-    .progress-complete-msg {
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--green);
-      letter-spacing: 0.05em;
-      padding: 4px 0 0;
-      display: none;
-    }
+    .action-chip .chip-check { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 9px; }
+    .action-chip.done .chip-check { background: var(--green); border-color: var(--green); color: #fff; }
+    .progress-complete-msg { text-align: center; font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: 0.05em; padding: 4px 0 0; display: none; }
     .progress-complete-msg.visible { display: block; }
 
-    .main-layout { max-width: 480px; margin: 0 auto; padding: 0 16px 40px; }
+    /* ── Main Layout ── */
+    .main-layout { max-width: 380px; margin: 0 auto; padding: 0 20px 40px; }
     .focused-wrap { margin-bottom: 28px; }
 
+    /* ── IG Card ── */
     .ig-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
-    .ig-card-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
-    .avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-family: var(--font-display); font-style: italic; }
-    .ig-username { font-size: 13px; font-weight: 600; color: var(--black); }
-    .ig-location { font-size: 11px; color: var(--muted); margin-top: 1px; }
-    .ig-more { margin-left: auto; color: var(--muted); font-size: 18px; line-height: 1; background: none; border: none; cursor: pointer; }
-    .media-frame { width: 100%; aspect-ratio: 1/1; background: linear-gradient(145deg, #1a1a1a 0%, #2d2210 50%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; overflow: hidden; }
+    .ig-card-header { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px solid var(--border); }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-family: var(--font-display); font-style: italic; }
+    .ig-username { font-size: 12px; font-weight: 600; color: var(--black); }
+    .ig-location { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .ig-more { margin-left: auto; color: var(--muted); font-size: 16px; line-height: 1; background: none; border: none; cursor: pointer; }
+    .media-frame { width: 100%; aspect-ratio: 1/1; background: linear-gradient(145deg, #1a1a1a 0%, #2d2210 50%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; overflow: hidden; cursor: pointer; }
     .media-frame-wide { aspect-ratio: 16/9; }
-    .media-frame-tall { aspect-ratio: 9/16; max-height: 520px; }
-    .play-overlay { position: absolute; width: 56px; height: 56px; background: rgba(255,255,255,0.18); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,255,255,0.4); }
-    .duration-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.72); color: #fff; font-size: 10px; font-weight: 600; padding: 3px 6px; border-radius: 3px; letter-spacing: 0.04em; }
-    .ig-actions { display: flex; align-items: center; gap: 14px; padding: 12px 14px 8px; }
-    .ig-action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); transition: color 0.15s; }
+    .media-frame-tall { aspect-ratio: 9/16; max-height: 420px; }
+    .play-overlay { position: absolute; width: 48px; height: 48px; background: rgba(255,255,255,0.18); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,255,255,0.4); }
+    .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.72); color: #fff; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; }
+    .ig-actions { display: flex; align-items: center; gap: 11px; padding: 9px 11px 6px; }
+    .ig-action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); transition: color 0.15s; }
     .ig-action-btn:hover { color: var(--black); }
-    .ig-action-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
+    .ig-action-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; }
     .ig-action-btn.liked svg { fill: #e74c3c; stroke: #e74c3c; color: #e74c3c; }
     .ig-action-btn.liked { color: #e74c3c; }
     .ig-action-btn.saved { color: var(--black); }
     .ig-save { margin-left: auto; }
-    .ig-likes { padding: 0 14px 4px; font-size: 13px; font-weight: 600; }
-    .ig-caption { padding: 0 14px 14px; font-size: 13px; color: var(--black); line-height: 1.55; }
-    .ig-caption .ig-caption-name { font-weight: 600; }
+    .ig-likes { padding: 0 11px 4px; font-size: 12px; font-weight: 600; }
+    .ig-caption { padding: 0 11px 11px; font-size: 12px; color: var(--black); line-height: 1.5; }
 
-    .card-checklist {
-      display: flex;
-      border-top: 1px solid var(--border);
-      background: var(--offwhite);
-    }
-    .card-check-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 10px 4px 9px;
-      cursor: pointer;
-      border-right: 1px solid var(--border);
-      transition: background 0.15s;
-      position: relative;
-      user-select: none;
-    }
+    /* ── Card Checklist ── */
+    .card-checklist { display: flex; border-top: 1px solid var(--border); background: var(--offwhite); }
+    .card-check-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px 7px; cursor: pointer; border-right: 1px solid var(--border); transition: background 0.15s; position: relative; user-select: none; }
     .card-check-item:last-child { border-right: none; }
     .card-check-item:hover { background: rgba(0,0,0,0.04); }
     .card-check-item.done { background: #f0fff5; }
-    .card-check-item .cci-icon {
-      font-size: 15px;
-      line-height: 1;
-      transition: transform 0.2s;
-    }
+    .card-check-item .cci-icon { font-size: 14px; line-height: 1; transition: transform 0.2s; }
     .card-check-item.done .cci-icon { transform: scale(1.15); }
-    .card-check-item .cci-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color 0.15s;
-    }
+    .card-check-item .cci-label { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); transition: color 0.15s; }
     .card-check-item.done .cci-label { color: var(--green); }
-    .card-check-item .cci-status {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--muted);
-      transition: color 0.15s;
-    }
-    .card-check-item.done .cci-status { color: var(--green); }
-    .card-check-item .cci-tick {
-      position: absolute;
-      top: 6px; right: 6px;
-      width: 13px; height: 13px;
-      border-radius: 50%;
-      border: 1.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px;
-      font-weight: 900;
-      color: transparent;
-      transition: all 0.2s;
-    }
-    .card-check-item.done .cci-tick {
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
-    }
-    .card-checklist-summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 14px;
-      border-top: 1px solid var(--border);
-      background: var(--offwhite);
-    }
-    .card-checklist-summary.all-done-bar {
-      background: #f0fff5;
-      border-top-color: #b2dfc5;
-    }
-    .checklist-summary-text {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.03em;
-    }
+    .card-check-item .cci-tick { position: absolute; top: 6px; right: 6px; width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: transparent; transition: all 0.2s; }
+    .card-check-item.done .cci-tick { background: var(--green); border-color: var(--green); color: #fff; }
+    .card-checklist-summary { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-top: 1px solid var(--border); background: var(--offwhite); }
+    .card-checklist-summary.all-done-bar { background: #f0fff5; border-top-color: #b2dfc5; }
+    .checklist-summary-text { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.03em; }
     .card-checklist-summary.all-done-bar .checklist-summary-text { color: var(--green); }
-    .checklist-mini-bar {
-      width: 80px;
-      height: 3px;
-      background: rgba(0,0,0,0.08);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .checklist-mini-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--black), var(--gold));
-      border-radius: 3px;
-      transition: width 0.4s ease;
-    }
-    .card-checklist-summary.all-done-bar .checklist-mini-fill {
-      background: linear-gradient(90deg, var(--green), #52d68a);
-    }
-    .ig-hashtag { color: var(--gold); }
+    .checklist-mini-bar { width: 80px; height: 3px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden; }
+    .checklist-mini-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 3px; transition: width 0.4s ease; }
+    .card-checklist-summary.all-done-bar .checklist-mini-fill { background: linear-gradient(90deg, var(--green), #52d68a); }
 
-    /* ── Goals Section ── */
-    .goals-section { border-top: 1px solid var(--border); padding: 14px; }
-    .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    /* ── Goals ── */
+    .goals-section { border-top: 1px solid var(--border); padding: 11px; }
+    .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .goals-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .goal-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: 6px; padding: 8px 5px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .goal-card-icon { font-size: 13px; line-height: 1; }
+    .goal-card-type { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+    .goal-card-num { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--black); line-height: 1; }
+    .goal-card-bar { width: 100%; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+    .goal-card-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 2px; transition: width 0.6s ease; }
 
-    /* NEW: 3-column goal card layout for public view */
-    .goals-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .goal-card {
-      background: var(--offwhite);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 6px 8px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .goal-card-icon { font-size: 15px; line-height: 1; }
-    .goal-card-type {
-      font-size: 8px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--muted);
-    }
-    .goal-card-num {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--black);
-      line-height: 1;
-      letter-spacing: 0.01em;
-    }
-    .goal-card-bar {
-      width: 100%;
-      height: 3px;
-      background: rgba(0,0,0,0.08);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
-    .goal-card-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--black), var(--gold));
-      border-radius: 2px;
-      transition: width 0.6s ease;
-    }
-    .goal-card-label {
-      font-size: 9px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    /* keep old goal-row for backward compat */
-    .goal-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .goal-row:last-child { margin-bottom: 0; }
-    .goal-icon { font-size: 14px; width: 20px; text-align: center; }
-    .goal-track { flex: 1; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; }
-    .goal-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 2px; transition: width 0.6s ease; }
-    .goal-num { font-size: 11px; font-weight: 600; color: var(--black); min-width: 28px; text-align: right; }
-
+    /* ── Thumb Grid ── */
     .grid-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 10px; }
     .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .thumb-item { aspect-ratio: 1/1; cursor: pointer; overflow: hidden; border-radius: 2px; position: relative; }
@@ -354,55 +134,64 @@
     .thumb-item:hover .thumb-media { transform: scale(1.06); }
     .thumb-item .thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
     .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.2); }
+    .thumb-item.completed .thumb-media { opacity: 0.35; filter: grayscale(60%); }
+    .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 22px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.82); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-    .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; padding: 16px; }
-    .tw-header { display: flex; gap: 10px; margin-bottom: 12px; }
-    .tw-info .tw-name { font-size: 14px; font-weight: 700; }
-    .tw-info .tw-handle { font-size: 12px; color: var(--muted); }
-    .tw-text { font-size: 15px; line-height: 1.55; margin-bottom: 12px; }
-    .tw-hashtag { color: var(--gold); }
-    .tw-actions { display: flex; gap: 20px; border-top: 1px solid var(--border); padding-top: 12px; }
-    .tw-action { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); cursor: pointer; transition: color 0.15s; }
-    .tw-action:hover { color: var(--gold); }
-    .tw-action svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+    /* ── Platform-specific cards ── */
+    .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; padding: 13px; }
+    .tw-card .focus-banner { margin: -13px -13px 10px; border-radius: 2px 2px 0 0; }
+    .tw-header { display: flex; gap: 8px; margin-bottom: 10px; }
+    .tw-info .tw-name { font-size: 13px; font-weight: 700; }
+    .tw-info .tw-handle { font-size: 11px; color: var(--muted); }
+    .tw-text { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
+    .tw-actions { display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .tw-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; }
+    .tw-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
 
     .fb-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
-    .fb-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
-    .fb-user { font-size: 13px; font-weight: 600; }
-    .fb-time { font-size: 11px; color: var(--muted); }
-    .fb-text { padding: 12px 14px; font-size: 14px; line-height: 1.55; }
-    .fb-reactions { padding: 8px 14px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); display: flex; gap: 10px; }
+    .fb-header { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px solid var(--border); }
+    .fb-user { font-size: 12px; font-weight: 600; }
+    .fb-time { font-size: 10px; color: var(--muted); }
+    .fb-text { padding: 10px 11px; font-size: 13px; line-height: 1.5; }
+    .fb-reactions { padding: 6px 11px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; gap: 8px; }
     .fb-actions { display: flex; border-top: 1px solid var(--border); }
-    .fb-act { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; background: none; border: none; border-right: 1px solid var(--border); transition: background 0.15s; }
+    .fb-act { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; background: none; border: none; border-right: 1px solid var(--border); transition: background 0.15s; }
     .fb-act:last-child { border-right: none; }
     .fb-act:hover { background: var(--offwhite); }
-    .fb-act svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
+    .fb-act svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
 
     .yt-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
-    .yt-info { padding: 12px 14px; }
-    .yt-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; }
-    .yt-meta { font-size: 12px; color: var(--muted); }
-    .yt-actions { display: flex; gap: 16px; padding: 10px 14px; border-top: 1px solid var(--border); }
-    .yt-action { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); cursor: pointer; }
-    .yt-action svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
+    .yt-info { padding: 10px 11px; }
+    .yt-title { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 3px; }
+    .yt-meta { font-size: 11px; color: var(--muted); }
+    .yt-actions { display: flex; gap: 14px; padding: 8px 11px; border-top: 1px solid var(--border); }
+    .yt-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; }
+    .yt-action svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
 
     .tk-card { background: #0a0a0a; border-radius: 3px; overflow: hidden; position: relative; }
-    .tk-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 20px 14px 14px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .tk-left .tk-username { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .tk-left .tk-desc { font-size: 12px; color: rgba(255,255,255,0.82); line-height: 1.4; }
-    .tk-hashtag { color: #54d9d9; }
-    .tk-right { display: flex; flex-direction: column; gap: 16px; align-items: center; }
-    .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 10px; cursor: pointer; }
-    .tk-btn svg { width: 24px; height: 24px; stroke: #fff; fill: none; }
+    .tk-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 16px 11px 11px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .tk-left .tk-username { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .tk-left .tk-desc { font-size: 11px; color: rgba(255,255,255,0.82); line-height: 1.4; }
+    .tk-right { display: flex; flex-direction: column; gap: 13px; align-items: center; }
+    .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 9px; cursor: pointer; }
+    .tk-btn svg { width: 20px; height: 20px; stroke: #fff; fill: none; }
 
+    /* ── Divider ── */
     .editorial-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
     .editorial-divider::before, .editorial-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .editorial-divider span { font-family: var(--font-display); font-style: italic; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-    .modal-bg { position: fixed; inset: 0; background: rgba(10,10,10,0.6); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 500; animation: fadeUp 0.25s ease; }
-    @keyframes fadeUp { from { opacity: 0; } to { opacity: 1; } }
-    .modal-box { background: var(--card-bg); border-radius: 4px; padding: 28px 24px 24px; max-width: 92%; width: 380px; text-align: center; position: relative; animation: slideUp 0.28s ease; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .focus-banner { background: linear-gradient(90deg, var(--gold), var(--gold-light)); color: #fff; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; text-align: center; padding: 5px; }
+
+    /* ── Empty state ── */
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+    .empty-state-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.35; }
+    .empty-state-text { font-family: var(--font-display); font-size: 18px; font-style: italic; margin-bottom: 6px; }
+    .empty-state-sub { font-size: 12px; color: var(--muted); }
+
+    /* ── Modals ── */
+    .modal-bg { position: fixed; inset: 0; background: rgba(10,10,10,0.6); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 500; }
+    .modal-box { background: var(--card-bg); border-radius: 4px; padding: 28px 24px 24px; max-width: 92%; width: 380px; text-align: center; position: relative; }
     .modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
     .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 300; letter-spacing: 0.02em; margin-bottom: 18px; }
     .comment-filter-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
@@ -410,36 +199,34 @@
     .c-pill.active { background: var(--black); border-color: var(--black); color: #fff; }
     .comment-box { background: var(--offwhite); border-radius: 3px; padding: 16px; font-size: 14px; line-height: 1.65; color: var(--black); min-height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid var(--border); }
     .modal-actions { display: flex; gap: 10px; }
-    .btn-primary { flex: 1; background: var(--black); color: #fff; border: none; padding: 13px; border-radius: 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-primary { flex: 1; background: var(--black); color: #fff; border: none; padding: 13px; border-radius: 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-primary:hover { background: #2a2a2a; }
-    .btn-gold { flex: 1; background: var(--gold); color: #fff; border: none; padding: 13px; border-radius: 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; transition: background 0.2s; }
+    .btn-gold { flex: 1; background: var(--gold); color: #fff; border: none; padding: 13px; border-radius: 2px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .btn-gold:hover { background: var(--gold-light); }
-    .btn-outline { flex: 1; background: transparent; color: var(--black); border: 1.5px solid var(--black); padding: 12px; border-radius: 2px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-outline { flex: 1; background: transparent; color: var(--black); border: 1.5px solid var(--black); padding: 12px; border-radius: 2px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .btn-outline:hover { background: var(--offwhite); }
-
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 11px 22px; border-radius: 40px; font-size: 13px; font-weight: 500; z-index: 999; animation: fadeUp 0.2s ease; white-space: nowrap; }
-
     .share-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 3px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-bottom: 10px; }
     .share-btn:last-child { margin-bottom: 0; }
     .share-btn.gold { background: var(--gold); color: #fff; border: none; }
     .share-btn.outline { background: transparent; color: var(--black); border: 1.5px solid var(--border); }
     .share-btn:hover { opacity: 0.88; }
 
-    .thumb-item.completed .thumb-media { opacity: 0.35; filter: grayscale(60%); }
-    .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 22px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.82); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .ig-card.all-done .media-frame { opacity: 0.45; filter: grayscale(50%); }
-    .ig-card.all-done::after { content: 'Completed!'; display: block; text-align: center; font-size: 12px; font-weight: 600; color: var(--green); padding: 6px; background: #f0fff5; border-top: 1px solid #b2dfc5; letter-spacing: 0.05em; }
-    .focus-banner { background: linear-gradient(90deg, var(--gold), var(--gold-light)); color: #fff; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; text-align: center; padding: 5px; }
-
+    /* ── Toast & Confetti ── */
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 11px 22px; border-radius: 40px; font-size: 13px; font-weight: 500; z-index: 999; white-space: nowrap; }
     @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100px) rotate(540deg); opacity: 0; } }
     .confetti-p { position: fixed; width: 7px; height: 7px; animation: confettiFall 1.1s ease forwards; pointer-events: none; z-index: 9999; border-radius: 1px; }
 
+    /* ── ig-card all-done state ── */
+    .ig-card.all-done .media-frame { opacity: 0.45; filter: grayscale(50%); }
+    .ig-card.all-done::after { content: 'Completed!'; display: block; text-align: center; font-size: 12px; font-weight: 600; color: var(--green); padding: 6px; background: #f0fff5; border-top: 1px solid #b2dfc5; letter-spacing: 0.05em; }
+
+    /* ── Admin View ── */
     #adminView .admin-header { background: var(--black); padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
     #adminView .admin-header-left .eyebrow { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
     #adminView .admin-header-left .title { font-family: var(--font-display); font-size: 20px; font-weight: 300; color: #fff; }
     #adminView .admin-header-left .title em { font-style: italic; color: var(--gold-light); }
     #adminView .admin-badge { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(184,150,90,0.18); color: var(--gold); padding: 5px 12px; border-radius: 2px; border: 1px solid rgba(184,150,90,0.3); }
-    #adminView .view-link { font-size: 11px; color: rgba(255,255,255,0.5); text-decoration: none; display: flex; align-items: center; gap: 5px; letter-spacing: 0.06em; }
+    #adminView .view-link { font-size: 11px; color: rgba(255,255,255,0.5); text-decoration: none; display: flex; align-items: center; gap: 5px; letter-spacing: 0.06em; cursor: pointer; }
     #adminView .view-link:hover { color: var(--gold-light); }
     #adminView .header-right { display: flex; align-items: center; gap: 12px; }
     #adminView .admin-body { max-width: 560px; margin: 0 auto; padding: 24px 16px 60px; }
@@ -448,53 +235,41 @@
     #adminView .section-title { font-family: var(--font-display); font-size: 20px; font-weight: 300; letter-spacing: 0.02em; }
     #adminView .section-count { font-size: 11px; color: var(--muted); }
     #adminView .card { background: var(--card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
-    #adminView .card-body { padding: 16px; }
     #adminView .post-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
     #adminView .post-item:last-child { border-bottom: none; }
     #adminView .post-item:hover { background: var(--offwhite); }
-    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
     #adminView .post-meta { flex: 1; min-width: 0; }
     #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-    #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
     #adminView .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
-    #adminView .tag-type-runway { background: #f0f4ff; color: #3b5bdb; border: 1px solid #c5d0e6; }
-    #adminView .tag-type-frow { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
+    #adminView .tag-type { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
     #adminView .tag-media { background: #f0faf4; color: #1a7a44; border: 1px solid #b2dfc5; }
     #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 700; }
     #adminView .focus-ring { border-left: 3px solid var(--gold) !important; }
-    #adminView .icon-btn.star-on { border-color: var(--gold); color: var(--gold); background: #fffbf0; }
-    #adminView .post-time { font-size: 11px; color: var(--muted); margin-top: 4px; }
-    #adminView .post-actions { display: flex; gap: 6px; flex-shrink: 0; }
     #adminView .icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     #adminView .icon-btn:hover { border-color: var(--black); color: var(--black); }
     #adminView .icon-btn.danger:hover { border-color: var(--red); color: var(--red); }
+    #adminView .icon-btn.star-on { border-color: var(--gold); color: var(--gold); background: #fffbf0; }
     #adminView .icon-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+    #adminView .post-time { font-size: 11px; color: var(--muted); }
+    #adminView .post-actions { display: flex; gap: 6px; flex-shrink: 0; }
     #adminView .goals-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); }
     #adminView .goal-cell { background: var(--card); padding: 16px 12px; text-align: center; }
     #adminView .goal-icon { font-size: 20px; margin-bottom: 6px; }
     #adminView .goal-platform { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    #adminView .goal-input-wrap { position: relative; }
     #adminView .goal-input { width: 100%; text-align: center; font-family: var(--font-display); font-size: 22px; font-weight: 300; border: none; border-bottom: 1.5px solid var(--border); background: transparent; color: var(--black); padding: 4px 2px; outline: none; transition: border-color 0.15s; }
     #adminView .goal-input:focus { border-color: var(--gold); }
     #adminView .goal-label { font-size: 10px; color: var(--muted); margin-top: 5px; letter-spacing: 0.08em; }
-
-    /* Admin: show preview of formatted number */
-    #adminView .goal-preview {
-      font-size: 11px;
-      color: var(--gold);
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      margin-top: 3px;
-      min-height: 16px;
-    }
-
+    #adminView .goal-preview { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 0.06em; margin-top: 3px; min-height: 16px; }
     #adminView .form-row { margin-bottom: 14px; }
     #adminView .form-label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     #adminView .form-input, #adminView .form-select, #adminView .form-textarea { width: 100%; background: var(--offwhite); border: 1px solid var(--border); border-radius: 2px; padding: 10px 12px; font-size: 14px; color: var(--black); font-family: var(--font-body); outline: none; transition: border-color 0.15s; appearance: none; }
     #adminView .form-input:focus, #adminView .form-select:focus, #adminView .form-textarea:focus { border-color: var(--gold); background: #fff; }
     #adminView .form-textarea { min-height: 80px; resize: vertical; }
     #adminView .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    #adminView .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     #adminView .btn-row { display: flex; gap: 8px; margin-top: 18px; }
     #adminView .btn { padding: 11px 20px; border-radius: 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; border: none; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
     #adminView .btn-black { background: var(--black); color: #fff; }
@@ -508,67 +283,44 @@
     #adminView .divider::before, #adminView .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     #adminView .divider span { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
     #adminView .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
-    #adminView .empty-icon { font-size: 36px; margin-bottom: 10px; }
     #adminView .empty-text { font-family: var(--font-display); font-size: 18px; font-style: italic; }
-    #adminView .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 11px 22px; border-radius: 40px; font-size: 13px; font-weight: 500; z-index: 999; white-space: nowrap; animation: adminFadeIn 0.2s ease; }
-    @keyframes adminFadeIn { from { opacity: 0; transform: translateX(-50%) translateY(6px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-    #adminView .modal-bg { position: fixed; inset: 0; background: rgba(10,10,10,0.55); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 500; animation: adminFadeIn 0.2s ease; }
-    #adminView .modal-box { background: var(--card); border-radius: 4px; padding: 24px; max-width: 92%; width: 420px; max-height: 90vh; overflow-y: auto; position: relative; }
-    #adminView .modal-title { font-family: var(--font-display); font-size: 22px; font-weight: 300; margin-bottom: 20px; }
-    #adminView .modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; }
-    #adminView .confirm-text { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 20px; }
-    #adminView .btn-danger { background: var(--red); color: #fff; }
-    #adminView .btn-danger:hover { background: #a93226; }
     #adminView .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
     #adminView .save-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-
-    #adminView .username-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    #adminView .username-card-avatar {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: #fff;
-      font-family: var(--font-display); font-style: italic;
-      flex-shrink: 0;
-    }
+    #adminView .username-card { background: var(--card); border: 1px solid var(--border); border-radius: 3px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    #adminView .username-card-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--black) 0%, var(--gold) 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; font-family: var(--font-display); font-style: italic; flex-shrink: 0; }
+    #adminView .btn-danger { background: var(--red); color: #fff; }
+    #adminView .btn-danger:hover { background: #a93226; }
+    #adminView .confirm-text { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════ PUBLIC VIEW ═══ -->
 <div id="publicView">
+
 <header class="site-header">
   <div class="header-eyebrow">Milan Fashion Show · SS27</div>
   <h1 class="header-title">Pond Naravit <em>×</em> Prada</h1>
-  <div class="header-username-row">
-    <span class="header-username-text" id="headerUsernameText">@pondnaravit</span>
-  </div>
   <div class="header-sub">Engagement Tracker</div>
 </header>
 
 <div class="tab-bar">
-  <button class="tab-btn active" id="tabIG" onclick="setPlatform('ig')">IG</button>
-  <button class="tab-btn" id="tabTW" onclick="setPlatform('twitter')">X</button>
-  <button class="tab-btn" id="tabFB" onclick="setPlatform('fb')">f</button>
-  <button class="tab-btn" id="tabYT" onclick="setPlatform('youtube')">YT</button>
-  <button class="tab-btn" id="tabTK" onclick="setPlatform('tiktok')">TikTok</button>
+  <button class="tab-btn active" id="tabIG"      onclick="setPlatform('ig')">IG</button>
+  <button class="tab-btn"        id="tabTW"      onclick="setPlatform('twitter')">X</button>
+  <button class="tab-btn"        id="tabFB"      onclick="setPlatform('fb')">f</button>
+  <button class="tab-btn"        id="tabYT"      onclick="setPlatform('youtube')">YT</button>
+  <button class="tab-btn"        id="tabTK"      onclick="setPlatform('tiktok')">TikTok</button>
 </div>
 
 <div class="filter-bar">
-  <button class="filter-pill active" id="pfAll" onclick="setPageFilter('all')">All</button>
-  <button class="filter-pill" id="pfRunway" onclick="setPageFilter('runway')">Runway Day</button>
-  <button class="filter-pill" id="pfFrow" onclick="setPageFilter('frow')">Front Row</button>
+  <button class="filter-pill active" id="pfAll"     onclick="setPageFilter('all')">All</button>
+  <button class="filter-pill"        id="pfFocus"   onclick="setPageFilter('focus')">Focus</button>
+  <button class="filter-pill"        id="pfAirport" onclick="setPageFilter('airport')">Airport</button>
+  <button class="filter-pill"        id="pfShow"    onclick="setPageFilter('show')">Show</button>
+  <button class="filter-pill"        id="pfAfter"   onclick="setPageFilter('after')">After</button>
 </div>
 
+<!-- Progress Banner -->
 <div style="background:var(--warm-white); border-bottom:1px solid var(--border)">
   <div class="progress-banner">
     <div class="progress-header">
@@ -578,7 +330,7 @@
     <div class="progress-track">
       <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
-    <div class="progress-actions" id="progressChips">
+    <div class="progress-actions">
       <div class="action-chip" id="chip-liked">
         <span class="chip-icon" id="chipIconLiked"></span>
         <span class="chip-label">Like</span>
@@ -610,31 +362,31 @@
 
 <div class="main-layout">
   <div id="focusedWrap" class="focused-wrap"></div>
-  <div class="editorial-divider"><span>More posts</span></div>
-  <div class="grid-label">Tap to view</div>
+  <div class="editorial-divider" id="moreDivider" style="display:none"><span>More posts</span></div>
+  <div class="grid-label" id="gridLabel" style="display:none">Tap to view</div>
   <div id="thumbGrid" class="thumb-grid"></div>
 </div>
 
+<!-- Comment Modal -->
 <div id="commentModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeCommentModal()">
   <div class="modal-box">
     <button class="modal-close" onclick="closeCommentModal()">✕</button>
     <div class="modal-title">Random Comment</div>
     <div class="comment-filter-row">
-      <button class="c-pill active" id="cfAll" onclick="setCommentFilter('all')">All</button>
-      <button class="c-pill" id="cfRunway" onclick="setCommentFilter('runway')">Runway</button>
-      <button class="c-pill" id="cfFrow" onclick="setCommentFilter('frow')">Front Row</button>
+      <button class="c-pill active" onclick="randomizeComment()">Shuffle</button>
     </div>
     <div class="comment-box" id="randomComment"></div>
     <div class="modal-actions">
       <button class="btn-outline" onclick="randomizeComment()">Shuffle</button>
       <button class="btn-primary" onclick="copyAndClose()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        Send Comment
+        Copy & Done
       </button>
     </div>
   </div>
 </div>
 
+<!-- Share Modal -->
 <div id="shareModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeShareModal()">
   <div class="modal-box">
     <button class="modal-close" onclick="closeShareModal()">✕</button>
@@ -649,9 +401,13 @@
     </button>
   </div>
 </div>
-</div>
 
+</div><!-- /publicView -->
+
+
+<!-- ════════════════════════════════════════════════════════ ADMIN VIEW ════ -->
 <div id="adminView" style="display:none">
+
 <header class="admin-header">
   <div class="admin-header-left">
     <div class="eyebrow">Pond Naravit × Prada</div>
@@ -659,15 +415,16 @@
   </div>
   <div class="header-right">
     <span class="admin-badge">ADMIN</span>
-    <a href="javascript:void(0)" class="view-link" onclick="exitAdmin()">
+    <span class="view-link" onclick="exitAdmin()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
       View Public Page
-    </a>
+    </span>
   </div>
 </header>
 
 <div class="admin-body">
 
+  <!-- Username -->
   <div class="section-head" style="margin-top:0">
     <div class="section-title">Display Username</div>
   </div>
@@ -680,9 +437,10 @@
           <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
           <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
             style="padding-left:26px"
+            oninput="updateUsernamePreview(this.value)"
             onkeydown="if(event.key==='Enter')saveAdminUsername()">
         </div>
-        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;letter-spacing:0.04em;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
+        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
           Save
         </button>
@@ -691,16 +449,17 @@
     </div>
   </div>
 
+  <!-- Goals -->
   <div class="section-head">
     <div class="section-title">Engagement Goals</div>
     <div class="save-status"><span class="save-dot"></span>Auto-saved</div>
   </div>
   <div class="card">
-    <div style="padding:14px 16px 10px; border-bottom:1px solid var(--border)">
-      <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">ใส่ตัวเลขเต็ม — จะแสดงเป็นแบบย่อ (1K, 500K, 1M) ให้แฟนคลับดูเอง</div>
+    <div style="padding:14px 16px 10px;border-bottom:1px solid var(--border)">
+      <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">ใส่ตัวเลขเต็ม — จะแสดงเป็นแบบย่อ (1K, 500K, 1M) ให้แฟนคลับดูเอง</div>
     </div>
     <div class="goals-grid" id="goalsGrid"></div>
-    <div style="padding:14px 16px; border-top:1px solid var(--border)">
+    <div style="padding:14px 16px;border-top:1px solid var(--border)">
       <button class="btn btn-gold" onclick="saveGoals()" style="border:none;cursor:pointer;padding:11px 20px;border-radius:2px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
         Save Goals
@@ -708,28 +467,30 @@
     </div>
   </div>
 
+  <!-- Posts -->
   <div class="section-head">
     <div class="section-title">All Posts</div>
     <div class="section-count" id="postCount">0 posts</div>
   </div>
   <div class="card" id="postList">
-    <div class="empty"><div class="empty-icon"></div><div class="empty-text">No posts yet</div></div>
+    <div class="empty"><div class="empty-text">No posts yet</div></div>
   </div>
-  <button class="btn btn-black" style="width:100%; justify-content:center; margin-top:4px;border:none;border-radius:2px;font-size:13px;font-weight:600;padding:11px 20px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--black);color:#fff" onclick="openAddModal()">
+  <button class="btn btn-black" style="width:100%;justify-content:center;margin-top:4px;border:none;border-radius:2px;font-size:13px;font-weight:600;padding:11px 20px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--black);color:#fff" onclick="openAddModal()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
     Add New Post
   </button>
 
-</div>
+</div><!-- /admin-body -->
 
+<!-- Post Add/Edit Modal -->
 <div id="postModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closePostModal()">
-  <div class="modal-box" style="text-align:left">
+  <div class="modal-box" style="text-align:left;max-height:90vh;overflow-y:auto;width:420px">
     <button class="modal-close" onclick="closePostModal()">✕</button>
     <div class="modal-title" id="modalTitle">Add New Post</div>
 
     <div class="form-row">
       <label class="form-label">Platform</label>
-      <select class="form-select" id="fPlatform">
+      <select class="form-select" id="fPlatform" onchange="renderPreview()">
         <option value="ig">Instagram</option>
         <option value="twitter">Twitter / X</option>
         <option value="fb">Facebook</option>
@@ -741,7 +502,7 @@
     <div class="form-row-2">
       <div>
         <label class="form-label">Media Type</label>
-        <select class="form-select" id="fMediaType">
+        <select class="form-select" id="fMediaType" onchange="renderPreview()">
           <option value="photo">Photo</option>
           <option value="video">Video</option>
           <option value="reel">Reel</option>
@@ -755,20 +516,27 @@
         <label class="form-label">Post Type</label>
         <select class="form-select" id="fType">
           <option value="all">All</option>
-          <option value="runway">Runway Day</option>
-          <option value="frow">Front Row</option>
+          <option value="focus">Focus</option>
+          <option value="airport">Airport</option>
+          <option value="show">Show</option>
+          <option value="after">After</option>
         </select>
       </div>
     </div>
 
     <div class="form-row">
       <label class="form-label">Post Name / Label</label>
-      <input type="text" class="form-input" id="fLabel" placeholder="e.g. Prada Day 1 Look, Front Row Moment...">
+      <input type="text" class="form-input" id="fLabel" placeholder="e.g. Prada Day 1 Look, Front Row Moment..." oninput="renderPreview()">
     </div>
 
     <div class="form-row">
       <label class="form-label">Caption</label>
-      <textarea class="form-textarea" id="fCaption" placeholder="Milan, Prada SS27 — thank you so much, Prada"></textarea>
+      <textarea class="form-textarea" id="fCaption" placeholder="Milan, Prada SS27 — thank you so much, Prada" oninput="renderPreview()"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Post URL (ลิงก์โพสต์จริง)</label>
+      <input type="text" class="form-input" id="fPostUrl" placeholder="https://www.instagram.com/p/...">
     </div>
 
     <div class="form-row-2">
@@ -777,14 +545,14 @@
         <input type="datetime-local" class="form-input" id="fTime">
       </div>
       <div>
-        <label class="form-label">Actual Engagement (likes)</label>
+        <label class="form-label">Likes (actual)</label>
         <input type="number" class="form-input" id="fLikes" placeholder="0" min="0">
       </div>
     </div>
 
     <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
       <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Engagement Goals for This Post</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div class="form-row-3">
         <div>
           <label class="form-label" style="text-align:center;display:block">Likes</label>
           <input type="number" class="form-input" id="fGoalLikes" placeholder="200" min="0" style="text-align:center">
@@ -800,15 +568,16 @@
       </div>
     </div>
 
+    <!-- Thumbnail -->
     <div class="form-row">
       <label class="form-label">Thumbnail Image</label>
       <div style="display:flex;gap:0;margin-bottom:10px;border:1px solid var(--border);border-radius:3px;overflow:hidden">
-        <button type="button" id="imgTabUpload" onclick="switchImgTab('upload')" style="flex:1;padding:7px;font-size:11px;font-weight:600;letter-spacing:0.06em;cursor:pointer;border:none;background:var(--black);color:#fff;transition:all 0.15s">Upload Image</button>
-        <button type="button" id="imgTabUrl" onclick="switchImgTab('url')" style="flex:1;padding:7px;font-size:11px;font-weight:600;letter-spacing:0.06em;cursor:pointer;border:none;background:var(--offwhite);color:var(--muted);transition:all 0.15s">Paste URL</button>
+        <button type="button" id="imgTabUpload" onclick="switchImgTab('upload')" style="flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--black);color:#fff">Upload Image</button>
+        <button type="button" id="imgTabUrl"    onclick="switchImgTab('url')"    style="flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--offwhite);color:var(--muted)">Paste URL</button>
       </div>
       <div id="imgPanelUpload">
-        <label id="uploadDropzone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px;border:2px dashed var(--border);border-radius:3px;cursor:pointer;background:var(--offwhite);transition:border-color 0.2s" ondragover="event.preventDefault();this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleImgDrop(event)">
-          <span style="font-size:12px;color:var(--muted);text-align:center">Click to choose an image, or drag and drop here<br><span style="font-size:10px">JPG, PNG, WEBP — up to 5MB</span></span>
+        <label id="uploadDropzone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px;border:2px dashed var(--border);border-radius:3px;cursor:pointer;background:var(--offwhite)" ondragover="event.preventDefault();this.style.borderColor='var(--gold)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleImgDrop(event)">
+          <span style="font-size:12px;color:var(--muted);text-align:center">Click to choose, or drag & drop<br><span style="font-size:10px">JPG, PNG, WEBP — up to 5MB</span></span>
           <input type="file" id="fImgFile" accept="image/*" style="display:none" onchange="handleImgFile(this)">
         </label>
         <div id="uploadPreviewWrap" style="display:none;margin-top:8px;position:relative">
@@ -825,17 +594,18 @@
       </div>
     </div>
 
+    <!-- Focus toggle -->
     <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;margin-bottom:14px;cursor:pointer" onclick="toggleFocusPick()" id="focusToggleRow">
       <span id="focusStarIcon" style="font-size:20px"></span>
       <div style="flex:1">
         <div style="font-size:13px;font-weight:600">Focus Post</div>
-        <div style="font-size:11px;color:var(--muted)">This post will be shown first on the home page</div>
+        <div style="font-size:11px;color:var(--muted)">Shown first on the home page</div>
       </div>
       <div id="focusCheckbox" style="width:20px;height:20px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all 0.15s"></div>
     </div>
 
     <div class="divider"><span>Preview</span></div>
-    <div id="previewCard" style="border:1px solid var(--border); border-radius:3px; overflow:hidden; margin-bottom:4px"></div>
+    <div id="previewCard" style="border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:4px"></div>
 
     <div class="btn-row">
       <button class="btn btn-outline" onclick="closePostModal()">Cancel</button>
@@ -847,206 +617,42 @@
   </div>
 </div>
 
+<!-- Delete Modal -->
 <div id="deleteModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeDeleteModal()">
-  <div class="modal-box" style="max-width:320px; text-align:center">
+  <div class="modal-box" style="max-width:320px;text-align:center">
     <div class="modal-title">Delete this post?</div>
     <p class="confirm-text">This action cannot be undone. The post will no longer appear on the public page.</p>
     <div class="btn-row">
       <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="closeDeleteModal()">Cancel</button>
-      <button class="btn btn-danger" style="flex:1;justify-content:center" onclick="confirmDelete()">Delete</button>
+      <button class="btn btn-danger"  style="flex:1;justify-content:center" onclick="confirmDelete()">Delete</button>
     </div>
   </div>
 </div>
-</div>
+
+</div><!-- /adminView -->
 
 <div id="toast" class="toast" style="display:none"></div>
 
+<!-- ═══════════════════════════════════════════════════════════ SCRIPT ════ -->
 <script>
-// ─── Number formatter: 1000000 → 1M, 500000 → 500K, 1200 → 1.2K ───────────
+// ─── Helpers ────────────────────────────────────────────────────────────────
 function formatNum(n) {
   n = parseInt(n) || 0;
-  if (n >= 1000000) {
-    var v = n / 1000000;
-    return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'M';
-  }
-  if (n >= 1000) {
-    var v = n / 1000;
-    return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'K';
-  }
+  if (n >= 1000000) { const v = n / 1000000; return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'M'; }
+  if (n >= 1000)    { const v = n / 1000;    return (v % 1 === 0 ? v.toFixed(0) : parseFloat(v.toFixed(1)).toString()) + 'K'; }
   return n.toString();
 }
 
-const comments = [
-  "Wow!! Pond looked incredible in Milan, hope to see more Prada looks from him!",
-  "Pond in Prada is so handsome, truly a worthy honored guest!",
-  "This look is so minimal, Prada x Pond is just perfect!",
-  "Seeing Pond in Prada makes me want to buy the whole look!",
-  "Prada SS27 is amazing! Pond sat front row in Milan!",
-  "Prada picked Pond as such a stylish guest!",
-  "Pond and Prada are the perfect match!",
-  "Watching Pond in Milan, I'm so proud, well done!",
-  "Prada's minimal luxury looks so good on him, it really suits Pond.",
-  "Love that Prada brought Pond to the Milan show! So shiny!",
-  "Thank you Prada for bringing Pond Naravit to Milan Fashion Week! He absolutely shined!",
-  "Pond Naravit is absolutely stunning in Prada! Perfect front row guest",
-  "The clean, minimal aesthetic looks incredible on him! Prada x Pond Naravit equals perfection",
-  "Seeing Pond Naravit in Prada makes me want to shop the SS27 collection immediately",
-  "So proud to see him represent at Milan Fashion Week SS27!"
+const platformNames = { ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
+const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const GOAL_DEFS     = [
+  { key:'likes',    icon:'heart',   label:'Likes' },
+  { key:'comments', icon:'comment', label:'Comments' },
+  { key:'shares',   icon:'share',   label:'Shares' },
 ];
 
-const emojis = ['icon1','icon2','icon3','icon4','icon5','icon6','icon7','icon8','icon9','icon10'];
-const times = ['2h','3h','5h','1d','22h','2d'];
-const platformNames = { ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
-
-let currentPlatform = 'ig';
-let pageFilter = 'all';
-let focusedIndex = 0;
-let currentComment = comments[0];
-let currentPostId = null;
-
-const postStates = new Map();
-
-function getState(id) {
-  if (!postStates.has(id)) postStates.set(id, { liked:false, saved:false, commented:false, shared:false });
-  return postStates.get(id);
-}
-function isAllDone(id) {
-  const s = getState(id);
-  return s.liked && s.saved && s.commented && s.shared;
-}
-
-function updateProgressTracker() {
-  const filtered = getFilteredPosts();
-  const post = filtered[focusedIndex] || null;
-  const postId = post ? post.id : `demo-${focusedIndex}`;
-  const s = getState(postId);
-
-  const actions = [
-    { key: 'liked',     chipId: 'chip-liked' },
-    { key: 'commented', chipId: 'chip-commented' },
-    { key: 'shared',    chipId: 'chip-shared' },
-    { key: 'saved',     chipId: 'chip-saved' },
-  ];
-
-  let doneCount = 0;
-  actions.forEach(({ key, chipId }) => {
-    const chip = document.getElementById(chipId);
-    if (!chip) return;
-    const done = s[key];
-    if (done) doneCount++;
-    chip.classList.toggle('done', done);
-    const check = chip.querySelector('.chip-check');
-    if (check) check.innerHTML = done ? '✓' : '';
-  });
-
-  const pct = Math.round((doneCount / 4) * 100);
-  const fillEl = document.getElementById('progressFill');
-  const pctEl = document.getElementById('progressPct');
-  const msgEl = document.getElementById('progressCompleteMsg');
-  if (fillEl) fillEl.style.width = pct + '%';
-  if (pctEl) pctEl.innerHTML = pct + '<span>%</span>';
-  if (msgEl) msgEl.classList.toggle('visible', pct === 100);
-
-  setChipIcons();
-
-  const cclEl = document.getElementById('ccl-' + postId);
-  if (cclEl) {
-    const newHTML = cardChecklistHTML(postId);
-    const temp = document.createElement('div');
-    temp.innerHTML = newHTML;
-    const newCcl = temp.querySelector('.card-checklist');
-    const newSummary = temp.querySelector('.card-checklist-summary');
-    if (newCcl) cclEl.replaceWith(newCcl);
-    const summaryEl = document.querySelector('.card-checklist-summary');
-    if (summaryEl && newSummary) summaryEl.replaceWith(newSummary);
-  }
-}
-
-function setChipIcons() {
-  const map = { chipIconLiked: 'heart', chipIconCommented: 'comment', chipIconShared: 'share', chipIconSaved: 'bookmark' };
-  Object.keys(map).forEach(elId => {
-    const el = document.getElementById(elId);
-    if (el && typeof icons !== 'undefined') el.innerHTML = icons[map[elId]];
-  });
-}
-
-let currentUsername = 'pondnaravit';
-try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
-
-function getUsername() { return currentUsername; }
-
-function saveAdminUsername() {
-  const val = document.getElementById('adminUsernameInput').value.trim().replace(/^@/, '');
-  if (!val) { showToast('Please enter a username'); return; }
-  currentUsername = val;
-  try { localStorage.setItem('pond_username', val); } catch(e) {}
-  const el = document.getElementById('headerUsernameText');
-  if (el) el.textContent = '@' + val;
-  const prev = document.getElementById('adminUsernamePreview');
-  if (prev) prev.innerHTML = 'Displayed as: <strong>@' + val + '</strong>';
-  generatePosts();
-  showToast('Username saved');
-}
-
-document.addEventListener('input', e => {
-  if (e.target.id === 'adminUsernameInput') {
-    const prev = document.getElementById('adminUsernamePreview');
-    if (prev) prev.innerHTML = 'Displayed as: <strong>@' + (e.target.value.replace(/^@/,'') || 'pondnaravit') + '</strong>';
-  }
-  // Admin goals: show live formatted preview
-  if (e.target.classList.contains('goal-input')) {
-    const key = e.target.id.replace('goal_', '');
-    const previewEl = document.getElementById('goal_preview_' + key);
-    if (previewEl) {
-      const n = parseInt(e.target.value) || 0;
-      previewEl.textContent = n > 0 ? '→ แสดงเป็น: ' + formatNum(n) : '';
-    }
-  }
-  if (['fCaption','fLabel'].includes(e.target.id)) renderPreview();
-});
-document.addEventListener('change', e => {
-  if (['fPlatform','fType','fMediaType'].includes(e.target.id)) renderPreview();
-});
-
-document.getElementById('headerUsernameText').textContent = '@' + currentUsername;
-
-let adminPosts = [];
-let adminGoals = { likes:200, comments:50, shares:30 };
-function loadAdminData() {
-  try { const p = localStorage.getItem('pond_posts'); if (p) adminPosts = JSON.parse(p); } catch(e) {}
-  try { const g = localStorage.getItem('pond_goals'); if (g) adminGoals = { ...adminGoals, ...JSON.parse(g) }; } catch(e) {}
-}
-
-function getFilteredPosts() {
-  return adminPosts
-    .filter(p => (p.platform === currentPlatform) && (pageFilter === 'all' || p.type === pageFilter || p.type === 'all'))
-    .sort((a, b) => {
-      if (a.focused && !b.focused) return -1;
-      if (!a.focused && b.focused) return 1;
-      return new Date(b.createdAt||0) - new Date(a.createdAt||0);
-    });
-}
-
-function setPlatform(p) {
-  currentPlatform = p;
-  focusedIndex = 0;
-  document.getElementById('platformLabel').textContent = platformNames[p];
-  ['IG','TW','FB','YT','TK'].forEach(k => {
-    const b = document.getElementById('tab'+k);
-    b.classList.toggle('active', {ig:'IG',twitter:'TW',fb:'FB',youtube:'YT',tiktok:'TK'}[p] === k);
-  });
-  generatePosts();
-}
-
-function setPageFilter(f) {
-  pageFilter = f;
-  focusedIndex = 0;
-  ['All','Runway','Frow'].forEach(k => {
-    document.getElementById('pf'+k).classList.toggle('active', f === k.toLowerCase() || (k==='All' && f==='all'));
-  });
-  generatePosts();
-}
-
+// ─── SVG icon set ───────────────────────────────────────────────────────────
 const icons = {
   heart:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`,
   heartFilled:`<svg width="20" height="20" viewBox="0 0 24 24" fill="#e74c3c" stroke="#e74c3c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`,
@@ -1063,215 +669,339 @@ const icons = {
   camera:`<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`,
   star:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
   starFilled:`<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
+  extLink:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
 };
 
-// ─── Goals HTML for PUBLIC view — uses formatNum() for compact display ───────
-function goalsHTML(post) {
-  const gL = (post && post.goalLikes)    ? parseInt(post.goalLikes)    : (adminGoals.likes    || 0);
-  const gC = (post && post.goalComments) ? parseInt(post.goalComments) : (adminGoals.comments || 0);
-  const gS = (post && post.goalShares)   ? parseInt(post.goalShares)   : (adminGoals.shares   || 0);
-  const likes = post ? (parseInt(post.likes) || 0) : 0;
-  const pctL = gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0;
+// ─── State ───────────────────────────────────────────────────────────────────
+let currentPlatform = 'ig';
+let pageFilter      = 'all';
+let focusedIndex    = 0;
+let currentComment  = '';
+let currentPostId   = null;
+let currentSharePostId = null;
 
-  if (!gL && !gC && !gS) return '';
+const postStates = new Map();
+function getState(id) {
+  if (!postStates.has(id)) postStates.set(id, { liked:false, saved:false, commented:false, shared:false });
+  return postStates.get(id);
+}
+function isAllDone(id) { const s = getState(id); return s.liked && s.saved && s.commented && s.shared; }
 
-  const cards = [
-    gL ? `<div class="goal-card">
-            <span class="goal-card-icon">❤️</span>
-            <span class="goal-card-type">Likes</span>
-            <span class="goal-card-num">${formatNum(gL)}</span>
-            <div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div>
-          </div>` : '',
-    gC ? `<div class="goal-card">
-            <span class="goal-card-icon">💬</span>
-            <span class="goal-card-type">Comments</span>
-            <span class="goal-card-num">${formatNum(gC)}</span>
-            <div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div>
-          </div>` : '',
-    gS ? `<div class="goal-card">
-            <span class="goal-card-icon">↗️</span>
-            <span class="goal-card-type">Shares</span>
-            <span class="goal-card-num">${formatNum(gS)}</span>
-            <div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div>
-          </div>` : '',
-  ].filter(Boolean).join('');
+// ─── Username ────────────────────────────────────────────────────────────────
+let currentUsername = 'pondnaravit';
+try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
 
-  return `
-    <div class="goals-section">
-      <div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div>
-      <div class="goals-cards">${cards}</div>
-    </div>`;
+function getUsername() { return currentUsername; }
+
+function updateUsernamePreview(val) {
+  const clean = val.replace(/^@/, '') || 'pondnaravit';
+  const el = document.getElementById('adminUsernamePreview');
+  if (el) el.innerHTML = 'Displayed as: <strong>@' + clean + '</strong>';
+}
+function saveAdminUsername() {
+  const val = document.getElementById('adminUsernameInput').value.trim().replace(/^@/, '');
+  if (!val) { showToast('Please enter a username'); return; }
+  currentUsername = val;
+  try { localStorage.setItem('pond_username', val); } catch(e) {}
+  document.getElementById('adminUsernamePreview').innerHTML = 'Displayed as: <strong>@' + val + '</strong>';
+  showToast('Username saved');
 }
 
+// ─── Data ────────────────────────────────────────────────────────────────────
+let posts    = [];
+let goals    = { likes:0, comments:0, shares:0 };
+const POSTS_KEY = 'pond_posts';
+const GOALS_KEY = 'pond_goals';
+
+function loadLocalData() {
+  try { const p = localStorage.getItem(POSTS_KEY); if (p) posts = JSON.parse(p); } catch(e) {}
+  try { const g = localStorage.getItem(GOALS_KEY); if (g) goals = { ...goals, ...JSON.parse(g) }; } catch(e) {}
+}
+
+function saveLocalData() {
+  try { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); } catch(e) {}
+}
+
+const APPS_SCRIPT_URL = '';
+
+async function loadFromScript() {
+  if (!APPS_SCRIPT_URL) { loadLocalData(); generatePosts(); return; }
+  try {
+    const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
+    const dp = await rp.json();
+    if (dp.ok && Array.isArray(dp.posts)) {
+      posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0 }));
+      saveLocalData();
+    }
+    const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
+    const dg = await rg.json();
+    if (dg.ok && dg.goals) {
+      goals = { likes: parseInt(dg.goals.likes)||0, comments: parseInt(dg.goals.comments)||0, shares: parseInt(dg.goals.shares)||0 };
+      localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
+    }
+  } catch(err) { loadLocalData(); }
+  generatePosts();
+}
+
+async function saveToScript() {
+  saveLocalData();
+  if (!APPS_SCRIPT_URL) return;
+  try { await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'savePosts', posts }) }); } catch(e) {}
+}
+
+async function saveGoals() {
+  GOAL_DEFS.forEach(d => {
+    const v = parseInt(document.getElementById('goal_' + d.key)?.value) || 0;
+    goals[d.key] = v;
+  });
+  try { localStorage.setItem(GOALS_KEY, JSON.stringify(goals)); } catch(e) {}
+  if (APPS_SCRIPT_URL) {
+    try { await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'saveGoals', goals }) }); } catch(e) {}
+  }
+  showToast('Goals saved');
+}
+
+// ─── Filter helpers ──────────────────────────────────────────────────────────
+function getFilteredPosts() {
+  return posts
+    .filter(p => {
+      if (p.platform !== currentPlatform) return false;
+      if (pageFilter === 'all') return true;
+      if (pageFilter === 'focus') return !!p.focused;
+      return p.post_type === pageFilter || p.type === pageFilter;
+    })
+    .sort((a, b) => {
+      if (a.focused && !b.focused) return -1;
+      if (!a.focused && b.focused) return 1;
+      return new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0);
+    });
+}
+
+// ─── Progress tracker ────────────────────────────────────────────────────────
+function updateProgressTracker() {
+  const filtered = getFilteredPosts();
+  const post   = filtered[focusedIndex] || null;
+  if (!post) return;
+  const postId = post.id;
+  const s = getState(postId);
+
+  const items = [
+    { key:'liked',     chipId:'chip-liked' },
+    { key:'commented', chipId:'chip-commented' },
+    { key:'shared',    chipId:'chip-shared' },
+    { key:'saved',     chipId:'chip-saved' },
+  ];
+  let doneCount = 0;
+  items.forEach(({ key, chipId }) => {
+    const chip = document.getElementById(chipId);
+    if (!chip) return;
+    const done = s[key];
+    if (done) doneCount++;
+    chip.classList.toggle('done', done);
+    const check = chip.querySelector('.chip-check');
+    if (check) check.innerHTML = done ? '✓' : '';
+  });
+
+  const pct = Math.round((doneCount / 4) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').innerHTML = pct + '<span>%</span>';
+  document.getElementById('progressCompleteMsg').classList.toggle('visible', pct === 100);
+
+  const chipMap = { chipIconLiked:'heart', chipIconCommented:'comment', chipIconShared:'share', chipIconSaved:'bookmark' };
+  Object.keys(chipMap).forEach(elId => {
+    const el = document.getElementById(elId);
+    if (el) el.innerHTML = icons[chipMap[elId]];
+  });
+}
+
+// ─── HTML builders ───────────────────────────────────────────────────────────
 function getMediaContent(post) {
-  const img = post?.image;
+  const img = post?.image || post?.image_url;
   if (img) return `<img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">`;
   return icons.camera;
 }
 
-function cardChecklistHTML(postId) {
+function focusBannerHTML(post) {
+  return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
+}
+
+function goalsHTML(post) {
+  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
+  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
+  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
+  const likes = parseInt(post?.likes || 0);
+  const pctL  = gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0;
+  if (!gL && !gC && !gS) return '';
+  const cards = [
+    gL ? `<div class="goal-card"><span class="goal-card-type">Likes</span><span class="goal-card-num">${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div></div>` : '',
+    gC ? `<div class="goal-card"><span class="goal-card-type">Comments</span><span class="goal-card-num">${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div></div>` : '',
+    gS ? `<div class="goal-card"><span class="goal-card-type">Shares</span><span class="goal-card-num">${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:0%"></div></div></div>` : '',
+  ].filter(Boolean).join('');
+  return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
+}
+
+function cardChecklistHTML(postId, post) {
   const s = getState(postId);
+  const postUrl = post?.post_url || post?.postUrl || '';
   const items = [
-    { key: 'liked',     icon: icons.heart,    label: 'Like',    doneLabel: 'Liked' },
-    { key: 'commented', icon: icons.comment,  label: 'Comment', doneLabel: 'Commented' },
-    { key: 'shared',    icon: icons.share,    label: 'Share',   doneLabel: 'Shared' },
-    { key: 'saved',     icon: icons.bookmark, label: 'Save',    doneLabel: 'Saved' },
+    { key:'liked',     icon:icons.heart,    label:'Like',    doneLabel:'Liked',     handler:`onclick="checklistAction('${postId}','liked')"` },
+    { key:'commented', icon:icons.comment,  label:'Comment', doneLabel:'Commented', handler:`onclick="openCommentModal('${postId}')"` },
+    { key:'shared',    icon:icons.share,    label:'Share',   doneLabel:'Shared',    handler:`onclick="openShareModal('${postId}')"` },
+    { key:'saved',     icon:icons.bookmark, label:'Save',    doneLabel:'Saved',     handler:`onclick="checklistAction('${postId}','saved')"` },
   ];
   const doneCount = items.filter(i => s[i.key]).length;
   const pct = Math.round((doneCount / 4) * 100);
   const allDone = doneCount === 4;
 
   const chips = items.map(item => {
-    // Map each action to the right handler
-    let handler = '';
-    if (item.key === 'liked')     handler = `onclick="checklistAction('${postId}','liked',this)"`;
-    if (item.key === 'commented') handler = `onclick="checklistComment('${postId}')"`;
-    if (item.key === 'shared')    handler = `onclick="checklistShare('${postId}')"`;
-    if (item.key === 'saved')     handler = `onclick="checklistAction('${postId}','saved',this)"`;
-    const isDone = s[item.key];
-    return `
-    <div class="card-check-item ${isDone ? 'done' : ''}" id="cci-${item.key}-${postId}" ${handler} style="cursor:pointer">
-      <div class="cci-tick">${isDone ? '✓' : ''}</div>
+    const done = s[item.key];
+    return `<div class="card-check-item ${done?'done':''}" id="cci-${item.key}-${postId}" ${item.handler} style="cursor:pointer">
+      <div class="cci-tick">${done?'✓':''}</div>
       <span class="cci-icon">${item.icon}</span>
-      <span class="cci-label">${isDone ? item.doneLabel : item.label}</span>
+      <span class="cci-label">${done ? item.doneLabel : item.label}</span>
     </div>`;
   }).join('');
 
-  const summary = allDone
-    ? `<div class="card-checklist-summary all-done-bar">
-        <span class="checklist-summary-text">All actions completed!</span>
-        <div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div>
-      </div>`
-    : `<div class="card-checklist-summary">
-        <span class="checklist-summary-text">${doneCount}/4 done (${pct}%)</span>
-        <div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div>
-      </div>`;
+  const openLinkBtn = postUrl
+    ? `<a href="${postUrl}" target="_blank" rel="noopener" style="font-size:10px;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:3px;text-decoration:none;letter-spacing:0.05em">${icons.extLink} Open Post</a>`
+    : '';
 
-  return `<div class="card-checklist" id="ccl-${postId}">${chips}</div>${summary}`;
+  const summary = allDone
+    ? `<div class="card-checklist-summary all-done-bar"><span class="checklist-summary-text">All actions completed!</span><div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div></div>`
+    : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/4 done (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
+
+  return `<div id="cklwrap-${postId}"><div class="card-checklist" id="ccl-${postId}">${chips}</div>${summary}</div>`;
+}
+
+function refreshChecklist(postId) {
+  const wrap = document.getElementById('cklwrap-' + postId);
+  if (!wrap) return;
+  const filtered = getFilteredPosts();
+  const post = filtered.find(p => p.id === postId) || null;
+  wrap.outerHTML = cardChecklistHTML(postId, post);
 }
 
 function buildFocused(idx) {
   const filtered = getFilteredPosts();
-  const post = filtered[idx] || null;
-  const postId = post ? post.id : `demo-${idx}`;
-  const caption = post ? post.caption : 'Milan, Prada SS27 — thank you so much, Prada';
-  const t = post && post.time ? new Date(post.time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : times[idx % times.length];
+  const post = filtered[idx];
+  if (!post) return '';
+  const postId = post.id;
+  const t = (post.time || post.post_time) ? new Date(post.time || post.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '';
   const state = getState(postId);
-  const uname = getUsername();
+  const postUrl = post?.post_url || post?.postUrl || '';
 
   if (currentPlatform === 'ig') {
-    const mediaLabel = post?.mediaType ? ({photo:'Photo',video:'Video',reel:'Reel',story:'Story',carousel:'Carousel',live:'Live',short:'Short'}[post.mediaType]||post.mediaType) : '';
+    const mediaLabel = post.mediaType || post.media_type ? (MEDIA_LABELS[post.mediaType||post.media_type]||post.mediaType||post.media_type) : '';
     const allDone = isAllDone(postId);
     return `
       <div class="ig-card${allDone?' all-done':''}" data-post-id="${postId}">
-        ${post?.focused ? '<div class="focus-banner">Focus post — like, comment, share, and save it!</div>' : ''}
+        ${focusBannerHTML(post)}
         <div class="ig-card-header">
           <div class="avatar">P</div>
           <div>
-            <div class="ig-username">${uname} ${post?.focused ? '<span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700;margin-left:4px">Focus</span>' : ''}</div>
-            <div class="ig-location">Milan, Italy · ${t}${mediaLabel ? ` · ${mediaLabel}` : ''}</div>
-            ${post?.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
+            ${post.focused ? '<div class="ig-username"><span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700">Focus</span></div>' : ''}
+            <div class="ig-location">${t ? 'Milan, Italy · ' + t : 'Milan, Italy'}${mediaLabel ? ' · ' + mediaLabel : ''}</div>
+            ${post.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
           </div>
-          <button class="ig-more">···</button>
+          <button class="ig-more" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')" title="Open original post"`:''}>${postUrl ? icons.extLink : '···'}</button>
         </div>
-        <div class="media-frame">${getMediaContent(post)}</div>
+        <div class="media-frame" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="ig-actions">
           <button class="ig-action-btn ${state.liked?'liked':''}" onclick="toggleLike('${postId}',this)" title="Like">
             ${state.liked ? icons.heartFilled : icons.heart}
           </button>
-          <button class="ig-action-btn" onclick="openCommentModal('${postId}')" title="Comment">
-            ${icons.comment}
-          </button>
-          <button class="ig-action-btn" onclick="openShareModal('${postId}')" title="Share">
-            ${icons.share}
-          </button>
+          <button class="ig-action-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}</button>
+          <button class="ig-action-btn" onclick="openShareModal('${postId}')"   title="Share">${icons.share}</button>
           <button class="ig-action-btn ig-save ${state.saved?'saved':''}" onclick="toggleSave('${postId}',this)" title="Save">
             ${state.saved ? icons.bookmarkFilled : icons.bookmark}
           </button>
         </div>
-        ${post && post.likes ? `<div class="ig-likes">${post.likes.toLocaleString()} likes</div>` : ''}
-        <div class="ig-caption">
-          <span class="ig-caption-name">${uname}</span> ${caption}
-          <span class="ig-hashtag">#Prada #MilanFashionWeek #SS27 #PondNaravit</span>
-        </div>
-        ${cardChecklistHTML(postId)}
+        ${post.likes ? `<div class="ig-likes">${parseInt(post.likes).toLocaleString()} likes</div>` : ''}
+        ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
       </div>`;
   }
+
   if (currentPlatform === 'twitter') {
     return `
       <div class="tw-card" data-post-id="${postId}">
+        ${focusBannerHTML(post)}
         <div class="tw-header">
           <div class="avatar">P</div>
           <div class="tw-info">
             <div class="tw-name">Pond Naravit</div>
-            <div class="tw-handle">@${uname} · ${t}</div>
+            <div class="tw-handle">${t}</div>
           </div>
         </div>
-        <div class="media-frame media-frame-wide">${getMediaContent(post)}</div>
-        <div class="tw-text" style="margin-top:12px">${caption} <span class="tw-hashtag">#Prada #MFW</span></div>
+        <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="tw-actions">
-          <div class="tw-action">${icons.msgCircle} <span>42</span></div>
-          <div class="tw-action">${icons.repeat} <span>156</span></div>
-          <div class="tw-action">${icons.heart} <span>${post&&post.likes?post.likes.toLocaleString():'1.2K'}</span></div>
+          <div class="tw-action">${icons.msgCircle}</div>
+          <div class="tw-action">${icons.repeat}</div>
+          <div class="tw-action">${icons.heart} ${post.likes ? `<span>${parseInt(post.likes).toLocaleString()}</span>` : ''}</div>
         </div>
+        ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
       </div>`;
   }
+
   if (currentPlatform === 'fb') {
     return `
       <div class="fb-card" data-post-id="${postId}">
+        ${focusBannerHTML(post)}
         <div class="fb-header">
           <div class="avatar">P</div>
           <div>
             <div class="fb-user">Pond Naravit</div>
-            <div class="fb-time">${t} · Public</div>
+            <div class="fb-time">${t ? t + ' · Public' : 'Public'}</div>
           </div>
         </div>
-        <div class="fb-text">${caption}</div>
-        <div class="media-frame" style="aspect-ratio:1.4/1">${getMediaContent(post)}</div>
-        <div class="fb-reactions">Like ${post&&post.likes?post.likes.toLocaleString():'1.2K'}   Love 380   Wow 42</div>
+        <div class="media-frame" style="aspect-ratio:1.4/1" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
+        ${post.likes ? `<div class="fb-reactions" style="padding:6px 11px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">${parseInt(post.likes).toLocaleString()} reactions</div>` : ''}
         <div class="fb-actions">
           <button class="fb-act" onclick="toggleLike('${postId}',this)">${icons.thumbup} Like</button>
           <button class="fb-act" onclick="openCommentModal('${postId}')">${icons.msgCircle} Comment</button>
           <button class="fb-act" onclick="openShareModal('${postId}')">${icons.shareArrow} Share</button>
         </div>
+        ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
       </div>`;
   }
+
   if (currentPlatform === 'youtube') {
     return `
       <div class="yt-card" data-post-id="${postId}">
-        <div class="media-frame media-frame-wide">${getMediaContent(post)}<div class="duration-badge">12:45</div></div>
+        ${focusBannerHTML(post)}
+        <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="yt-info">
-          <div class="yt-title">${caption || 'Pond Naravit × Prada SS27 | Milan Fashion Week Vlog'}</div>
-          <div class="yt-meta">@${uname} · ${post&&post.likes?post.likes.toLocaleString()+' views':'84K views'} · ${t}</div>
+          <div class="yt-title">${post.label || post.caption || ''}</div>
+          <div class="yt-meta">${post.likes ? parseInt(post.likes).toLocaleString() + ' views' : ''}${t ? (post.likes ? ' · ' : '') + t : ''}</div>
         </div>
         <div class="yt-actions">
-          <div class="yt-action">${icons.thumbup} <span>3.4K</span></div>
-          <div class="yt-action">${icons.msgCircle} <span>280</span></div>
+          <div class="yt-action">${icons.thumbup}</div>
+          <div class="yt-action">${icons.msgCircle}</div>
           <div class="yt-action">${icons.shareArrow} <span>Share</span></div>
         </div>
+        ${cardChecklistHTML(postId, post)}
         ${goalsHTML(post)}
       </div>`;
   }
+
   if (currentPlatform === 'tiktok') {
     return `
       <div class="tk-card" data-post-id="${postId}">
-        <div class="media-frame media-frame-tall">${getMediaContent(post)}
+        ${focusBannerHTML(post)}
+        <div class="media-frame media-frame-tall" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}
           <div class="play-overlay">${icons.play}</div>
         </div>
-        <div class="tk-overlay">
-          <div class="tk-left">
-            <div class="tk-username">@${uname}</div>
-            <div class="tk-desc">${caption}<span class="tk-hashtag"> #prada #ss27 #milanfashionweek</span></div>
-          </div>
+        <div class="tk-overlay" style="justify-content:flex-end">
           <div class="tk-right">
-            <div class="tk-btn">${icons.heart}<span>${post&&post.likes?post.likes.toLocaleString():'84K'}</span></div>
-            <div class="tk-btn">${icons.comment}<span>2.1K</span></div>
+            <div class="tk-btn">${icons.heart}${post.likes ? `<span>${parseInt(post.likes).toLocaleString()}</span>` : ''}</div>
+            <div class="tk-btn">${icons.comment}</div>
             <div class="tk-btn">${icons.music}</div>
           </div>
         </div>
+        ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
   return '';
@@ -1279,100 +1009,115 @@ function buildFocused(idx) {
 
 function buildThumb(idx) {
   const filtered = getFilteredPosts();
-  const post = filtered[idx] || null;
-  const isVideo = currentPlatform === 'youtube' || currentPlatform === 'tiktok';
-  const postId = post ? post.id : `demo-${idx}`;
-  const done = isAllDone(postId);
-  const isFocus = post?.focused;
-  const thumbInner = post?.image
-    ? `<img src="${post.image}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">`
+  const post   = filtered[idx];
+  if (!post) return '';
+  const postId = post.id;
+  const done   = isAllDone(postId);
+  const isFocus = !!post.focused;
+  const thumbInner = (post.image || post.image_url)
+    ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentElement.innerHTML='${icons.camera}'">`
     : icons.camera;
   return `
-    <div class="thumb-item${done?' completed':''}${isFocus?' focus-thumb':''}" onclick="focusedIndex=${idx}; generatePosts()" style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
+    <div class="thumb-item${done?' completed':''}${isFocus?' focus-thumb':''}"
+         onclick="focusedIndex=${idx};generatePosts()"
+         style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
       <div class="thumb-media">${thumbInner}</div>
-      <div class="thumb-overlay">
-        ${done ? '' : (isVideo ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>` : '')}
-      </div>
+      <div class="thumb-overlay"></div>
       ${isFocus && !done ? `<div style="position:absolute;top:4px;left:4px;background:var(--gold);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:2px;letter-spacing:0.05em">FOCUS</div>` : ''}
     </div>`;
 }
 
 function generatePosts() {
-  const fw = document.getElementById('focusedWrap');
-  const tg = document.getElementById('thumbGrid');
   const filtered = getFilteredPosts();
-  const total = Math.max(filtered.length, 10);
-  if (focusedIndex >= total) focusedIndex = 0;
 
-  fw.innerHTML = buildFocused(focusedIndex);
-  tg.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    if (i === focusedIndex) continue;
-    tg.insertAdjacentHTML('beforeend', buildThumb(i));
+  if (filtered.length === 0) {
+    document.getElementById('focusedWrap').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">${icons.camera}</div>
+        <div class="empty-state-text">No posts yet</div>
+        <div class="empty-state-sub">Posts added by admin will appear here</div>
+      </div>`;
+    document.getElementById('thumbGrid').innerHTML = '';
+    document.getElementById('moreDivider').style.display = 'none';
+    document.getElementById('gridLabel').style.display   = 'none';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressPct').innerHTML = '0<span>%</span>';
+    document.getElementById('progressCompleteMsg').classList.remove('visible');
+    return;
   }
+
+  if (focusedIndex >= filtered.length) focusedIndex = 0;
+
+  document.getElementById('focusedWrap').innerHTML = buildFocused(focusedIndex);
+
+  const thumbs = filtered
+    .map((_, i) => i)
+    .filter(i => i !== focusedIndex)
+    .map(i => buildThumb(i))
+    .join('');
+
+  const tg = document.getElementById('thumbGrid');
+  tg.innerHTML = thumbs;
+
+  const hasMore = filtered.length > 1;
+  document.getElementById('moreDivider').style.display = hasMore ? 'flex' : 'none';
+  document.getElementById('gridLabel').style.display   = hasMore ? 'block' : 'none';
+
   updateProgressTracker();
 }
 
-// ─── Checklist row handlers ──────────────────────────────────────────────────
-function checklistAction(postId, key) {
-  const s = getState(postId);
-  if (s[key]) return; // already done
-  s[key] = true;
-  if (key === 'liked') {
-    spawnConfetti();
-    logFanAction(postId, 'like');
-    showToast('Liked! ❤️');
-    // sync the ig-action-btn heart button too
-    const igBtn = document.querySelector('.ig-action-btn[title="Like"]');
-    if (igBtn) { igBtn.innerHTML = icons.heartFilled; igBtn.classList.add('liked'); }
-  }
-  if (key === 'saved') {
-    logFanAction(postId, 'save');
-    showToast('Saved! 🔖');
-    const igBtn = document.querySelector('.ig-action-btn[title="Save"]');
-    if (igBtn) { igBtn.innerHTML = icons.bookmarkFilled; igBtn.classList.add('saved'); }
-  }
-  updateProgressTracker();
-  checkAllDone(postId);
+// ─── Platform / Filter ───────────────────────────────────────────────────────
+function setPlatform(p) {
+  currentPlatform = p;
+  focusedIndex = 0;
+  document.getElementById('platformLabel').textContent = platformNames[p];
+  const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK' };
+  ['IG','TW','FB','YT','TK'].forEach(k => document.getElementById('tab'+k).classList.toggle('active', tabMap[p] === k));
+  generatePosts();
 }
 
-function checklistComment(postId) {
-  openCommentModal(postId);
+function setPageFilter(f) {
+  pageFilter = f;
+  focusedIndex = 0;
+  ['All','Focus','Airport','Show','After'].forEach(k => {
+    document.getElementById('pf'+k).classList.toggle('active', f === k.toLowerCase() || (k==='All' && f==='all'));
+  });
+  generatePosts();
 }
 
-function checklistShare(postId) {
-  openShareModal(postId);
-}
-
+// ─── Like / Save ─────────────────────────────────────────────────────────────
 function toggleLike(postId, btn) {
   const s = getState(postId);
   s.liked = !s.liked;
   btn.innerHTML = s.liked ? icons.heartFilled : icons.heart;
   btn.classList.toggle('liked', s.liked);
-  if (s.liked) { spawnConfetti(); showToast('Liked!'); logFanAction(postId, 'like'); }
-  updateProgressTracker();
-  checkAllDone(postId);
+  if (s.liked) { spawnConfetti(); showToast('Liked!'); }
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
-
 function toggleSave(postId, btn) {
   const s = getState(postId);
   s.saved = !s.saved;
   btn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
   btn.classList.toggle('saved', s.saved);
   showToast(s.saved ? 'Saved!' : 'Removed from saved');
-  if (s.saved) logFanAction(postId, 'save');
-  updateProgressTracker();
-  checkAllDone(postId);
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
-
+function checklistAction(postId, key) {
+  const s = getState(postId);
+  if (s[key]) return;
+  s[key] = true;
+  if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
+  if (key === 'saved') showToast('Saved!');
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
+}
 function checkAllDone(postId) {
   if (isAllDone(postId)) {
-    setTimeout(() => {
-      generatePosts();
-      showToast('All actions completed! Thank you for supporting Pond.');
-    }, 300);
+    setTimeout(() => { generatePosts(); showToast('All actions completed! Thank you!'); }, 300);
   }
 }
+
+// ─── Comment Modal ───────────────────────────────────────────────────────────
+const comments = [];
 
 function openCommentModal(postId) {
   currentPostId = postId;
@@ -1384,73 +1129,61 @@ function closeCommentModal() {
   currentPostId = null;
 }
 function randomizeComment() {
+  if (!comments.length) {
+    document.getElementById('randomComment').textContent = 'No comments available — add some via the Admin panel.';
+    return;
+  }
   currentComment = comments[Math.floor(Math.random() * comments.length)];
   document.getElementById('randomComment').textContent = currentComment;
 }
 function copyAndClose() {
-  const tags = { ig:' #Prada #MilanFashionWeek #SS27 #PondNaravit', twitter:' #Prada #MFW', fb:' #Prada #MilanFashionWeek', youtube:'', tiktok:' #prada #ss27 #milanfashionweek' };
-  const full = currentComment + (tags[currentPlatform] || '');
-  if (navigator.clipboard) navigator.clipboard.writeText(full).then(() => showToast('Copied!'));
+  if (!currentComment) { closeCommentModal(); return; }
+  const tagMap = { ig:' #Prada #MilanFashionWeek #SS27 #PondNaravit', twitter:' #Prada #MFW', fb:' #Prada #MilanFashionWeek', youtube:'', tiktok:' #prada #ss27 #milanfashionweek' };
+  const full = currentComment + (tagMap[currentPlatform] || '');
+  if (navigator.clipboard) navigator.clipboard.writeText(full).catch(() => {});
   if (currentPostId) {
     getState(currentPostId).commented = true;
-    logFanAction(currentPostId, 'comment');
     updateProgressTracker();
+    refreshChecklist(currentPostId);
     checkAllDone(currentPostId);
   }
+  showToast('Copied!');
   closeCommentModal();
 }
-function setCommentFilter(f) {
-  ['All','Runway','Frow'].forEach(k => document.getElementById('cf'+k).classList.toggle('active', f===k.toLowerCase()||(k==='All'&&f==='all')));
-}
 
-let currentSharePostId = null;
+// ─── Share Modal ─────────────────────────────────────────────────────────────
 function openShareModal(postId) {
-  currentSharePostId = postId || null;
+  currentSharePostId = postId;
   document.getElementById('shareModal').style.display = 'flex';
 }
 function closeShareModal() {
   document.getElementById('shareModal').style.display = 'none';
+  currentSharePostId = null;
 }
 function shareToStory() {
-  if (currentSharePostId) {
-    getState(currentSharePostId).shared = true;
-    logFanAction(currentSharePostId, 'share');
-    updateProgressTracker();
-    checkAllDone(currentSharePostId);
-  }
-  showToast('Added to story!');
-  closeShareModal();
+  markShared(); showToast('Added to story!'); closeShareModal();
 }
 function shareLink() {
-  if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(() => showToast('Link copied!'));
+  if (navigator.clipboard) navigator.clipboard.writeText(location.href).catch(() => {});
+  markShared(); showToast('Link copied!'); closeShareModal();
+}
+function markShared() {
   if (currentSharePostId) {
     getState(currentSharePostId).shared = true;
-    logFanAction(currentSharePostId, 'share');
     updateProgressTracker();
+    refreshChecklist(currentSharePostId);
     checkAllDone(currentSharePostId);
   }
-  closeShareModal();
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwo7ffT895ZCNY6ZvJODVblTL9qlt86JdZhMLI5Llhu6V7A_giwpnYrJhwEf5Kc7uVl/exec';
-
-function logFanAction(postId, actionType) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('YOUR_')) return;
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({ action:'fanAction', postId, actionType, platform:currentPlatform }),
-  }).catch(() => {});
-}
-
+// ─── Toast & Confetti ────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
+  t.textContent = msg; t.style.display = 'block';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.style.display = 'none', 2200);
+  toastTimer = setTimeout(() => t.style.display = 'none', 2400);
 }
-
 function spawnConfetti() {
   const colors = ['#0a0a0a','#b8965a','#d4b07a','#ffffff'];
   for (let i = 0; i < 14; i++) {
@@ -1462,137 +1195,25 @@ function spawnConfetti() {
   }
 }
 
-const POSTS_KEY = 'pond_posts';
-const GOALS_KEY = 'pond_goals';
-const PLATFORMS = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
-const MEDIA_LABELS = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
-const GOAL_DEFS = [
-  { key:'likes',    icon:'heart',   label:'Likes' },
-  { key:'comments', icon:'comment', label:'Comments' },
-  { key:'shares',   icon:'share',   label:'Shares' },
-];
-
-let posts = [];
-let goals = { likes:200, comments:50, shares:30 };
-let editingId = null;
-let deletingId = null;
-let selectedEmoji = null;
-let isFocused = false;
+// ─── Admin ───────────────────────────────────────────────────────────────────
+let editingId   = null;
+let deletingId  = null;
+let isFocused   = false;
 let selectedImageData = null;
-let imgTabMode = 'upload';
+let imgTabMode  = 'upload';
 
-async function load() {
-  try {
-    const p = localStorage.getItem(POSTS_KEY);
-    if (p) posts = JSON.parse(p);
-    const g = localStorage.getItem(GOALS_KEY);
-    if (g) goals = { ...goals, ...JSON.parse(g) };
-  } catch(e) {}
-
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('YOUR_')) return;
-  try {
-    const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
-    const dp = await rp.json();
-    if (dp.ok && Array.isArray(dp.posts)) {
-      posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0 }));
-      localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
-    }
-    const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
-    const dg = await rg.json();
-    if (dg.ok && dg.goals) {
-      goals = { likes: parseInt(dg.goals.likes)||200, comments: parseInt(dg.goals.comments)||50, shares: parseInt(dg.goals.shares)||30 };
-      localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
-    }
-  } catch(err) { console.warn('Apps Script load failed:', err); }
-}
-
-async function loadAdminDataFromScript() {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('YOUR_')) { loadAdminData(); generatePosts(); return; }
-  try {
-    const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
-    const dp = await rp.json();
-    if (dp.ok && Array.isArray(dp.posts)) {
-      adminPosts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0 }));
-      localStorage.setItem(POSTS_KEY, JSON.stringify(adminPosts));
-    }
-    const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
-    const dg = await rg.json();
-    if (dg.ok && dg.goals) {
-      adminGoals = { likes: parseInt(dg.goals.likes)||200, comments: parseInt(dg.goals.comments)||50, shares: parseInt(dg.goals.shares)||30 };
-      localStorage.setItem(GOALS_KEY, JSON.stringify(adminGoals));
-    }
-  } catch(err) { console.warn('Apps Script public load failed:', err); loadAdminData(); }
-  generatePosts();
-}
-
-async function save() {
-  localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
-  adminPosts = [...posts];
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('YOUR_')) return;
-  try {
-    await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'savePosts', posts }) });
-    setSaveDot(true);
-  } catch(err) { setSaveDot(false); }
-}
-
-async function saveGoals() {
-  const g = {};
-  GOAL_DEFS.forEach(d => { const v = parseInt(document.getElementById('goal_'+d.key)?.value) || 0; g[d.key] = v; });
-  goals = g;
-  adminGoals = { ...g };
-  localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
-  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.startsWith('YOUR_')) {
-    try { await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'saveGoals', goals }) }); } catch(err) {}
-  }
-  showToast('Goals saved');
-}
-
-function setSaveDot(success) {
-  const dot = document.querySelector('.save-dot');
-  if (!dot) return;
-  dot.style.background = success ? '#27ae60' : '#e74c3c';
-  setTimeout(() => { dot.style.background = ''; }, 3000);
-}
-
-function toggleFocusPick() {
-  isFocused = !isFocused;
-  setFocusUI(isFocused);
-}
-
-function setFocusUI(val) {
-  isFocused = !!val;
-  const box = document.getElementById('focusCheckbox');
-  const row = document.getElementById('focusToggleRow');
-  const starIcon = document.getElementById('focusStarIcon');
-  if (isFocused) {
-    box.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-    box.style.borderColor = 'var(--gold)'; box.style.background = '#fffbf0';
-    row.style.borderColor = 'var(--gold)'; row.style.background = '#fffbf0';
-    if (starIcon) starIcon.innerHTML = icons.starFilled;
-  } else {
-    box.innerHTML = '';
-    box.style.borderColor = 'var(--border)'; box.style.background = 'transparent';
-    row.style.borderColor = 'var(--border)'; row.style.background = 'var(--offwhite)';
-    if (starIcon) starIcon.innerHTML = icons.star;
-  }
-}
-
-// ─── Admin goals grid — shows full number in input, formatted preview below ──
 function renderGoals() {
-  const grid = document.getElementById('goalsGrid');
-  grid.innerHTML = GOAL_DEFS.map(d => {
+  document.getElementById('goalsGrid').innerHTML = GOAL_DEFS.map(d => {
     const val = goals[d.key] || 0;
     return `
-    <div class="goal-cell">
-      <div class="goal-icon">${icons[d.icon]}</div>
-      <div class="goal-platform">${d.label}</div>
-      <div class="goal-input-wrap">
+      <div class="goal-cell">
+        <div class="goal-icon">${icons[d.icon]}</div>
+        <div class="goal-platform">${d.label}</div>
         <input type="number" class="goal-input" id="goal_${d.key}" value="${val}" min="0"
           oninput="document.getElementById('goal_preview_${d.key}').textContent = this.value > 0 ? '→ ' + formatNum(parseInt(this.value)||0) : ''">
-      </div>
-      <div class="goal-preview" id="goal_preview_${d.key}">${val > 0 ? '→ ' + formatNum(val) : ''}</div>
-      <div class="goal-label">แสดงแบบย่อ</div>
-    </div>`;
+        <div class="goal-preview" id="goal_preview_${d.key}">${val > 0 ? '→ ' + formatNum(val) : ''}</div>
+        <div class="goal-label">แสดงแบบย่อ</div>
+      </div>`;
   }).join('');
 }
 
@@ -1606,28 +1227,29 @@ function renderPosts() {
   const sorted = [...posts].sort((a, b) => {
     if (a.focused && !b.focused) return -1;
     if (!a.focused && b.focused) return 1;
-    return new Date(b.createdAt||0) - new Date(a.createdAt||0);
+    return new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0);
   });
   list.innerHTML = sorted.map(p => {
-    const typeTag = p.type && p.type !== 'all' ? `<span class="tag tag-type-${p.type}">${p.type==='runway'?'Runway Day':'Front Row'}</span>` : '';
-    const mediaTag = p.mediaType ? `<span class="tag tag-media">${MEDIA_LABELS[p.mediaType]||p.mediaType}</span>` : '';
-    const labelText = p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : '';
-    const timeStr = p.time ? new Date(p.time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '—';
+    const postType = p.post_type || p.type || '';
+    const typeLabel = postType && postType !== 'all' ? postType.charAt(0).toUpperCase() + postType.slice(1) : '';
+    const mediaLabel = MEDIA_LABELS[p.mediaType || p.media_type] || '';
+    const t = (p.time || p.post_time) ? new Date(p.time || p.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '—';
     return `
-      <div class="post-item ${p.focused?'focus-ring':''}">
-        <div class="post-thumb">${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
+      <div class="post-item${p.focused?' focus-ring':''}">
+        <div class="post-thumb">${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
         <div class="post-meta">
-          ${labelText}
-          <div class="post-caption">${p.caption||'(no caption)'}</div>
+          ${p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : ''}
+          <div class="post-caption">${p.caption || '(no caption)'}</div>
           <div class="post-tags">
             <span class="tag tag-platform">${PLATFORMS[p.platform]||p.platform}</span>
-            ${mediaTag}${typeTag}
-            ${p.focused?'<span class="focus-badge">Focus</span>':''}
+            ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
+            ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
+            ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
           </div>
-          <div class="post-time">${timeStr} · ${p.likes||0} likes</div>
+          <div class="post-time">${t}${p.likes ? ` · ${parseInt(p.likes).toLocaleString()} likes` : ''}${p.post_url ? ` · <a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>` : ''}</div>
         </div>
         <div class="post-actions">
-          <button class="icon-btn ${p.focused?'star-on':''}" onclick="toggleFocus('${p.id}')" title="${p.focused?'Unset focus':'Set as focus'}">
+          <button class="icon-btn${p.focused?' star-on':''}" onclick="toggleFocus('${p.id}')" title="${p.focused?'Unset focus':'Set as focus'}">
             <svg viewBox="0 0 24 24" fill="${p.focused?'var(--gold)':'none'}" stroke="${p.focused?'var(--gold)':'currentColor'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
           </button>
           <button class="icon-btn" onclick="openEditModal('${p.id}')" title="Edit">
@@ -1641,22 +1263,17 @@ function renderPosts() {
   }).join('');
 }
 
+// Image picker
 function switchImgTab(mode) {
   imgTabMode = mode;
-  const tabs = { upload:'imgTabUpload', url:'imgTabUrl' };
-  const panels = { upload:'imgPanelUpload', url:'imgPanelUrl' };
-  Object.keys(tabs).forEach(k => {
-    const isActive = k === mode;
-    document.getElementById(tabs[k]).style.background = isActive ? 'var(--black)' : 'var(--offwhite)';
-    document.getElementById(tabs[k]).style.color = isActive ? '#fff' : 'var(--muted)';
-    document.getElementById(panels[k]).style.display = isActive ? 'block' : 'none';
-  });
+  document.getElementById('imgTabUpload').style.cssText = `flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:${mode==='upload'?'var(--black)':'var(--offwhite)'};color:${mode==='upload'?'#fff':'var(--muted)'}`;
+  document.getElementById('imgTabUrl').style.cssText    = `flex:1;padding:7px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:${mode==='url'?'var(--black)':'var(--offwhite)'};color:${mode==='url'?'#fff':'var(--muted)'}`;
+  document.getElementById('imgPanelUpload').style.display = mode==='upload' ? 'block' : 'none';
+  document.getElementById('imgPanelUrl').style.display    = mode==='url'    ? 'block' : 'none';
   renderPreview();
 }
-
 function handleImgFile(input) {
-  const file = input.files[0];
-  if (!file) return;
+  const file = input.files[0]; if (!file) return;
   if (file.size > 5*1024*1024) { showToast('Image is larger than 5MB'); return; }
   const reader = new FileReader();
   reader.onload = e => {
@@ -1668,7 +1285,6 @@ function handleImgFile(input) {
   };
   reader.readAsDataURL(file);
 }
-
 function handleImgDrop(e) {
   e.preventDefault();
   document.getElementById('uploadDropzone').style.borderColor = 'var(--border)';
@@ -1677,7 +1293,6 @@ function handleImgDrop(e) {
   document.getElementById('fImgFile').files = e.dataTransfer.files;
   handleImgFile(document.getElementById('fImgFile'));
 }
-
 function handleImgUrl(val) {
   const url = val.trim();
   if (!url) { selectedImageData = null; document.getElementById('urlPreviewWrap').style.display = 'none'; renderPreview(); return; }
@@ -1686,7 +1301,6 @@ function handleImgUrl(val) {
   document.getElementById('urlPreviewWrap').style.display = 'block';
   renderPreview();
 }
-
 function clearImage() {
   selectedImageData = null;
   document.getElementById('fImgFile').value = '';
@@ -1696,7 +1310,6 @@ function clearImage() {
   document.getElementById('urlPreviewWrap').style.display = 'none';
   renderPreview();
 }
-
 function resetImagePicker(existingImg) {
   selectedImageData = null;
   document.getElementById('fImgFile').value = '';
@@ -1723,42 +1336,60 @@ function resetImagePicker(existingImg) {
   }
 }
 
-function toggleFocus(id) {
-  const idx = posts.findIndex(p => p.id === id);
-  if (idx < 0) return;
-  posts[idx].focused = !posts[idx].focused;
-  save(); renderPosts();
-  showToast(posts[idx].focused ? 'Set as focus' : 'Unset focus');
+// Focus toggle
+function toggleFocusPick() {
+  isFocused = !isFocused;
+  setFocusUI(isFocused);
+}
+function setFocusUI(val) {
+  isFocused = !!val;
+  const box  = document.getElementById('focusCheckbox');
+  const row  = document.getElementById('focusToggleRow');
+  const star = document.getElementById('focusStarIcon');
+  if (isFocused) {
+    box.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    box.style.borderColor = 'var(--gold)'; box.style.background = '#fffbf0';
+    row.style.borderColor = 'var(--gold)'; row.style.background = '#fffbf0';
+    if (star) star.innerHTML = icons.starFilled;
+  } else {
+    box.innerHTML = ''; box.style.borderColor = 'var(--border)'; box.style.background = 'transparent';
+    row.style.borderColor = 'var(--border)'; row.style.background = 'var(--offwhite)';
+    if (star) star.innerHTML = icons.star;
+  }
 }
 
 function renderPreview() {
-  const caption = document.getElementById('fCaption')?.value || '';
-  const label = document.getElementById('fLabel')?.value || '';
+  const caption  = document.getElementById('fCaption')?.value || '';
+  const label    = document.getElementById('fLabel')?.value || '';
   const platform = document.getElementById('fPlatform')?.value || 'ig';
-  const mediaType = document.getElementById('fMediaType')?.value || 'photo';
-  const preview = document.getElementById('previewCard');
+  const mediaType= document.getElementById('fMediaType')?.value || 'photo';
+  const preview  = document.getElementById('previewCard');
   if (!preview) return;
-  const useImage = !!selectedImageData;
-  const mediaHTML = useImage
+  const mediaHTML = selectedImageData
     ? `<img src="${selectedImageData}" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block">`
     : `<div style="width:100%;aspect-ratio:1/1;background:linear-gradient(145deg,#1a1a1a 0%,#2d2210 55%,var(--gold) 100%);display:flex;align-items:center;justify-content:center">${icons.camera}</div>`;
   preview.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
       <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#1a1a1a,var(--gold));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia;font-style:italic;color:#fff;font-size:13px">P</div>
       <div>
-        <div style="font-size:12px;font-weight:600">@${currentUsername}</div>
-        ${label ? `<div style="font-size:10px;color:var(--gold);font-weight:600">${label}</div>` : ''}
+        ${label ? `<div style="font-size:11px;color:var(--gold);font-weight:600">${label}</div>` : ''}
       </div>
       <div style="margin-left:auto;display:flex;gap:5px;align-items:center">
         <span style="font-size:10px;background:#f0faf4;color:#1a7a44;border:1px solid #b2dfc5;border-radius:40px;padding:2px 6px">${MEDIA_LABELS[mediaType]||mediaType}</span>
         <span style="font-size:10px;color:var(--muted)">${PLATFORMS[platform]}</span>
       </div>
     </div>
-    ${mediaHTML}
-    <div style="padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.5">${caption||'<em>Caption will appear here...</em>'}</div>
-  `;
+    ${mediaHTML}`;
 }
 
+// CRUD
+function toggleFocus(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  p.focused = !p.focused;
+  saveToScript(); renderPosts();
+  showToast(p.focused ? 'Set as focus' : 'Unset focus');
+}
 function openAddModal() {
   editingId = null;
   document.getElementById('modalTitle').textContent = 'Add New Post';
@@ -1767,6 +1398,7 @@ function openAddModal() {
   document.getElementById('fType').value = 'all';
   document.getElementById('fLabel').value = '';
   document.getElementById('fCaption').value = '';
+  document.getElementById('fPostUrl').value = '';
   document.getElementById('fTime').value = new Date().toISOString().slice(0,16);
   document.getElementById('fLikes').value = '';
   document.getElementById('fGoalLikes').value = '';
@@ -1777,98 +1409,96 @@ function openAddModal() {
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
 }
-
 function openEditModal(id) {
-  const p = posts.find(x => x.id === id);
-  if (!p) return;
+  const p = posts.find(x => x.id === id); if (!p) return;
   editingId = id;
   document.getElementById('modalTitle').textContent = 'Edit Post';
-  document.getElementById('fPlatform').value = p.platform||'ig';
-  document.getElementById('fMediaType').value = p.mediaType||'photo';
-  document.getElementById('fType').value = p.type||'all';
-  document.getElementById('fLabel').value = p.label||'';
-  document.getElementById('fCaption').value = p.caption||'';
-  document.getElementById('fTime').value = p.time ? p.time.slice(0,16) : '';
-  document.getElementById('fLikes').value = p.likes||'';
-  document.getElementById('fGoalLikes').value = p.goalLikes||'';
-  document.getElementById('fGoalComments').value = p.goalComments||'';
-  document.getElementById('fGoalShares').value = p.goalShares||'';
-  resetImagePicker(p.image||null);
-  setFocusUI(p.focused||false);
+  document.getElementById('fPlatform').value  = p.platform || 'ig';
+  document.getElementById('fMediaType').value = p.mediaType || p.media_type || 'photo';
+  document.getElementById('fType').value      = p.post_type || p.type || 'all';
+  document.getElementById('fLabel').value     = p.label || '';
+  document.getElementById('fCaption').value   = p.caption || '';
+  document.getElementById('fPostUrl').value   = p.post_url || p.postUrl || '';
+  document.getElementById('fTime').value      = (p.time || p.post_time || '').slice(0,16);
+  document.getElementById('fLikes').value     = p.likes || '';
+  document.getElementById('fGoalLikes').value    = p.goalLikes    || p.goal_likes    || '';
+  document.getElementById('fGoalComments').value = p.goalComments || p.goal_comments || '';
+  document.getElementById('fGoalShares').value   = p.goalShares   || p.goal_shares   || '';
+  resetImagePicker(p.image || p.image_url || null);
+  setFocusUI(p.focused || false);
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
 }
-
 function closePostModal() { document.getElementById('postModal').style.display = 'none'; editingId = null; }
 function openDeleteModal(id) { deletingId = id; document.getElementById('deleteModal').style.display = 'flex'; }
 function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; deletingId = null; }
-function confirmDelete() { posts = posts.filter(p => p.id !== deletingId); save(); renderPosts(); closeDeleteModal(); showToast('Post deleted'); }
-
+function confirmDelete() {
+  posts = posts.filter(p => p.id !== deletingId);
+  saveToScript(); renderPosts(); closeDeleteModal(); showToast('Post deleted');
+}
 function savePost() {
   const caption = document.getElementById('fCaption').value.trim();
-  if (!caption) { showToast('Please enter a caption'); return; }
-  const platform = document.getElementById('fPlatform').value;
-  const mediaType = document.getElementById('fMediaType').value;
-  const type = document.getElementById('fType').value;
-  const label = document.getElementById('fLabel').value.trim();
-  const time = document.getElementById('fTime').value;
-  const likes = parseInt(document.getElementById('fLikes').value)||0;
-  const goalLikes = parseInt(document.getElementById('fGoalLikes').value)||0;
-  const goalComments = parseInt(document.getElementById('fGoalComments').value)||0;
-  const goalShares = parseInt(document.getElementById('fGoalShares').value)||0;
-  const focused = isFocused;
-  const image = selectedImageData || null;
-
+  const now = new Date().toISOString();
+  const record = {
+    caption,
+    platform:     document.getElementById('fPlatform').value,
+    mediaType:    document.getElementById('fMediaType').value,
+    post_type:    document.getElementById('fType').value,
+    type:         document.getElementById('fType').value,
+    label:        document.getElementById('fLabel').value.trim(),
+    post_url:     document.getElementById('fPostUrl').value.trim(),
+    time:         document.getElementById('fTime').value,
+    likes:        parseInt(document.getElementById('fLikes').value) || 0,
+    goalLikes:    parseInt(document.getElementById('fGoalLikes').value)    || 0,
+    goalComments: parseInt(document.getElementById('fGoalComments').value) || 0,
+    goalShares:   parseInt(document.getElementById('fGoalShares').value)   || 0,
+    image:        selectedImageData || null,
+    image_url:    selectedImageData || null,
+    focused:      isFocused,
+  };
   if (editingId) {
     const idx = posts.findIndex(p => p.id === editingId);
-    if (idx >= 0) posts[idx] = { ...posts[idx], caption, platform, mediaType, type, label, time, likes, goalLikes, goalComments, goalShares, image, focused };
+    if (idx >= 0) posts[idx] = { ...posts[idx], ...record };
     showToast('Post updated');
   } else {
-    posts.push({ id:'p_'+Date.now(), caption, platform, mediaType, type, label, time, likes, goalLikes, goalComments, goalShares, image, focused, createdAt: new Date().toISOString() });
+    posts.push({ id: 'p_' + Date.now(), ...record, createdAt: now, created_at: now });
     showToast('Post added');
   }
-  save(); renderPosts(); closePostModal();
+  saveToScript(); renderPosts(); closePostModal();
 }
 
-const ADMIN_SECRET = "pradamilan";
-
+// Admin enter/exit
 async function enterAdmin() {
   document.getElementById('publicView').style.display = 'none';
-  document.getElementById('adminView').style.display = 'block';
+  document.getElementById('adminView').style.display  = 'block';
   window.scrollTo(0, 0);
-  showToast('Loading data...');
-  await load();
-  const adminInput = document.getElementById('adminUsernameInput');
-  if (adminInput) {
-    adminInput.value = currentUsername;
-    const prev = document.getElementById('adminUsernamePreview');
-    if (prev) prev.innerHTML = 'Displayed as: <strong>@' + currentUsername + '</strong>';
-  }
+  loadLocalData();
+  const inp = document.getElementById('adminUsernameInput');
+  if (inp) { inp.value = currentUsername; updateUsernamePreview(currentUsername); }
   renderGoals(); renderPosts();
 }
-
 function exitAdmin() {
-  document.getElementById('adminView').style.display = 'none';
+  document.getElementById('adminView').style.display  = 'none';
   document.getElementById('publicView').style.display = 'block';
   const url = new URL(location.href);
   url.searchParams.delete('admin');
   history.replaceState(null, '', url.toString());
-  loadAdminDataFromScript();
+  generatePosts();
   window.scrollTo(0, 0);
 }
 
-(function checkAdminParam() {
+// ─── Boot ────────────────────────────────────────────────────────────────────
+const ADMIN_SECRET = 'pradamilan';
+(function boot() {
   const params = new URLSearchParams(location.search);
-  const secret = params.get('admin');
-  if (secret && secret.trim().toLowerCase() === ADMIN_SECRET.toLowerCase()) {
+  if (params.get('admin')?.trim().toLowerCase() === ADMIN_SECRET) {
     const url = new URL(location.href);
     url.searchParams.delete('admin');
     history.replaceState(null, '', url.toString());
     enterAdmin();
   } else {
-    loadAdminDataFromScript();
+    loadFromScript();
   }
-  setChipIcons();
 })();
 </script>
 </body>
