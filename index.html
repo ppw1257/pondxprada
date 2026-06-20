@@ -48,8 +48,11 @@
     .filter-pill:hover:not(.active) { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
 
     /* ── Progress Banner ── */
-    .platform-label { text-align: center; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); padding: 16px 0 8px; }
-    .progress-banner { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 12px 16px; max-width: 380px; margin: 0 auto; }
+    .platform-label { text-align: center; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); padding: 18px 0 10px; font-weight: 500; }
+    .progress-banner { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 12px 16px; max-width: 380px; margin: 0 auto; width: 100%; }
+    @media (min-width: 600px)  { .progress-banner { max-width: 560px; } }
+    @media (min-width: 900px)  { .progress-banner { max-width: 720px; } }
+    @media (min-width: 1200px) { .progress-banner { max-width: 880px; } }
     .progress-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .progress-title { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
     .progress-pct { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--black); line-height: 1; }
@@ -69,7 +72,10 @@
     .progress-complete-msg.visible { display: block; }
 
     /* ── Main Layout ── */
-    .main-layout { max-width: 380px; margin: 0 auto; padding: 0 20px 40px; }
+    .main-layout { max-width: 380px; margin: 0 auto; padding: 0 20px 40px; width: 100%; }
+    @media (min-width: 600px)  { .main-layout { max-width: 560px; padding: 0 28px 56px; } }
+    @media (min-width: 900px)  { .main-layout { max-width: 720px; padding: 0 32px 64px; } .thumb-item { max-width: 180px; } }
+    @media (min-width: 1200px) { .main-layout { max-width: 880px; padding: 0 40px 72px; } .thumb-item { max-width: 220px; } }
     .focused-wrap { margin-bottom: 28px; }
 
     /* ── IG Card ── */
@@ -127,15 +133,18 @@
     .goal-card-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 2px; transition: width 0.6s ease; }
 
     /* ── Thumb Grid ── */
-    .grid-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 10px; }
-    .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
-    .thumb-item { aspect-ratio: 1/1; cursor: pointer; overflow: hidden; border-radius: 2px; position: relative; }
-    .thumb-item .thumb-media { width: 100%; height: 100%; background: linear-gradient(145deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 28px; transition: transform 0.2s; }
-    .thumb-item:hover .thumb-media { transform: scale(1.06); }
-    .thumb-item .thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
-    .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.2); }
-    .thumb-item.completed .thumb-media { opacity: 0.35; filter: grayscale(60%); }
-    .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 22px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.82); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .grid-label { font-family: var(--font-display); font-style: italic; font-size: 15px; letter-spacing: 0.02em; color: var(--black); text-align: center; margin-bottom: 14px; }
+    .thumb-grid { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: nowrap; }
+    .thumb-item { flex: 1 1 0; max-width: 130px; min-width: 0; aspect-ratio: 1/1; cursor: pointer; overflow: hidden; border-radius: 2px; position: relative; background: linear-gradient(145deg, #1a1a1a 0%, #2d2210 55%, var(--gold) 100%); padding: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .thumb-item + .thumb-item { margin-left: 0; }
+    .thumb-item:not(:last-child)::after { content: '›'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 28px; color: var(--gold); z-index: 3; pointer-events: none; }
+    .thumb-grid { gap: 22px; padding: 0 8px; }
+    .thumb-item .thumb-media { width: 100%; height: 100%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; transition: transform 0.25s; overflow: hidden; border-radius: 1px; }
+    .thumb-item:hover .thumb-media { transform: scale(1.04); }
+    .thumb-item .thumb-overlay { position: absolute; inset: 6px; background: rgba(0,0,0,0); transition: background 0.2s; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.15); }
+    .thumb-item.completed .thumb-media { opacity: 0.4; filter: grayscale(60%); }
+    .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 20px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.85); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
     /* ── Platform-specific cards ── */
     .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; padding: 13px; }
@@ -705,7 +714,22 @@ let currentComment  = '';
 let currentPostId   = null;
 let currentSharePostId = null;
 
+const STATES_KEY = 'pond_post_states_v1';
 const postStates = new Map();
+try {
+  const raw = localStorage.getItem(STATES_KEY);
+  if (raw) {
+    const obj = JSON.parse(raw);
+    Object.keys(obj).forEach(k => postStates.set(k, { liked:false, saved:false, commented:false, shared:false, ...obj[k] }));
+  }
+} catch(e) {}
+function saveStates() {
+  try {
+    const obj = {};
+    postStates.forEach((v, k) => { obj[k] = v; });
+    localStorage.setItem(STATES_KEY, JSON.stringify(obj));
+  } catch(e) {}
+}
 function getState(id) {
   if (!postStates.has(id)) postStates.set(id, { liked:false, saved:false, commented:false, shared:false });
   return postStates.get(id);
@@ -1057,7 +1081,7 @@ function buildThumb(idx) {
          style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
       <div class="thumb-media">${thumbInner}</div>
       <div class="thumb-overlay"></div>
-      ${isFocus && !done ? `<div style="position:absolute;top:4px;left:4px;background:var(--gold);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:2px;letter-spacing:0.05em">FOCUS</div>` : ''}
+      ${isFocus && !done ? `<div style="position:absolute;top:10px;left:10px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;letter-spacing:0.12em;z-index:4;box-shadow:0 1px 3px rgba(0,0,0,0.25)">FOCUS</div>` : ''}
     </div>`;
 }
 
@@ -1158,6 +1182,7 @@ function setPageFilter(f) {
 function toggleLike(postId, btn) {
   const s = getState(postId);
   s.liked = !s.liked;
+  saveStates();
   btn.innerHTML = s.liked ? icons.heartFilled : icons.heart;
   btn.classList.toggle('liked', s.liked);
   if (s.liked) { spawnConfetti(); showToast('Liked!'); }
@@ -1166,6 +1191,7 @@ function toggleLike(postId, btn) {
 function toggleSave(postId, btn) {
   const s = getState(postId);
   s.saved = !s.saved;
+  saveStates();
   btn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
   btn.classList.toggle('saved', s.saved);
   showToast(s.saved ? 'Saved!' : 'Removed from saved');
@@ -1175,6 +1201,7 @@ function checklistAction(postId, key) {
   const s = getState(postId);
   if (s[key]) return;
   s[key] = true;
+  saveStates();
   if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
   if (key === 'saved') showToast('Saved!');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
@@ -1291,6 +1318,7 @@ function confirmPickedComment() {
   if (navigator.clipboard) navigator.clipboard.writeText(full).catch(() => {});
   if (currentPostId) {
     getState(currentPostId).commented = true;
+    saveStates();
     updateProgressTracker();
     refreshChecklist(currentPostId);
     checkAllDone(currentPostId);
@@ -1318,6 +1346,7 @@ function shareLink() {
 function markShared() {
   if (currentSharePostId) {
     getState(currentSharePostId).shared = true;
+    saveStates();
     updateProgressTracker();
     refreshChecklist(currentSharePostId);
     checkAllDone(currentSharePostId);
