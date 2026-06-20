@@ -510,15 +510,17 @@
   <!-- Posts -->
   <div class="section-head">
     <div class="section-title">All Posts</div>
-    <div class="section-count" id="postCount">0 posts</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="section-count" id="postCount">0 posts</div>
+      <button class="btn btn-black" style="border:none;border-radius:2px;font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--black);color:#fff" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Add New Post
+      </button>
+    </div>
   </div>
   <div class="card" id="postList">
     <div class="empty"><div class="empty-text">No posts yet</div></div>
   </div>
-  <button class="btn btn-black" style="width:100%;justify-content:center;margin-top:4px;border:none;border-radius:2px;font-size:13px;font-weight:600;padding:11px 20px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--black);color:#fff" onclick="openAddModal()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    Add New Post
-  </button>
 
 </div><!-- /admin-body -->
 
