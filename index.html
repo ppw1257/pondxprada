@@ -198,6 +198,12 @@
     .c-pill { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 40px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
     .c-pill.active { background: var(--black); border-color: var(--black); color: #fff; }
     .comment-box { background: var(--offwhite); border-radius: 3px; padding: 16px; font-size: 14px; line-height: 1.65; color: var(--black); min-height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid var(--border); }
+    .comment-pick-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .comment-pick { background: var(--offwhite); border: 1px solid var(--border); border-radius: 3px; padding: 12px 14px; font-size: 13px; line-height: 1.55; color: var(--black); cursor: pointer; text-align: left; transition: all 0.15s; position: relative; }
+    .comment-pick:hover { border-color: var(--gold); background: #fff; }
+    .comment-pick.picked { border-color: var(--gold); background: #fff; box-shadow: inset 0 0 0 1px var(--gold); }
+    .comment-pick.picked::after { content: '\2713'; position: absolute; top: 8px; right: 10px; width: 18px; height: 18px; background: var(--gold); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .comment-pick-hint { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 10px; font-weight: 600; }
     .modal-actions { display: flex; gap: 10px; }
     .btn-primary { flex: 1; background: var(--black); color: #fff; border: none; padding: 13px; border-radius: 2px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-primary:hover { background: #2a2a2a; }
@@ -215,6 +221,12 @@
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 11px 22px; border-radius: 40px; font-size: 13px; font-weight: 500; z-index: 999; white-space: nowrap; }
     @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100px) rotate(540deg); opacity: 0; } }
     .confetti-p { position: fixed; width: 7px; height: 7px; animation: confettiFall 1.1s ease forwards; pointer-events: none; z-index: 9999; border-radius: 1px; }
+
+    .back-to-grid { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 40px; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-bottom: 14px; transition: all 0.15s; }
+    .back-to-grid:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── Grid-only view: bigger thumbs so fans can pick easily ── */
+    .focused-wrap:empty + .editorial-divider { display: none !important; }
 
     /* ── ig-card all-done state ── */
     .ig-card.all-done .media-frame { opacity: 0.45; filter: grayscale(50%); }
@@ -377,10 +389,10 @@
       <button class="c-pill" data-style="cool" onclick="setCommentStyle('cool',this)">Cool</button>
       <button class="c-pill" data-style="hype" onclick="setCommentStyle('hype',this)">Hype</button>
     </div>
-    <div class="comment-box" id="randomComment"></div>
+    <div class="comment-pick-list" id="commentPickList"></div>
     <div class="modal-actions">
-      <button class="btn-outline" onclick="randomizeComment()">Shuffle</button>
-      <button class="btn-primary" onclick="copyAndClose()">
+      <button class="btn-outline" onclick="shuffleCommentOptions()">Shuffle</button>
+      <button class="btn-primary" id="commentConfirmBtn" onclick="confirmPickedComment()" disabled style="opacity:0.45;cursor:not-allowed">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         Copy & Done
       </button>
@@ -688,7 +700,7 @@ const icons = {
 // ─── State ───────────────────────────────────────────────────────────────────
 let currentPlatform = 'ig';
 let pageFilter      = 'all';
-let focusedIndex    = 0;
+let focusedIndex    = null;
 let currentComment  = '';
 let currentPostId   = null;
 let currentSharePostId = null;
@@ -1068,30 +1080,65 @@ function generatePosts() {
     return;
   }
 
+  const focusedWrap = document.getElementById('focusedWrap');
+  const tg          = document.getElementById('thumbGrid');
+  const divider     = document.getElementById('moreDivider');
+  const gridLabel   = document.getElementById('gridLabel');
+
+  if (focusedIndex === null || focusedIndex === undefined) {
+    // Grid-only view: fan picks a post first
+    focusedWrap.innerHTML = '';
+    tg.innerHTML = filtered.map((_, i) => buildThumb(i)).join('');
+    divider.style.display   = 'none';
+    gridLabel.style.display = filtered.length ? 'block' : 'none';
+    gridLabel.textContent   = 'เลือกโพสต์ที่จะช่วยปั่น';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressPct').innerHTML = '0<span>%</span>';
+    document.getElementById('progressCompleteMsg').classList.remove('visible');
+    // Reset chip icons when nothing is focused
+    const chipMap = { chipIconLiked:'heart', chipIconCommented:'comment', chipIconShared:'share', chipIconSaved:'bookmark' };
+    Object.keys(chipMap).forEach(elId => {
+      const el = document.getElementById(elId);
+      if (el) el.innerHTML = icons[chipMap[elId]];
+      const chip = document.getElementById(elId.replace('chipIcon','chip-').toLowerCase().replace('chip-l','chip-l'));
+    });
+    ['chip-liked','chip-commented','chip-shared','chip-saved'].forEach(id => {
+      const chip = document.getElementById(id);
+      if (chip) { chip.classList.remove('done'); const c = chip.querySelector('.chip-check'); if (c) c.innerHTML = ''; }
+    });
+    return;
+  }
+
   if (focusedIndex >= filtered.length) focusedIndex = 0;
 
-  document.getElementById('focusedWrap').innerHTML = buildFocused(focusedIndex);
+  focusedWrap.innerHTML = `<button class="back-to-grid" onclick="backToGrid()">← ดูโพสต์ทั้งหมด</button>` + buildFocused(focusedIndex);
 
   const thumbs = filtered
     .map((_, i) => i)
     .filter(i => i !== focusedIndex)
     .map(i => buildThumb(i))
     .join('');
-
-  const tg = document.getElementById('thumbGrid');
   tg.innerHTML = thumbs;
 
   const hasMore = filtered.length > 1;
-  document.getElementById('moreDivider').style.display = hasMore ? 'flex' : 'none';
-  document.getElementById('gridLabel').style.display   = hasMore ? 'block' : 'none';
+  divider.style.display   = hasMore ? 'flex' : 'none';
+  gridLabel.style.display = hasMore ? 'block' : 'none';
+  gridLabel.textContent   = 'Tap to view';
 
   updateProgressTracker();
+}
+
+// Return to the grid view
+function backToGrid() {
+  focusedIndex = null;
+  generatePosts();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ─── Platform / Filter ───────────────────────────────────────────────────────
 function setPlatform(p) {
   currentPlatform = p;
-  focusedIndex = 0;
+  focusedIndex = null;
   document.getElementById('platformLabel').textContent = platformNames[p];
   const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK' };
   ['IG','TW','FB','YT','TK'].forEach(k => document.getElementById('tab'+k).classList.toggle('active', tabMap[p] === k));
@@ -1100,7 +1147,7 @@ function setPlatform(p) {
 
 function setPageFilter(f) {
   pageFilter = f;
-  focusedIndex = 0;
+  focusedIndex = null;
   ['All','Focus','Airport','Show','After'].forEach(k => {
     document.getElementById('pf'+k).classList.toggle('active', f === k.toLowerCase() || (k==='All' && f==='all'));
   });
@@ -1135,19 +1182,11 @@ function checklistAction(postId, key) {
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
   setTimeout(() => {
-    // Re-sort so the completed post drops to the bottom, then focus the
-    // next post that still needs actions (if any).
-    focusedIndex = 0;
+    focusedIndex = null;          // back to grid
     generatePosts();
-    const filtered = getFilteredPosts();
-    const nextIdx = filtered.findIndex(p => !isAllDone(p.id));
-    if (nextIdx >= 0) {
-      focusedIndex = nextIdx;
-      generatePosts();
-    }
-    showToast('โพสต์นี้ทำครบแล้ว! ✓ ย้ายลงด้านล่าง');
+    showToast('โพสต์นี้ทำครบแล้ว! ✓ เลือกโพสต์ถัดไปได้เลย');
     spawnConfetti();
-  }, 350);
+  }, 400);
 }
 
 // ─── Comment Modal ───────────────────────────────────────────────────────────
@@ -1201,28 +1240,52 @@ function openCommentModal(postId) {
   currentPostId = postId;
   commentStyle = 'sweet';
   document.querySelectorAll('#commentModal .c-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
-  randomizeComment();
+  shuffleCommentOptions();
   document.getElementById('commentModal').style.display = 'flex';
 }
 function closeCommentModal() {
   document.getElementById('commentModal').style.display = 'none';
   currentPostId = null;
 }
-function randomizeComment() {
-  const list = commentBank[commentStyle] || [];
-  if (!list.length) {
-    document.getElementById('randomComment').textContent = 'No comments available.';
+let currentPickOptions = [];
+function shuffleCommentOptions() {
+  const list = (commentBank[commentStyle] || []).slice();
+  // Fisher-Yates, take first 3
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  currentPickOptions = list.slice(0, 3);
+  currentComment = '';
+  renderCommentPicks();
+  const btn = document.getElementById('commentConfirmBtn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.45'; btn.style.cursor = 'not-allowed'; }
+}
+function renderCommentPicks() {
+  const wrap = document.getElementById('commentPickList');
+  if (!wrap) return;
+  if (!currentPickOptions.length) {
+    wrap.innerHTML = '<div class="comment-box">No comments available.</div>';
     return;
   }
-  let next = list[Math.floor(Math.random() * list.length)];
-  if (list.length > 1 && next === currentComment) {
-    next = list[(list.indexOf(next) + 1) % list.length];
-  }
-  currentComment = next;
-  document.getElementById('randomComment').textContent = currentComment;
+  wrap.innerHTML = '<div class="comment-pick-hint">เลือก 1 ข้อความ</div>' +
+    currentPickOptions.map((c, i) =>
+      `<div class="comment-pick" data-idx="${i}" onclick="pickComment(${i})">${c}</div>`
+    ).join('');
 }
-function copyAndClose() {
-  if (!currentComment) { closeCommentModal(); return; }
+function pickComment(i) {
+  currentComment = currentPickOptions[i] || '';
+  document.querySelectorAll('#commentPickList .comment-pick').forEach((el, idx) => {
+    el.classList.toggle('picked', idx === i);
+  });
+  const btn = document.getElementById('commentConfirmBtn');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+}
+// kept for backwards-compat with any onclick still referencing it
+function randomizeComment() { shuffleCommentOptions(); }
+function copyAndClose() { confirmPickedComment(); }
+function confirmPickedComment() {
+  if (!currentComment) { showToast('เลือกข้อความก่อนนะ'); return; }
   const tagMap = { ig:' #Prada #MilanFashionWeek #SS27 #PondNaravit', twitter:' #Prada #MFW', fb:' #Prada #MilanFashionWeek', youtube:'', tiktok:' #prada #ss27 #milanfashionweek' };
   const full = currentComment + (tagMap[currentPlatform] || '');
   if (navigator.clipboard) navigator.clipboard.writeText(full).catch(() => {});
@@ -1232,7 +1295,7 @@ function copyAndClose() {
     refreshChecklist(currentPostId);
     checkAllDone(currentPostId);
   }
-  showToast('Copied!');
+  showToast('Copied! เอาไปวางในแอปได้เลย');
   closeCommentModal();
 }
 
