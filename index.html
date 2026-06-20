@@ -823,13 +823,32 @@ function updateUsernamePreview(val) {
   const el = document.getElementById('adminUsernamePreview');
   if (el) el.innerHTML = 'Displayed as: <strong>@' + clean + '</strong>';
 }
-function saveAdminUsername() {
+async function saveAdminUsername() {
   const val = document.getElementById('adminUsernameInput').value.trim().replace(/^@/, '');
   if (!val) { showToast('Please enter a username'); return; }
   currentUsername = val;
   try { localStorage.setItem('pond_username', val); } catch(e) {}
   document.getElementById('adminUsernamePreview').innerHTML = 'Displayed as: <strong>@' + val + '</strong>';
   renderPosts();
+
+  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action:'saveGoals', goals: { ...goals, username: val } })
+      });
+      const result = await res.json();
+      if (!result.ok) {
+        showToast('⚠️ บันทึก username ขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
+        return;
+      }
+    } catch(e) {
+      console.error('saveAdminUsername failed', e);
+      showToast('⚠️ บันทึก username ขึ้น Sheet ไม่สำเร็จ — เช็คอินเทอร์เน็ต');
+      return;
+    }
+  }
   showToast('Username saved');
 }
 
@@ -873,6 +892,10 @@ async function loadFromScript() {
     if (dg.ok && dg.goals) {
       goals = { likes: parseInt(dg.goals.likes)||0, comments: parseInt(dg.goals.comments)||0, shares: parseInt(dg.goals.shares)||0 };
       localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
+      if (dg.goals.username) {
+        currentUsername = dg.goals.username;
+        try { localStorage.setItem('pond_username', currentUsername); } catch(e) {}
+      }
     }
   } catch(err) {
     console.error('loadFromScript failed', err);
@@ -930,7 +953,7 @@ async function saveGoals() {
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action:'saveGoals', goals })
+        body: JSON.stringify({ action:'saveGoals', goals: { ...goals, username: currentUsername } })
       });
       const result = await res.json();
       if (!result.ok) {
