@@ -880,7 +880,7 @@ function saveLocalData() {
   try { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); } catch(e) {}
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSJKOLPlPrLWdwrLDzAT8qknV34XC65VpBr5LW91mxKjPAs5ZQgQyEaXCtlq4MeLCV/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaXckhN1doposNCtIuCH82aWSJvzrtPCXiZrW97FxMtjkXcEeyo3Eu5UJEyHMXezr0cg/exec';
 
 async function loadFromScript() {
   if (!APPS_SCRIPT_URL) { loadLocalData(); generatePosts(); return; }
