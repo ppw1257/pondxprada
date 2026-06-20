@@ -137,48 +137,36 @@
 
     /* ── Thumb Grid ── */
     .grid-label { font-family: var(--font-display); font-style: italic; font-size: 15px; letter-spacing: 0.02em; color: var(--black); text-align: center; margin-bottom: 14px; }
-    .thumb-grid { display: flex; align-items: stretch; justify-content: center; gap: 28px; padding: 6px 10px; flex-wrap: nowrap; }
+    .thumb-grid { display: flex; align-items: stretch; justify-content: center; gap: 16px; padding: 6px 10px; flex-wrap: nowrap; }
     .thumb-item {
       flex: 1 1 0; max-width: 130px; min-width: 0; aspect-ratio: 1/1;
       cursor: pointer; position: relative;
-      background: linear-gradient(150deg, #c8a45c 0%, #8a6a2e 45%, #d9b870 100%);
-      padding: 3px; border-radius: 3px;
+      border: 2px solid #c8a45c; border-radius: 3px;
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.5) inset,
         0 0 0 1px rgba(120,90,30,0.55),
         0 6px 14px -6px rgba(60,40,10,0.35),
         0 2px 4px rgba(0,0,0,0.08);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
+      overflow: hidden;
     }
     .thumb-item:hover {
       transform: translateY(-2px);
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.6) inset,
         0 0 0 1px rgba(120,90,30,0.7),
         0 10px 22px -8px rgba(60,40,10,0.45),
         0 3px 6px rgba(0,0,0,0.1);
-    }
-    .thumb-item:not(:last-child)::after {
-      content: ''; position: absolute; right: -22px; top: 50%;
-      width: 10px; height: 10px;
-      border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);
-      transform: translateY(-50%) rotate(45deg);
-      z-index: 3; pointer-events: none;
-      opacity: 0.7;
     }
     .thumb-item .thumb-media {
       width: 100%; height: 100%; background: #e8e2d4;
       display: flex; align-items: center; justify-content: center;
       font-size: 28px; transition: transform 0.25s; overflow: hidden;
-      border-radius: 1px;
     }
     .thumb-item .thumb-media > img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
     .thumb-item:hover .thumb-media { transform: scale(1.04); }
     .thumb-item .thumb-overlay {
-      position: absolute; inset: 3px; background: rgba(0,0,0,0);
+      position: absolute; inset: 0; background: rgba(0,0,0,0);
       transition: background 0.2s; display: flex;
       align-items: center; justify-content: center; pointer-events: none;
-      border-radius: 1px;
     }
     .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.12); }
     .thumb-item.completed .thumb-media { opacity: 0.4; filter: grayscale(60%); }
@@ -364,7 +352,8 @@
 </header>
 
 <div class="tab-bar">
-  <button class="tab-btn active" id="tabIG"      onclick="setPlatform('ig')">IG</button>
+  <button class="tab-btn active" id="tabAll"     onclick="setPlatform('all')">All</button>
+  <button class="tab-btn"        id="tabIG"      onclick="setPlatform('ig')">IG</button>
   <button class="tab-btn"        id="tabTW"      onclick="setPlatform('twitter')">X</button>
   <button class="tab-btn"        id="tabFB"      onclick="setPlatform('fb')">f</button>
   <button class="tab-btn"        id="tabYT"      onclick="setPlatform('youtube')">YT</button>
@@ -372,7 +361,6 @@
 </div>
 
 <div class="filter-bar">
-  <button class="filter-pill active" id="pfAll"     onclick="setPageFilter('all')">All</button>
   <button class="filter-pill"        id="pfFocus"   onclick="setPageFilter('focus')">Focus</button>
   <button class="filter-pill"        id="pfAirport" onclick="setPageFilter('airport')">Airport</button>
   <button class="filter-pill"        id="pfShow"    onclick="setPageFilter('show')">Show</button>
@@ -594,10 +582,6 @@
       <input type="text" class="form-input" id="fLabel" placeholder="e.g. Prada Day 1 Look, Front Row Moment..." oninput="renderPreview()">
     </div>
 
-    <div class="form-row">
-      <label class="form-label">Caption</label>
-      <textarea class="form-textarea" id="fCaption" placeholder="Milan, Prada SS27 — thank you so much, Prada" oninput="renderPreview()"></textarea>
-    </div>
 
     <div class="form-row">
       <label class="form-label">Post URL (ลิงก์โพสต์จริง)</label>
@@ -739,7 +723,7 @@ function formatNum(n) {
   return n.toString();
 }
 
-const platformNames = { ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
 const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 const GOAL_DEFS     = [
@@ -768,8 +752,13 @@ const icons = {
   extLink:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
 };
 
+function thumbImgError(img) {
+  const p = img.parentElement;
+  if (p) p.innerHTML = icons.camera;
+}
+
 // ─── State ───────────────────────────────────────────────────────────────────
-let currentPlatform = 'ig';
+let currentPlatform = 'all';
 let pageFilter      = 'all';
 let focusedIndex    = null;
 let currentComment  = '';
@@ -882,7 +871,27 @@ async function loadFromScript() {
 async function saveToScript() {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
-  try { await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'savePosts', posts }) }); } catch(e) {}
+  // ดึงข้อมูลล่าสุดจากชีทก่อน merge เพื่อกัน overwrite ของแอดมินคนอื่น
+  try {
+    const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
+    const dp = await rp.json();
+    if (dp.ok && Array.isArray(dp.posts)) {
+      const remote = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes)||0, comments: parseInt(p.comments)||0, shares: parseInt(p.shares)||0 }));
+      const map = new Map();
+      remote.forEach(p => map.set(p.id, p));
+      posts.forEach(p => map.set(p.id, p)); // local ทับ remote เฉพาะ id ที่ตรงกัน
+      posts = Array.from(map.values());
+      saveLocalData();
+    }
+  } catch(e) {}
+  // ส่งเป็น text/plain เพื่อเลี่ยง CORS preflight ของ Apps Script
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action:'savePosts', posts })
+    });
+  } catch(e) { console.error('saveToScript failed', e); }
 }
 
 async function saveGoals() {
@@ -892,7 +901,13 @@ async function saveGoals() {
   });
   try { localStorage.setItem(GOALS_KEY, JSON.stringify(goals)); } catch(e) {}
   if (APPS_SCRIPT_URL) {
-    try { await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({ action:'saveGoals', goals }) }); } catch(e) {}
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action:'saveGoals', goals })
+      });
+    } catch(e) { console.error('saveGoals failed', e); }
   }
   showToast('Goals saved');
 }
@@ -901,7 +916,7 @@ async function saveGoals() {
 function getFilteredPosts() {
   return posts
     .filter(p => {
-      if (p.platform !== currentPlatform) return false;
+      if (currentPlatform !== 'all' && p.platform !== currentPlatform) return false;
       if (pageFilter === 'all') return true;
       if (pageFilter === 'focus') return !!p.focused;
       return p.post_type === pageFilter || p.type === pageFilter;
@@ -1075,12 +1090,13 @@ function buildFocused(idx) {
   const filtered = getFilteredPosts();
   const post = filtered[idx];
   if (!post) return '';
+  const platform = currentPlatform === 'all' ? (post.platform || 'ig') : currentPlatform;
   const postId = post.id;
   const t = (post.time || post.post_time) ? new Date(post.time || post.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '';
   const state = getState(postId);
   const postUrl = post?.post_url || post?.postUrl || '';
 
-  if (currentPlatform === 'ig') {
+  if (platform === 'ig') {
     const mediaLabel = post.mediaType || post.media_type ? (MEDIA_LABELS[post.mediaType||post.media_type]||post.mediaType||post.media_type) : '';
     const allDone = isAllDone(postId);
     return `
@@ -1112,7 +1128,7 @@ function buildFocused(idx) {
       </div>`;
   }
 
-  if (currentPlatform === 'twitter') {
+  if (platform === 'twitter') {
     return `
       <div class="tw-card" data-post-id="${postId}">
         ${focusBannerHTML(post)}
@@ -1134,7 +1150,7 @@ function buildFocused(idx) {
       </div>`;
   }
 
-  if (currentPlatform === 'fb') {
+  if (platform === 'fb') {
     return `
       <div class="fb-card" data-post-id="${postId}">
         ${focusBannerHTML(post)}
@@ -1157,7 +1173,7 @@ function buildFocused(idx) {
       </div>`;
   }
 
-  if (currentPlatform === 'youtube') {
+  if (platform === 'youtube') {
     return `
       <div class="yt-card" data-post-id="${postId}">
         ${focusBannerHTML(post)}
@@ -1176,7 +1192,7 @@ function buildFocused(idx) {
       </div>`;
   }
 
-  if (currentPlatform === 'tiktok') {
+  if (platform === 'tiktok') {
     return `
       <div class="tk-card" data-post-id="${postId}">
         ${focusBannerHTML(post)}
@@ -1206,7 +1222,7 @@ function buildThumb(idx) {
   const done   = isAllDone(postId);
   const isFocus = !!post.focused;
   const thumbInner = (post.image || post.image_url)
-    ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentElement.innerHTML='${icons.camera}'">`
+    ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="thumbImgError(this)">`
     : icons.camera;
   return `
     <div class="thumb-item${done?' completed':''}${isFocus?' focus-thumb':''}"
@@ -1297,6 +1313,8 @@ function setPlatform(p) {
   currentPlatform = p;
   focusedIndex = null;
   document.getElementById('platformLabel').textContent = platformNames[p];
+  const tabAll = document.getElementById('tabAll');
+  if (tabAll) tabAll.classList.toggle('active', p === 'all');
   const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK' };
   ['IG','TW','FB','YT','TK'].forEach(k => document.getElementById('tab'+k).classList.toggle('active', tabMap[p] === k));
   generatePosts();
@@ -1305,8 +1323,9 @@ function setPlatform(p) {
 function setPageFilter(f) {
   pageFilter = f;
   focusedIndex = null;
-  ['All','Focus','Airport','Show','After'].forEach(k => {
-    document.getElementById('pf'+k).classList.toggle('active', f === k.toLowerCase() || (k==='All' && f==='all'));
+  ['Focus','Airport','Show','After'].forEach(k => {
+    const el = document.getElementById('pf'+k);
+    if (el) el.classList.toggle('active', f === k.toLowerCase());
   });
   generatePosts();
 }
@@ -1553,7 +1572,6 @@ function renderPosts() {
         <div class="post-thumb">${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
         <div class="post-meta">
           ${p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : ''}
-          <div class="post-caption">${p.caption || '(no caption)'}</div>
           <div class="post-tags">
             <span class="tag tag-platform">${PLATFORMS[p.platform]||p.platform}</span>
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
@@ -1675,7 +1693,6 @@ function setFocusUI(val) {
 }
 
 function renderPreview() {
-  const caption  = document.getElementById('fCaption')?.value || '';
   const label    = document.getElementById('fLabel')?.value || '';
   const platform = document.getElementById('fPlatform')?.value || 'ig';
   const mediaType= document.getElementById('fMediaType')?.value || 'photo';
@@ -1713,7 +1730,6 @@ function openAddModal() {
   document.getElementById('fMediaType').value = 'photo';
   document.getElementById('fType').value = 'all';
   document.getElementById('fLabel').value = '';
-  document.getElementById('fCaption').value = '';
   document.getElementById('fPostUrl').value = '';
   document.getElementById('fTime').value = new Date().toISOString().slice(0,16);
   document.getElementById('fLikes').value = '';
@@ -1740,7 +1756,6 @@ function openEditModal(id) {
   document.getElementById('fMediaType').value = p.mediaType || p.media_type || 'photo';
   document.getElementById('fType').value      = p.post_type || p.type || 'all';
   document.getElementById('fLabel').value     = p.label || '';
-  document.getElementById('fCaption').value   = p.caption || '';
   document.getElementById('fPostUrl').value   = p.post_url || p.postUrl || '';
   document.getElementById('fTime').value      = (p.time || p.post_time || '').slice(0,16);
   document.getElementById('fLikes').value     = p.likes || '';
@@ -1768,10 +1783,8 @@ function confirmDelete() {
   saveToScript(); renderPosts(); closeDeleteModal(); showToast('Post deleted');
 }
 function savePost() {
-  const caption = document.getElementById('fCaption').value.trim();
   const now = new Date().toISOString();
   const record = {
-    caption,
     platform:     document.getElementById('fPlatform').value,
     mediaType:    document.getElementById('fMediaType').value,
     post_type:    document.getElementById('fType').value,
