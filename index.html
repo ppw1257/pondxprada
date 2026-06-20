@@ -879,22 +879,54 @@ function focusBannerHTML(post) {
 }
 
 function goalsHTML(post) {
+  const postId = post?.id || '';
+  const s = postId ? getState(postId) : { liked:false, commented:false, shared:false };
   const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
   const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
   const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
-  const likes    = parseInt(post?.likes    || 0);
-  const comments = parseInt(post?.comments || 0);
-  const shares   = parseInt(post?.shares   || 0);
+  const likes    = parseInt(post?.likes    || 0) + (s.liked ? 1 : 0);
+  const comments = parseInt(post?.comments || 0) + (s.commented ? 1 : 0);
+  const shares   = parseInt(post?.shares   || 0) + (s.shared ? 1 : 0);
   const pctL = gL ? Math.min(100, Math.round((likes    / gL) * 100)) : 0;
   const pctC = gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0;
   const pctS = gS ? Math.min(100, Math.round((shares   / gS) * 100)) : 0;
   if (!gL && !gC && !gS) return '';
   const cards = [
-    gL ? `<div class="goal-card"><span class="goal-card-type">Likes</span><span class="goal-card-num">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctL}%"></div></div></div>` : '',
-    gC ? `<div class="goal-card"><span class="goal-card-type">Comments</span><span class="goal-card-num">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctC}%"></div></div></div>` : '',
-    gS ? `<div class="goal-card"><span class="goal-card-type">Shares</span><span class="goal-card-num">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" style="width:${pctS}%"></div></div></div>` : '',
+    gL ? `<div class="goal-card" id="goal-likes-${postId}"><span class="goal-card-type">Likes</span><span class="goal-card-num" id="goal-likes-num-${postId}">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-likes-fill-${postId}" style="width:${pctL}%"></div></div></div>` : '',
+    gC ? `<div class="goal-card" id="goal-comments-${postId}"><span class="goal-card-type">Comments</span><span class="goal-card-num" id="goal-comments-num-${postId}">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-comments-fill-${postId}" style="width:${pctC}%"></div></div></div>` : '',
+    gS ? `<div class="goal-card" id="goal-shares-${postId}"><span class="goal-card-type">Shares</span><span class="goal-card-num" id="goal-shares-num-${postId}">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-shares-fill-${postId}" style="width:${pctS}%"></div></div></div>` : '',
   ].filter(Boolean).join('');
   return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
+}
+
+function updateGoalDisplay(postId) {
+  const post = posts.find(p => p.id === postId);
+  if (!post) return;
+  const s = getState(postId);
+  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
+  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
+  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
+  const baseLikes    = parseInt(post.likes    || 0);
+  const baseComments = parseInt(post.comments || 0);
+  const baseShares   = parseInt(post.shares   || 0);
+  const likes    = baseLikes    + (s.liked ? 1 : 0);
+  const comments = baseComments + (s.commented ? 1 : 0);
+  const shares   = baseShares   + (s.shared ? 1 : 0);
+
+  const numL = document.getElementById(`goal-likes-num-${postId}`);
+  const fillL = document.getElementById(`goal-likes-fill-${postId}`);
+  if (numL) numL.textContent = `${formatNum(likes)} / ${formatNum(gL)}`;
+  if (fillL) fillL.style.width = `${gL ? Math.min(100, Math.round((likes / gL) * 100)) : 0}%`;
+
+  const numC = document.getElementById(`goal-comments-num-${postId}`);
+  const fillC = document.getElementById(`goal-comments-fill-${postId}`);
+  if (numC) numC.textContent = `${formatNum(comments)} / ${formatNum(gC)}`;
+  if (fillC) fillC.style.width = `${gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0}%`;
+
+  const numS = document.getElementById(`goal-shares-num-${postId}`);
+  const fillS = document.getElementById(`goal-shares-fill-${postId}`);
+  if (numS) numS.textContent = `${formatNum(shares)} / ${formatNum(gS)}`;
+  if (fillS) fillS.style.width = `${gS ? Math.min(100, Math.round((shares / gS) * 100)) : 0}%`;
 }
 
 function cardChecklistHTML(postId, post) {
@@ -1186,7 +1218,7 @@ function toggleLike(postId, btn) {
   btn.innerHTML = s.liked ? icons.heartFilled : icons.heart;
   btn.classList.toggle('liked', s.liked);
   if (s.liked) { spawnConfetti(); showToast('Liked!'); }
-  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
+  updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
 }
 function toggleSave(postId, btn) {
   const s = getState(postId);
@@ -1204,7 +1236,7 @@ function checklistAction(postId, key) {
   saveStates();
   if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
   if (key === 'saved') showToast('Saved!');
-  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
+  updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
 }
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
@@ -1321,6 +1353,7 @@ function confirmPickedComment() {
     saveStates();
     updateProgressTracker();
     refreshChecklist(currentPostId);
+    updateGoalDisplay(currentPostId);
     checkAllDone(currentPostId);
   }
   showToast('Copied! เอาไปวางในแอปได้เลย');
@@ -1349,6 +1382,7 @@ function markShared() {
     saveStates();
     updateProgressTracker();
     refreshChecklist(currentSharePostId);
+    updateGoalDisplay(currentSharePostId);
     checkAllDone(currentSharePostId);
   }
 }
