@@ -572,16 +572,16 @@
     </div>
 
     <div class="form-row">
-      <label class="form-label">Username (เฉพาะโพสต์นี้)</label>
+      <label class="form-label">Username (this post only)</label>
       <div style="position:relative">
         <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
         <input type="text" class="form-input" id="fUsername" placeholder="pondnaravit" maxlength="40" style="padding-left:26px" oninput="renderPreview()">
       </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">ปล่อยว่างเพื่อใช้ชื่อ default จาก Display Username</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Leave blank to use the default Display Username</div>
     </div>
 
     <div class="form-row">
-      <label class="form-label">Post URL (ลิงก์โพสต์จริง)</label>
+      <label class="form-label">Post URL (link to the actual post)</label>
       <input type="text" class="form-input" id="fPostUrl" placeholder="https://www.instagram.com/p/...">
     </div>
 
@@ -836,7 +836,7 @@ async function loadFromScript() {
     if (dp.ok && Array.isArray(dp.posts)) {
       posts = dp.posts.map(p => ({
   ...p,
-  username:     p.username || '',           // ← เพิ่มบรรทัดนี้
+  username:     p.username || '',           // ← add this field
   focused:      p.focused === 'TRUE' || p.focused === true,
   likes:        parseInt(p.likes)    || 0,
   comments:     parseInt(p.comments) || 0,
@@ -855,7 +855,7 @@ async function loadFromScript() {
   generatePosts();
 }
 
-// upsert โพสต์เดียว (เร็วกว่า savePosts แบบ replace ทั้งชีท)
+// upsert a single post (faster than replacing the whole sheet)
 async function upsertPostToScript(post) {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -868,7 +868,7 @@ async function upsertPostToScript(post) {
   } catch(e) { console.error('upsertPost failed', e); }
 }
 
-// ลบโพสต์เดียวจากชีท
+// delete a single post from the sheet
 async function deletePostFromScript(id) {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -881,7 +881,7 @@ async function deletePostFromScript(id) {
   } catch(e) { console.error('deletePost failed', e); }
 }
 
-// fallback: sync ทุก post (ใช้ตอน migrate หรือ emergency)
+// fallback: sync all posts (use for migration or emergency)
 async function saveToScript() {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -905,7 +905,11 @@ function getFilteredPosts() {
       return p.post_type === pageFilter || p.type === pageFilter;
     })
     .sort((a, b) => {
-      // โฟกัสขึ้นก่อน แล้วเรียงตามเวลาโพสต์ ใหม่สุดก่อน
+      // Completed posts go to the bottom
+      const aDone = isAllDone(a.id) ? 1 : 0;
+      const bDone = isAllDone(b.id) ? 1 : 0;
+      if (aDone !== bDone) return aDone - bDone;
+      // Focus posts first, then sort by post time newest first
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
       const aT = new Date(a.time || a.post_time || a.createdAt || a.created_at || 0).getTime();
@@ -1210,7 +1214,7 @@ function generatePosts() {
     tg.innerHTML = filtered.map((_, i) => buildThumb(i)).join('');
     divider.style.display   = 'none';
     gridLabel.style.display = filtered.length ? 'block' : 'none';
-    gridLabel.textContent   = 'เลือกโพสต์ที่จะช่วยปั่น';
+    gridLabel.textContent   = 'Select a post to support';
     // Show aggregate progress across ALL posts when on grid view
     updateProgressTracker();
     return;
@@ -1218,7 +1222,7 @@ function generatePosts() {
 
   if (focusedIndex >= filtered.length) focusedIndex = 0;
 
-  focusedWrap.innerHTML = `<button class="back-to-grid" onclick="backToGrid()">← ดูโพสต์ทั้งหมด</button>` + buildFocused(focusedIndex);
+  focusedWrap.innerHTML = `<button class="back-to-grid" onclick="backToGrid()">← All Posts</button>` + buildFocused(focusedIndex);
 
   const thumbs = filtered
     .map((_, i) => i)
@@ -1255,7 +1259,7 @@ function setPlatform(p) {
 }
 
 function setPageFilter(f) {
-  // กดซ้ำ = ยกเลิก filter กลับมาแสดงทั้งหมด
+  // Tap again to deselect — returns to showing all
   pageFilter = (pageFilter === f) ? 'all' : f;
   focusedIndex = null;
   ['Focus','Airport','Show','After'].forEach(k => {
@@ -1313,7 +1317,7 @@ function checkAllDone(postId) {
   setTimeout(() => {
     focusedIndex = null;          // back to grid
     generatePosts();
-    showToast('โพสต์นี้ทำครบแล้ว! ✓ เลือกโพสต์ถัดไปได้เลย');
+    showToast('Done! ✓ Pick the next post');
     spawnConfetti();
   }, 400);
 }
@@ -1464,7 +1468,7 @@ function renderCommentPicks() {
     wrap.innerHTML = '<div class="comment-box">No comments available.</div>';
     return;
   }
-  wrap.innerHTML = '<div class="comment-pick-hint">เลือก 1 ข้อความ · Pool ' + commentPool.length.toLocaleString() + '</div>' +
+  wrap.innerHTML = '<div class="comment-pick-hint">Pick 1 comment · Pool ' + commentPool.length.toLocaleString() + '</div>' +
     currentPickOptions.map((c, i) =>
       `<div class="comment-pick" data-idx="${i}" onclick="pickComment(${i})">${c.text}<div style="margin-top:6px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${c.tone}</div></div>`
     ).join('');
@@ -1483,7 +1487,7 @@ function pickComment(i) {
 function randomizeComment() { shuffleCommentOptions(); }
 function copyAndClose() { confirmPickedComment(); }
 function confirmPickedComment() {
-  if (!currentComment) { showToast('เลือกข้อความก่อนนะ'); return; }
+  if (!currentComment) { showToast('Please select a comment first'); return; }
   const tagMap = { ig:' #Prada #MilanFashionWeek #SS27 #PondNaravit', twitter:' #Prada #MFW', fb:' #Prada #MilanFashionWeek', youtube:'', tiktok:' #prada #ss27 #milanfashionweek' };
   const full = currentComment + (tagMap[currentPlatform] || '');
   if (navigator.clipboard) navigator.clipboard.writeText(full).catch(() => {});
@@ -1495,7 +1499,7 @@ function confirmPickedComment() {
    
     checkAllDone(currentPostId);
   }
-  showToast('Copied! เอาไปวางในแอปได้เลย');
+  showToast('Copied! Paste it into the app');
   closeCommentModal();
 }
 
