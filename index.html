@@ -829,6 +829,7 @@ function saveAdminUsername() {
   currentUsername = val;
   try { localStorage.setItem('pond_username', val); } catch(e) {}
   document.getElementById('adminUsernamePreview').innerHTML = 'Displayed as: <strong>@' + val + '</strong>';
+  renderPosts();
   showToast('Username saved');
 }
 
@@ -1117,7 +1118,7 @@ function buildFocused(idx) {
         <div class="ig-card-header">
           <div class="avatar">P</div>
           <div>
-            ${post.focused ? '<div class="ig-username"><span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700">Focus</span></div>' : ''}
+            <div class="ig-username">@${currentUsername}${post.focused ? ' <span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700;margin-left:4px">Focus</span>' : ''}</div>
             <div class="ig-location">${t ? 'Milan, Italy · ' + t : 'Milan, Italy'}${mediaLabel ? ' · ' + mediaLabel : ''}</div>
             ${post.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
           </div>
@@ -1146,8 +1147,8 @@ function buildFocused(idx) {
         <div class="tw-header">
           <div class="avatar">P</div>
           <div class="tw-info">
-            <div class="tw-name">Pond Naravit</div>
-            <div class="tw-handle">${t}</div>
+            <div class="tw-name">${currentUsername}</div>
+            <div class="tw-handle">@${currentUsername}${t ? ' · ' + t : ''}</div>
           </div>
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
@@ -1167,7 +1168,7 @@ function buildFocused(idx) {
         <div class="fb-header">
           <div class="avatar">P</div>
           <div>
-            <div class="fb-user">Pond Naravit</div>
+            <div class="fb-user">${currentUsername}</div>
             <div class="fb-time">${t ? t + ' · Public' : 'Public'}</div>
           </div>
         </div>
@@ -1242,7 +1243,7 @@ function buildThumb(idx) {
       <div class="thumb-overlay"></div>
       <div class="thumb-platform-badge">${platformBadge}</div>
       <div class="thumb-info-bar">
-        <span class="thumb-account">Pond Naravit</span>
+        <span class="thumb-account">${currentUsername}</span>
         ${mediaLabel ? `<span class="thumb-media-type">${mediaLabel}</span>` : ''}
       </div>
       ${isFocus && !done ? `<div style="position:absolute;top:10px;left:10px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;letter-spacing:0.12em;z-index:4;box-shadow:0 1px 3px rgba(0,0,0,0.25)">FOCUS</div>` : ''}
@@ -1594,7 +1595,7 @@ function renderPosts() {
         <div class="post-meta">
           ${p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : ''}
           <div class="post-tags">
-            <span class="tag tag-account">Pond Naravit</span>
+            <span class="tag tag-account">${currentUsername}</span>
             <span class="tag tag-platform">${PLATFORMS[p.platform]||p.platform}</span>
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
