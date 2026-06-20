@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PondNaravit×PradaSS27</title>
+  <title>Pond Naravit × Fashion Week</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,6 +33,8 @@
     .header-title { font-family: var(--font-display); font-size: 26px; font-weight: 300; color: #fff; letter-spacing: 0.04em; line-height: 1.1; }
     .header-title em { font-style: italic; color: var(--gold-light); }
     .header-sub { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-top: 6px; }
+    .header-username-row { display: flex; align-items: center; gap: 5px; justify-content: center; margin-bottom: 4px; }
+    .header-username-text { font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); }
 
     /* ── Tabs & Filters ── */
     .tab-bar { background: var(--black); border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: center; gap: 2px; padding: 10px 16px; }
@@ -90,6 +92,7 @@
     .media-frame-wide { aspect-ratio: 16/9; }
     .media-frame-tall { aspect-ratio: 9/16; max-height: 420px; }
     .play-overlay { position: absolute; width: 48px; height: 48px; background: rgba(255,255,255,0.18); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,255,255,0.4); }
+    .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.72); color: #fff; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; }
     .ig-actions { display: flex; align-items: center; gap: 11px; padding: 9px 11px 6px; }
     .ig-action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); transition: color 0.15s; }
     .ig-action-btn:hover { color: var(--black); }
@@ -99,6 +102,7 @@
     .ig-action-btn.saved { color: var(--black); }
     .ig-save { margin-left: auto; }
     .ig-likes { padding: 0 11px 4px; font-size: 12px; font-weight: 600; }
+    .ig-caption { padding: 0 11px 11px; font-size: 12px; color: var(--black); line-height: 1.5; }
 
     /* ── Card Checklist ── */
     .card-checklist { display: flex; border-top: 1px solid var(--border); background: var(--offwhite); }
@@ -125,6 +129,7 @@
     .goals-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
     .goals-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .goal-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: 6px; padding: 8px 5px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .goal-card-icon { font-size: 13px; line-height: 1; }
     .goal-card-type { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
     .goal-card-num { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--black); line-height: 1; }
     .goal-card-bar { width: 100%; height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; overflow: hidden; margin-top: 4px; }
@@ -166,10 +171,6 @@
     .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.12); }
     .thumb-item.completed .thumb-media { opacity: 0.4; filter: grayscale(60%); }
     .thumb-item.completed .thumb-overlay::after { content: '✓'; font-size: 20px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.9); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-    .thumb-platform-badge { position: absolute; top: 6px; right: 6px; z-index: 4; background: rgba(10,10,10,0.72); color: #fff; font-size: 8px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 3px; line-height: 1.4; pointer-events: none; }
-    .thumb-info-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: linear-gradient(transparent, rgba(0,0,0,0.78)); padding: 16px 6px 5px; display: flex; flex-direction: column; gap: 1px; pointer-events: none; }
-    .thumb-account { font-size: 9px; font-weight: 700; color: #fff; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .thumb-media-type { font-size: 8px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255,255,255,0.78); }
 
     /* ── Platform-specific cards ── */
     .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; padding: 13px; }
@@ -177,6 +178,7 @@
     .tw-header { display: flex; gap: 8px; margin-bottom: 10px; }
     .tw-info .tw-name { font-size: 13px; font-weight: 700; }
     .tw-info .tw-handle { font-size: 11px; color: var(--muted); }
+    .tw-text { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
     .tw-actions { display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
     .tw-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tw-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
@@ -186,6 +188,7 @@
     .fb-header { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px solid var(--border); }
     .fb-user { font-size: 12px; font-weight: 600; }
     .fb-time { font-size: 10px; color: var(--muted); }
+    .fb-text { padding: 10px 11px; font-size: 13px; line-height: 1.5; }
     .fb-reactions { padding: 6px 11px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; gap: 8px; }
     .fb-actions { display: flex; border-top: 1px solid var(--border); }
     .fb-act { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; background: none; border: none; border-right: 1px solid var(--border); transition: background 0.15s; }
@@ -205,6 +208,8 @@
 
     .tk-card { background: #0a0a0a; border-radius: 3px; overflow: hidden; position: relative; }
     .tk-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 16px 11px 11px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .tk-left .tk-username { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .tk-left .tk-desc { font-size: 11px; color: rgba(255,255,255,0.82); line-height: 1.4; }
     .tk-right { display: flex; flex-direction: column; gap: 13px; align-items: center; }
     .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 9px; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tk-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
@@ -285,13 +290,12 @@
     #adminView .post-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
     #adminView .post-item:last-child { border-bottom: none; }
     #adminView .post-item:hover { background: var(--offwhite); }
-    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; position: relative; }
-    #adminView .post-thumb-badge { position: absolute; bottom: 2px; right: 2px; background: rgba(10,10,10,0.75); color: #fff; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; padding: 1px 4px; border-radius: 2px; line-height: 1.4; }
+    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
     #adminView .post-meta { flex: 1; min-width: 0; }
+    #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
     #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
     #adminView .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
-    #adminView .tag-account { background: #fff; color: var(--black); border: 1px solid var(--border); font-weight: 600; }
     #adminView .tag-type { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
     #adminView .tag-media { background: #f0faf4; color: #1a7a44; border: 1px solid #b2dfc5; }
     #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 40px; font-weight: 700; }
@@ -478,8 +482,33 @@
 
 <div class="admin-body">
 
-  <!-- Goals -->
+  <!-- Username -->
   <div class="section-head" style="margin-top:0">
+    <div class="section-title">Display Username</div>
+  </div>
+  <div class="username-card">
+    <div class="username-card-avatar">P</div>
+    <div style="flex:1">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="position:relative;flex:1">
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
+          <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
+            style="padding-left:26px"
+            oninput="updateUsernamePreview(this.value)"
+            onkeydown="if(event.key==='Enter')saveAdminUsername()">
+        </div>
+        <button class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Save
+        </button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
+    </div>
+  </div>
+
+  <!-- Goals -->
+  <div class="section-head">
     <div class="section-title">Engagement Goals</div>
     <div class="save-status"><span class="save-dot"></span>Auto-saved</div>
   </div>
@@ -516,31 +545,6 @@
   <div class="modal-box" style="text-align:left;max-height:90vh;overflow-y:auto;width:420px">
     <button class="modal-close" onclick="closePostModal()">✕</button>
     <div class="modal-title" id="modalTitle">Add New Post</div>
-
-    <!-- Username -->
-    <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:14px">
-      <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px">Display Username</div>
-      <div class="username-card" style="border:none;padding:0;background:transparent">
-        <div class="username-card-avatar">P</div>
-        <div style="flex:1">
-          <div style="font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Name shown on every platform card</div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <div style="position:relative;flex:1">
-              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
-              <input type="text" id="adminUsernameInput" class="form-input" placeholder="pondnaravit" maxlength="40"
-                style="padding-left:26px"
-                oninput="updateUsernamePreview(this.value)"
-                onkeydown="if(event.key==='Enter'){event.preventDefault();saveAdminUsername();}">
-            </div>
-            <button type="button" class="btn btn-gold" style="white-space:nowrap;padding:10px 16px;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="saveAdminUsername()">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              Save
-            </button>
-          </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:6px" id="adminUsernamePreview">Displayed as: <strong>@pondnaravit</strong></div>
-        </div>
-      </div>
-    </div>
 
     <div class="form-row">
       <label class="form-label">Platform</label>
@@ -583,6 +587,14 @@
       <input type="text" class="form-input" id="fLabel" placeholder="e.g. Prada Day 1 Look, Front Row Moment..." oninput="renderPreview()">
     </div>
 
+    <div class="form-row">
+      <label class="form-label">Username (เฉพาะโพสต์นี้)</label>
+      <div style="position:relative">
+        <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">@</span>
+        <input type="text" class="form-input" id="fUsername" placeholder="pondnaravit" maxlength="40" style="padding-left:26px" oninput="renderPreview()">
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">ปล่อยว่างเพื่อใช้ชื่อ default จาก Display Username</div>
+    </div>
 
     <div class="form-row">
       <label class="form-label">Post URL (ลิงก์โพสต์จริง)</label>
@@ -725,7 +737,6 @@ function formatNum(n) {
 }
 
 const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
-const PLATFORM_BADGE = { ig:'IG', twitter:'X', fb:'f', youtube:'YT', tiktok:'TikTok' };
 const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
 const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 const GOAL_DEFS     = [
@@ -818,37 +829,20 @@ function requiredCount(p) {
 let currentUsername = 'pondnaravit';
 try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
 
+function getUsername() { return currentUsername; }
+function getPostUsername(post) { return (post && post.username) ? post.username : currentUsername; }
+
 function updateUsernamePreview(val) {
   const clean = val.replace(/^@/, '') || 'pondnaravit';
   const el = document.getElementById('adminUsernamePreview');
   if (el) el.innerHTML = 'Displayed as: <strong>@' + clean + '</strong>';
 }
-async function saveAdminUsername() {
+function saveAdminUsername() {
   const val = document.getElementById('adminUsernameInput').value.trim().replace(/^@/, '');
   if (!val) { showToast('Please enter a username'); return; }
   currentUsername = val;
   try { localStorage.setItem('pond_username', val); } catch(e) {}
   document.getElementById('adminUsernamePreview').innerHTML = 'Displayed as: <strong>@' + val + '</strong>';
-  renderPosts();
-
-  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
-    try {
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action:'saveGoals', goals: { ...goals, username: val } })
-      });
-      const result = await res.json();
-      if (!result.ok) {
-        showToast('⚠️ บันทึก username ขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
-        return;
-      }
-    } catch(e) {
-      console.error('saveAdminUsername failed', e);
-      showToast('⚠️ บันทึก username ขึ้น Sheet ไม่สำเร็จ — เช็คอินเทอร์เน็ต');
-      return;
-    }
-  }
   showToast('Username saved');
 }
 
@@ -867,50 +861,30 @@ function saveLocalData() {
   try { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); } catch(e) {}
 }
 
-// ⚠️ ใส่ URL ของ Web app deployment ใหม่ที่นี่ (จาก Apps Script → Deploy → New deployment)
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBT-gcLmdKm9kSS1iMhsvQ5HvKXxvO5x1t37DfgrrLvi3uduGN2bB8TmqklB_X1BKo/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSJKOLPlPrLWdwrLDzAT8qknV34XC65VpBr5LW91mxKjPAs5ZQgQyEaXCtlq4MeLCV/exec';
 
 async function loadFromScript() {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
-    loadLocalData(); generatePosts();
-    showToast('⚠️ ยังไม่ได้ตั้งค่า Apps Script URL — ใช้ข้อมูลในเครื่องชั่วคราว');
-    return;
-  }
+  if (!APPS_SCRIPT_URL) { loadLocalData(); generatePosts(); return; }
   try {
     const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
     const dp = await rp.json();
     if (dp.ok && Array.isArray(dp.posts)) {
       posts = dp.posts.map(p => ({ ...p, focused: p.focused === 'TRUE' || p.focused === true, likes: parseInt(p.likes) || 0, comments: parseInt(p.comments) || 0, shares: parseInt(p.shares) || 0 }));
       saveLocalData();
-    } else if (!dp.ok) {
-      console.error('loadFromScript: server returned error', dp.error);
-      showToast('⚠️ โหลดข้อมูลจาก Sheet ไม่สำเร็จ: ' + (dp.error || 'unknown error'));
-      loadLocalData();
     }
     const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
     const dg = await rg.json();
     if (dg.ok && dg.goals) {
       goals = { likes: parseInt(dg.goals.likes)||0, comments: parseInt(dg.goals.comments)||0, shares: parseInt(dg.goals.shares)||0 };
       localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
-      if (dg.goals.username) {
-        currentUsername = dg.goals.username;
-        try { localStorage.setItem('pond_username', currentUsername); } catch(e) {}
-      }
     }
-  } catch(err) {
-    console.error('loadFromScript failed', err);
-    showToast('⚠️ เชื่อมต่อ Sheet ไม่ได้ — แสดงข้อมูลที่เคยบันทึกในเครื่องนี้แทน');
-    loadLocalData();
-  }
+  } catch(err) { loadLocalData(); }
   generatePosts();
 }
 
 async function saveToScript() {
   saveLocalData();
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
-    showToast('⚠️ ยังไม่ได้ตั้งค่า Apps Script URL — บันทึกได้แค่ในเครื่องนี้ ไม่ขึ้น Sheet');
-    return;
-  }
+  if (!APPS_SCRIPT_URL) return;
   // ดึงข้อมูลล่าสุดจากชีทก่อน merge เพื่อกัน overwrite ของแอดมินคนอื่น
   try {
     const rp = await fetch(APPS_SCRIPT_URL + '?type=posts');
@@ -923,23 +897,15 @@ async function saveToScript() {
       posts = Array.from(map.values());
       saveLocalData();
     }
-  } catch(e) { console.error('saveToScript: merge fetch failed', e); }
+  } catch(e) {}
   // ส่งเป็น text/plain เพื่อเลี่ยง CORS preflight ของ Apps Script
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action:'savePosts', posts })
     });
-    const result = await res.json();
-    if (!result.ok) {
-      console.error('saveToScript: server returned error', result.error);
-      showToast('⚠️ บันทึกขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
-    }
-  } catch(e) {
-    console.error('saveToScript failed', e);
-    showToast('⚠️ บันทึกขึ้น Sheet ไม่สำเร็จ — เช็คอินเทอร์เน็ตหรือ Apps Script URL');
-  }
+  } catch(e) { console.error('saveToScript failed', e); }
 }
 
 async function saveGoals() {
@@ -948,23 +914,14 @@ async function saveGoals() {
     goals[d.key] = v;
   });
   try { localStorage.setItem(GOALS_KEY, JSON.stringify(goals)); } catch(e) {}
-  if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'PASTE_NEW_DEPLOYMENT_URL_HERE') {
+  if (APPS_SCRIPT_URL) {
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action:'saveGoals', goals: { ...goals, username: currentUsername } })
+        body: JSON.stringify({ action:'saveGoals', goals })
       });
-      const result = await res.json();
-      if (!result.ok) {
-        showToast('⚠️ บันทึก Goals ขึ้น Sheet ไม่สำเร็จ: ' + (result.error || 'unknown error'));
-        return;
-      }
-    } catch(e) {
-      console.error('saveGoals failed', e);
-      showToast('⚠️ บันทึก Goals ขึ้น Sheet ไม่สำเร็จ');
-      return;
-    }
+    } catch(e) { console.error('saveGoals failed', e); }
   }
   showToast('Goals saved');
 }
@@ -1044,6 +1001,27 @@ function getMediaContent(post) {
 
 function focusBannerHTML(post) {
   return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
+}
+
+function goalsHTML(post) {
+  const postId = post?.id || '';
+  const s = postId ? getState(postId) : { liked:false, commented:false, shared:false };
+  const gL = parseInt((post && post.goalLikes)    || (post && post.goal_likes)    || goals.likes    || 0);
+  const gC = parseInt((post && post.goalComments) || (post && post.goal_comments) || goals.comments || 0);
+  const gS = parseInt((post && post.goalShares)   || (post && post.goal_shares)   || goals.shares   || 0);
+  const likes    = parseInt(post?.likes    || 0) + (s.liked ? 1 : 0);
+  const comments = parseInt(post?.comments || 0) + (s.commented ? 1 : 0);
+  const shares   = parseInt(post?.shares   || 0) + (s.shared ? 1 : 0);
+  const pctL = gL ? Math.min(100, Math.round((likes    / gL) * 100)) : 0;
+  const pctC = gC ? Math.min(100, Math.round((comments / gC) * 100)) : 0;
+  const pctS = gS ? Math.min(100, Math.round((shares   / gS) * 100)) : 0;
+  if (!gL && !gC && !gS) return '';
+  const cards = [
+    gL ? `<div class="goal-card" id="goal-likes-${postId}"><span class="goal-card-type">Likes</span><span class="goal-card-num" id="goal-likes-num-${postId}">${formatNum(likes)} / ${formatNum(gL)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-likes-fill-${postId}" style="width:${pctL}%"></div></div></div>` : '',
+    gC ? `<div class="goal-card" id="goal-comments-${postId}"><span class="goal-card-type">Comments</span><span class="goal-card-num" id="goal-comments-num-${postId}">${formatNum(comments)} / ${formatNum(gC)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-comments-fill-${postId}" style="width:${pctC}%"></div></div></div>` : '',
+    gS ? `<div class="goal-card" id="goal-shares-${postId}"><span class="goal-card-type">Shares</span><span class="goal-card-num" id="goal-shares-num-${postId}">${formatNum(shares)} / ${formatNum(gS)}</span><div class="goal-card-bar"><div class="goal-card-fill" id="goal-shares-fill-${postId}" style="width:${pctS}%"></div></div></div>` : '',
+  ].filter(Boolean).join('');
+  return `<div class="goals-section"><div class="goals-label">เป้าหมาย Engagement โพสต์นี้</div><div class="goals-cards">${cards}</div></div>`;
 }
 
 function updateGoalDisplay(postId) {
@@ -1141,7 +1119,8 @@ function buildFocused(idx) {
         <div class="ig-card-header">
           <div class="avatar">P</div>
           <div>
-            <div class="ig-username">@${currentUsername}${post.focused ? ' <span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700;margin-left:4px">Focus</span>' : ''}</div>
+            <div class="ig-username">@${getPostUsername(post)}</div>
+            ${post.focused ? '<div style="margin-top:2px"><span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700">Focus</span></div>' : ''}
             <div class="ig-location">${t ? 'Milan, Italy · ' + t : 'Milan, Italy'}${mediaLabel ? ' · ' + mediaLabel : ''}</div>
             ${post.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
           </div>
@@ -1160,6 +1139,7 @@ function buildFocused(idx) {
         </div>
         ${post.likes ? `<div class="ig-likes">${formatNum(post.likes)} likes</div>` : ''}
         ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1170,8 +1150,8 @@ function buildFocused(idx) {
         <div class="tw-header">
           <div class="avatar">P</div>
           <div class="tw-info">
-            <div class="tw-name">${currentUsername}</div>
-            <div class="tw-handle">@${currentUsername}${t ? ' · ' + t : ''}</div>
+            <div class="tw-name">@${getPostUsername(post)}</div>
+            <div class="tw-handle">${t}</div>
           </div>
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
@@ -1181,6 +1161,7 @@ function buildFocused(idx) {
           <button class="tw-action${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
         </div>
         ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1191,7 +1172,7 @@ function buildFocused(idx) {
         <div class="fb-header">
           <div class="avatar">P</div>
           <div>
-            <div class="fb-user">${currentUsername}</div>
+            <div class="fb-user">@${getPostUsername(post)}</div>
             <div class="fb-time">${t ? t + ' · Public' : 'Public'}</div>
           </div>
         </div>
@@ -1203,6 +1184,7 @@ function buildFocused(idx) {
           <button class="fb-act" onclick="openShareModal('${postId}')">${icons.shareArrow} Share</button>
         </div>
         ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1221,6 +1203,7 @@ function buildFocused(idx) {
           <button class="yt-action" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow} <span>Share</span></button>
         </div>
         ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1231,7 +1214,11 @@ function buildFocused(idx) {
         <div class="media-frame media-frame-tall" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}
           <div class="play-overlay">${icons.play}</div>
         </div>
-        <div class="tk-overlay" style="justify-content:flex-end">
+        <div class="tk-overlay" style="justify-content:space-between;align-items:flex-end">
+          <div class="tk-left">
+            <div class="tk-username">@${getPostUsername(post)}</div>
+            ${post.label ? `<div class="tk-desc">${post.label}</div>` : ''}
+          </div>
           <div class="tk-right">
             <button class="tk-btn${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
             <button class="tk-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</button>
@@ -1240,6 +1227,7 @@ function buildFocused(idx) {
           </div>
         </div>
         ${cardChecklistHTML(postId, post)}
+        ${goalsHTML(post)}
       </div>`;
   }
   return '';
@@ -1252,9 +1240,6 @@ function buildThumb(idx) {
   const postId = post.id;
   const done   = isAllDone(postId);
   const isFocus = !!post.focused;
-  const platform = post.platform || 'ig';
-  const platformBadge = PLATFORM_BADGE[platform] || platform;
-  const mediaLabel = MEDIA_LABELS[post.mediaType || post.media_type] || '';
   const thumbInner = (post.image || post.image_url)
     ? `<img src="${post.image||post.image_url}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="thumbImgError(this)">`
     : icons.camera;
@@ -1264,11 +1249,6 @@ function buildThumb(idx) {
          style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
       <div class="thumb-media">${thumbInner}</div>
       <div class="thumb-overlay"></div>
-      <div class="thumb-platform-badge">${platformBadge}</div>
-      <div class="thumb-info-bar">
-        <span class="thumb-account">${currentUsername}</span>
-        ${mediaLabel ? `<span class="thumb-media-type">${mediaLabel}</span>` : ''}
-      </div>
       ${isFocus && !done ? `<div style="position:absolute;top:10px;left:10px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;letter-spacing:0.12em;z-index:4;box-shadow:0 1px 3px rgba(0,0,0,0.25)">FOCUS</div>` : ''}
     </div>`;
 }
@@ -1611,14 +1591,10 @@ function renderPosts() {
     const t = (p.time || p.post_time) ? new Date(p.time || p.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '—';
     return `
       <div class="post-item${p.focused?' focus-ring':''}">
-        <div class="post-thumb">
-          ${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}
-          <span class="post-thumb-badge">${PLATFORM_BADGE[p.platform]||p.platform}</span>
-        </div>
+        <div class="post-thumb">${(p.image||p.image_url) ? `<img src="${p.image||p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:2px" onerror="this.outerHTML=''">` : icons.camera}</div>
         <div class="post-meta">
           ${p.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-bottom:2px">${p.label}</div>` : ''}
           <div class="post-tags">
-            <span class="tag tag-account">${currentUsername}</span>
             <span class="tag tag-platform">${PLATFORMS[p.platform]||p.platform}</span>
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
@@ -1740,6 +1716,7 @@ function setFocusUI(val) {
 
 function renderPreview() {
   const label    = document.getElementById('fLabel')?.value || '';
+  const username = document.getElementById('fUsername')?.value.trim().replace(/^@/,'') || currentUsername;
   const platform = document.getElementById('fPlatform')?.value || 'ig';
   const mediaType= document.getElementById('fMediaType')?.value || 'photo';
   const preview  = document.getElementById('previewCard');
@@ -1751,6 +1728,7 @@ function renderPreview() {
     <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)">
       <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#1a1a1a,var(--gold));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia;font-style:italic;color:#fff;font-size:13px">P</div>
       <div>
+        <div style="font-size:12px;font-weight:600;color:var(--black)">@${username}</div>
         ${label ? `<div style="font-size:11px;color:var(--gold);font-weight:600">${label}</div>` : ''}
       </div>
       <div style="margin-left:auto;display:flex;gap:5px;align-items:center">
@@ -1772,12 +1750,11 @@ function toggleFocus(id) {
 function openAddModal() {
   editingId = null;
   document.getElementById('modalTitle').textContent = 'Add New Post';
-  const unameInp = document.getElementById('adminUsernameInput');
-  if (unameInp) { unameInp.value = currentUsername; updateUsernamePreview(currentUsername); }
   document.getElementById('fPlatform').value = 'ig';
   document.getElementById('fMediaType').value = 'photo';
   document.getElementById('fType').value = 'all';
   document.getElementById('fLabel').value = '';
+  document.getElementById('fUsername').value = '';
   document.getElementById('fPostUrl').value = '';
   document.getElementById('fTime').value = new Date().toISOString().slice(0,16);
   document.getElementById('fLikes').value = '';
@@ -1800,12 +1777,11 @@ function openEditModal(id) {
   const p = posts.find(x => x.id === id); if (!p) return;
   editingId = id;
   document.getElementById('modalTitle').textContent = 'Edit Post';
-  const unameInp = document.getElementById('adminUsernameInput');
-  if (unameInp) { unameInp.value = currentUsername; updateUsernamePreview(currentUsername); }
   document.getElementById('fPlatform').value  = p.platform || 'ig';
   document.getElementById('fMediaType').value = p.mediaType || p.media_type || 'photo';
   document.getElementById('fType').value      = p.post_type || p.type || 'all';
   document.getElementById('fLabel').value     = p.label || '';
+  document.getElementById('fUsername').value  = p.username || '';
   document.getElementById('fPostUrl').value   = p.post_url || p.postUrl || '';
   document.getElementById('fTime').value      = (p.time || p.post_time || '').slice(0,16);
   document.getElementById('fLikes').value     = p.likes || '';
@@ -1840,6 +1816,7 @@ function savePost() {
     post_type:    document.getElementById('fType').value,
     type:         document.getElementById('fType').value,
     label:        document.getElementById('fLabel').value.trim(),
+    username:     document.getElementById('fUsername').value.trim().replace(/^@/, '') || '',
     post_url:     document.getElementById('fPostUrl').value.trim(),
     time:         document.getElementById('fTime').value,
     likes:        parseInt(document.getElementById('fLikes').value) || 0,
@@ -1873,7 +1850,7 @@ async function enterAdmin() {
   document.getElementById('publicView').style.display = 'none';
   document.getElementById('adminView').style.display  = 'block';
   window.scrollTo(0, 0);
-  await loadFromScript();
+  loadLocalData();
   const inp = document.getElementById('adminUsernameInput');
   if (inp) { inp.value = currentUsername; updateUsernamePreview(currentUsername); }
   renderGoals(); renderPosts();
