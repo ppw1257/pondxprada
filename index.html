@@ -889,19 +889,20 @@ async function loadFromScript() {
     const dp = await rp.json();
     if (dp.ok && Array.isArray(dp.posts)) {
       posts = dp.posts.map(p => ({
-        ...p,
-        focused:      p.focused === 'TRUE' || p.focused === true,
-        likes:        parseInt(p.likes)    || 0,
-        comments:     parseInt(p.comments) || 0,
-        shares:       parseInt(p.shares)   || 0,
-        requireLike:    p.requireLike    === 'TRUE' || p.requireLike    === true,
-        requireComment: p.requireComment === 'TRUE' || p.requireComment === true,
-        requireShare:   p.requireShare   === 'TRUE' || p.requireShare   === true,
-        requireSave:    p.requireSave    === 'TRUE' || p.requireSave    === true,
-        goalLikes:    parseInt(p.goalLikes)    || 0,
-        goalComments: parseInt(p.goalComments) || 0,
-        goalShares:   parseInt(p.goalShares)   || 0,
-      }));
+  ...p,
+  username:     p.username || '',           // ← เพิ่มบรรทัดนี้
+  focused:      p.focused === 'TRUE' || p.focused === true,
+  likes:        parseInt(p.likes)    || 0,
+  comments:     parseInt(p.comments) || 0,
+  shares:       parseInt(p.shares)   || 0,
+  requireLike:    p.requireLike    === 'TRUE' || p.requireLike    === true,
+  requireComment: p.requireComment === 'TRUE' || p.requireComment === true,
+  requireShare:   p.requireShare   === 'TRUE' || p.requireShare   === true,
+  requireSave:    p.requireSave    === 'TRUE' || p.requireSave    === true,
+  goalLikes:    parseInt(p.goalLikes)    || 0,
+  goalComments: parseInt(p.goalComments) || 0,
+  goalShares:   parseInt(p.goalShares)   || 0,
+}));
       saveLocalData();
     }
     const rg = await fetch(APPS_SCRIPT_URL + '?type=goals');
