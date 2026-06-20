@@ -180,8 +180,9 @@
     .tw-info .tw-handle { font-size: 11px; color: var(--muted); }
     .tw-text { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
     .tw-actions { display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
-    .tw-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; }
+    .tw-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tw-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+    .tw-action.liked { color: var(--red); }
 
     .fb-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
     .fb-header { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-bottom: 1px solid var(--border); }
@@ -194,22 +195,26 @@
     .fb-act:last-child { border-right: none; }
     .fb-act:hover { background: var(--offwhite); }
     .fb-act svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+    .fb-act.liked { color: var(--red); }
 
     .yt-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
     .yt-info { padding: 10px 11px; }
     .yt-title { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 3px; }
     .yt-meta { font-size: 11px; color: var(--muted); }
     .yt-actions { display: flex; gap: 14px; padding: 8px 11px; border-top: 1px solid var(--border); }
-    .yt-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; }
+    .yt-action { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .yt-action svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+    .yt-action.liked { color: var(--red); }
 
     .tk-card { background: #0a0a0a; border-radius: 3px; overflow: hidden; position: relative; }
     .tk-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.85)); padding: 16px 11px 11px; display: flex; justify-content: space-between; align-items: flex-end; }
     .tk-left .tk-username { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
     .tk-left .tk-desc { font-size: 11px; color: rgba(255,255,255,0.82); line-height: 1.4; }
     .tk-right { display: flex; flex-direction: column; gap: 13px; align-items: center; }
-    .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 9px; cursor: pointer; }
-    .tk-btn svg { width: 20px; height: 20px; stroke: #fff; fill: none; }
+    .tk-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #fff; font-size: 9px; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
+    .tk-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
+    .tk-btn.liked { color: var(--red); }
+    .action-icon { display: flex; align-items: center; justify-content: center; }
 
     /* ── Divider ── */
     .editorial-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
@@ -1113,18 +1118,17 @@ function buildFocused(idx) {
         </div>
         <div class="media-frame" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="ig-actions">
-          <button class="ig-action-btn ${state.liked?'liked':''}" onclick="toggleLike('${postId}',this)" title="Like">
-            ${state.liked ? icons.heartFilled : icons.heart}
+          <button class="ig-action-btn ${state.liked?'liked':''}" id="likeBtn-${postId}" data-iconset="heart-fill" onclick="toggleLike('${postId}',this)" title="Like">
+            <span class="action-icon">${state.liked ? icons.heartFilled : icons.heart}</span>
           </button>
           <button class="ig-action-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}</button>
           <button class="ig-action-btn" onclick="openShareModal('${postId}')"   title="Share">${icons.share}</button>
-          <button class="ig-action-btn ig-save ${state.saved?'saved':''}" onclick="toggleSave('${postId}',this)" title="Save">
+          <button class="ig-action-btn ig-save ${state.saved?'saved':''}" id="saveBtn-${postId}" onclick="toggleSave('${postId}',this)" title="Save">
             ${state.saved ? icons.bookmarkFilled : icons.bookmark}
           </button>
         </div>
         ${post.likes ? `<div class="ig-likes">${formatNum(post.likes)} likes</div>` : ''}
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1141,12 +1145,11 @@ function buildFocused(idx) {
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="tw-actions">
-          <div class="tw-action">${icons.msgCircle} ${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</div>
-          <div class="tw-action">${icons.repeat} ${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</div>
-          <div class="tw-action">${icons.heart} ${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</div>
+          <button class="tw-action" onclick="openCommentModal('${postId}')" title="Comment">${icons.msgCircle}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</button>
+          <button class="tw-action" onclick="openShareModal('${postId}')" title="Share">${icons.repeat}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</button>
+          <button class="tw-action${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1164,12 +1167,11 @@ function buildFocused(idx) {
         <div class="media-frame" style="aspect-ratio:1.4/1" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         ${(post.likes || post.comments || post.shares) ? `<div class="fb-reactions" style="padding:6px 11px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">${post.likes ? formatNum(post.likes) + ' reactions' : ''}${post.comments ? (post.likes ? ' · ' : '') + formatNum(post.comments) + ' comments' : ''}${post.shares ? ((post.likes || post.comments) ? ' · ' : '') + formatNum(post.shares) + ' shares' : ''}</div>` : ''}
         <div class="fb-actions">
-          <button class="fb-act" onclick="toggleLike('${postId}',this)">${icons.thumbup} Like</button>
+          <button class="fb-act${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)"><span class="action-icon">${icons.thumbup}</span> Like</button>
           <button class="fb-act" onclick="openCommentModal('${postId}')">${icons.msgCircle} Comment</button>
           <button class="fb-act" onclick="openShareModal('${postId}')">${icons.shareArrow} Share</button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1183,12 +1185,11 @@ function buildFocused(idx) {
           <div class="yt-meta">${post.likes ? formatNum(post.likes) + ' views' : ''}${t ? (post.likes ? ' · ' : '') + t : ''}</div>
         </div>
         <div class="yt-actions">
-          <div class="yt-action">${icons.thumbup}</div>
-          <div class="yt-action">${icons.msgCircle}</div>
-          <div class="yt-action">${icons.shareArrow} <span>Share</span></div>
+          <button class="yt-action${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.thumbup}</span></button>
+          <button class="yt-action" onclick="openCommentModal('${postId}')" title="Comment">${icons.msgCircle}</button>
+          <button class="yt-action" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow} <span>Share</span></button>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
       </div>`;
   }
 
@@ -1201,14 +1202,13 @@ function buildFocused(idx) {
         </div>
         <div class="tk-overlay" style="justify-content:flex-end">
           <div class="tk-right">
-            <div class="tk-btn">${icons.heart}${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</div>
-            <div class="tk-btn">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</div>
-            <div class="tk-btn">${icons.shareArrow}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</div>
+            <button class="tk-btn${state.liked?' liked':''}" id="likeBtn-${postId}" onclick="toggleLike('${postId}',this)" title="Like"><span class="action-icon">${icons.heart}</span>${post.likes ? `<span>${formatNum(post.likes)}</span>` : ''}</button>
+            <button class="tk-btn" onclick="openCommentModal('${postId}')" title="Comment">${icons.comment}${post.comments ? `<span>${formatNum(post.comments)}</span>` : ''}</button>
+            <button class="tk-btn" onclick="openShareModal('${postId}')" title="Share">${icons.shareArrow}${post.shares ? `<span>${formatNum(post.shares)}</span>` : ''}</button>
             <div class="tk-btn">${icons.music}</div>
           </div>
         </div>
         ${cardChecklistHTML(postId, post)}
-        ${goalsHTML(post)}
       </div>`;
   }
   return '';
@@ -1319,12 +1319,27 @@ function setPageFilter(f) {
 }
 
 // ─── Like / Save ─────────────────────────────────────────────────────────────
+function syncHeaderButtons(postId) {
+  const s = getState(postId);
+  const likeBtn = document.getElementById('likeBtn-' + postId);
+  if (likeBtn) {
+    likeBtn.classList.toggle('liked', !!s.liked);
+    if (likeBtn.dataset.iconset === 'heart-fill') {
+      const slot = likeBtn.querySelector('.action-icon');
+      if (slot) slot.innerHTML = s.liked ? icons.heartFilled : icons.heart;
+    }
+  }
+  const saveBtn = document.getElementById('saveBtn-' + postId);
+  if (saveBtn) {
+    saveBtn.classList.toggle('saved', !!s.saved);
+    saveBtn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
+  }
+}
 function toggleLike(postId, btn) {
   const s = getState(postId);
   s.liked = !s.liked;
   saveStates();
-  btn.innerHTML = s.liked ? icons.heartFilled : icons.heart;
-  btn.classList.toggle('liked', s.liked);
+  syncHeaderButtons(postId);
   if (s.liked) { spawnConfetti(); showToast('Liked!'); }
   updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
 }
@@ -1332,8 +1347,7 @@ function toggleSave(postId, btn) {
   const s = getState(postId);
   s.saved = !s.saved;
   saveStates();
-  btn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
-  btn.classList.toggle('saved', s.saved);
+  syncHeaderButtons(postId);
   showToast(s.saved ? 'Saved!' : 'Removed from saved');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
@@ -1342,6 +1356,7 @@ function checklistAction(postId, key) {
   if (s[key]) return;
   s[key] = true;
   saveStates();
+  syncHeaderButtons(postId);
   if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
   if (key === 'saved') showToast('Saved!');
   updateProgressTracker(); refreshChecklist(postId); updateGoalDisplay(postId); checkAllDone(postId);
