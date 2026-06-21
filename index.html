@@ -201,6 +201,14 @@
       white-space: nowrap;
     }
     .thumb-priority-badge svg { width: 8px; height: 8px; flex-shrink: 0; }
+    .thumb-new-badge {
+      position: absolute; top: 4px; right: 4px; z-index: 2;
+      background: var(--red); color: #fff;
+      font-size: 7px; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; line-height: 1;
+      padding: 3px 5px; border-radius: 2px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
 
     .thumb-item .thumb-media {
       width: 100%; aspect-ratio: 1/1; background: #e8e2d4;
@@ -351,6 +359,7 @@
     #adminView .tag-type { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
     #adminView .tag-media { background: #f0faf4; color: #1a7a44; border: 1px solid #b2dfc5; }
     #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
+    #adminView .new-badge { background: var(--red); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
     #adminView .focus-ring { border-left: 3px solid var(--gold) !important; }
     #adminView .icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     #adminView .icon-btn:hover { border-color: var(--black); color: var(--black); }
@@ -412,7 +421,8 @@
 <div class="filter-bar">
   <button class="filter-pill"        id="pfFocus"   onclick="setPageFilter('focus')">Focus</button>
   <button class="filter-pill"        id="pfAirport" onclick="setPageFilter('airport')">Airport</button>
-  <button class="filter-pill"        id="pfShow"    onclick="setPageFilter('show')">Show</button>
+  <button class="filter-pill"        id="pfPreday"  onclick="setPageFilter('preday')">Pre-Day</button>
+  <button class="filter-pill"        id="pfDayevent" onclick="setPageFilter('dayevent')">Day Event</button>
   <button class="filter-pill"        id="pfAfter"   onclick="setPageFilter('after')">After</button>
 </div>
 
@@ -546,13 +556,23 @@
   <!-- Posts -->
   <div class="section-head">
     <div class="section-title">All Posts</div>
-    <div style="display:flex;align-items:center;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="section-count" id="postCount">0 posts</div>
+      <button class="btn btn-outline" style="flex:none;border-radius:2px;font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:6px" onclick="openBulkAddModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Bulk Add
+      </button>
       <button class="btn btn-black" style="border:none;border-radius:2px;font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:6px;background:var(--black);color:#fff" onclick="openAddModal()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         Add New Post
       </button>
     </div>
+  </div>
+  <div style="position:relative;margin-bottom:12px">
+    <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </span>
+    <input type="text" id="adminSearchInput" class="form-input" placeholder="Search by username or post label..." style="padding-left:32px" oninput="renderPosts()">
   </div>
   <div class="card" id="postList">
     <div class="empty"><div class="empty-text">No posts yet</div></div>
@@ -597,7 +617,8 @@
           <option value="all">All</option>
           <option value="focus">Focus</option>
           <option value="airport">Airport</option>
-          <option value="show">Show</option>
+          <option value="preday">Pre-Day</option>
+          <option value="dayevent">Day Event</option>
           <option value="after">After</option>
         </select>
       </div>
@@ -683,6 +704,78 @@
       <button class="btn btn-gold" onclick="savePost()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path></svg>
         Save Post
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Add Modal -->
+<div id="bulkAddModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeBulkAddModal()">
+  <div class="modal-box" style="text-align:left;max-height:90vh;overflow-y:auto;width:420px">
+    <button class="modal-close" onclick="closeBulkAddModal()">✕</button>
+    <div class="modal-title">Bulk Add Posts</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px">
+      Paste one post link per line. The settings below apply to every link. To set a different username per line, write it as <code>username | link</code>.
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Platform</label>
+      <select class="form-select" id="bPlatform">
+        <option value="ig">Instagram</option>
+        <option value="twitter">Twitter / X</option>
+        <option value="fb">Facebook</option>
+        <option value="youtube">YouTube</option>
+        <option value="tiktok">TikTok</option>
+      </select>
+    </div>
+
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Media Type</label>
+        <select class="form-select" id="bMediaType">
+          <option value="photo">Photo</option>
+          <option value="video">Video</option>
+          <option value="reel">Reel</option>
+          <option value="story">Story</option>
+          <option value="carousel">Carousel</option>
+          <option value="live">Live</option>
+          <option value="short">Short / TikTok</option>
+          <option value="article">Article</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Post Type</label>
+        <select class="form-select" id="bType">
+          <option value="all">All</option>
+          <option value="focus">Focus</option>
+          <option value="airport">Airport</option>
+          <option value="preday">Pre-Day</option>
+          <option value="dayevent">Day Event</option>
+          <option value="after">After</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Links (one per line)</label>
+      <textarea class="form-textarea" id="bLinks" style="min-height:140px" placeholder="mensfolio | https://www.instagram.com/p/xxxx&#10;https://www.instagram.com/p/yyyy&#10;esquirethai | https://www.instagram.com/p/zzzz"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Required Actions</label>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqLike" checked> Like</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqComment" checked> Comment</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqShare" checked> Share</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqSave" checked> Save</label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="closeBulkAddModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="submitBulkAdd()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Add All
       </button>
     </div>
   </div>
@@ -924,6 +1017,10 @@ function getFilteredPosts() {
       if (aDone !== bDone) return aDone - bDone;
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
+      const aName = getPostUsername(a) || '';
+      const bName = getPostUsername(b) || '';
+      const cmp = aName.localeCompare(bName, 'th', { sensitivity: 'base', numeric: true });
+      if (cmp !== 0) return cmp;
       const aT = new Date(a.time || a.post_time || a.createdAt || a.created_at || 0).getTime();
       const bT = new Date(b.time || b.post_time || b.createdAt || b.created_at || 0).getTime();
       if (aT !== bT) return bT - aT;
@@ -1166,6 +1263,7 @@ function buildThumb(post, globalIdx) {
   const uname = getPostUsername(post);
   const doneCheck = done ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:34px;height:34px;border-radius:50%;background:rgba(39,174,96,0.92);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">✓</div></div>` : '';
   const priorityBadge = (isFocus && !done) ? `<div class="thumb-priority-badge">★ Engage first</div>` : '';
+  const newBadge = (isNewPost(post) && !done) ? `<div class="thumb-new-badge">New</div>` : '';
 
   return `
     <div class="thumb-item${isFocus?' focus-thumb':''}"
@@ -1174,6 +1272,7 @@ function buildThumb(post, globalIdx) {
         ${thumbInner}
         <div class="thumb-overlay"></div>
         ${priorityBadge}
+        ${newBadge}
         ${doneCheck}
       </div>
       <div class="thumb-info">
@@ -1187,8 +1286,25 @@ function buildThumb(post, globalIdx) {
 }
 
 // ─── Generate posts — grid-first, split focus vs others ──────────────────────
+function updateFilterCounts() {
+  const base = posts.filter(p => currentPlatform === 'all' || p.platform === currentPlatform);
+  const counts = {
+    Focus:    base.filter(p => !!p.focused).length,
+    Airport:  base.filter(p => (p.post_type || p.type) === 'airport').length,
+    Preday:   base.filter(p => (p.post_type || p.type) === 'preday').length,
+    Dayevent: base.filter(p => (p.post_type || p.type) === 'dayevent').length,
+    After:    base.filter(p => (p.post_type || p.type) === 'after').length,
+  };
+  const labels = { Focus:'Focus', Airport:'Airport', Preday:'Pre-Day', Dayevent:'Day Event', After:'After' };
+  Object.keys(labels).forEach(key => {
+    const el = document.getElementById('pf' + key);
+    if (el) el.textContent = `${labels[key]} (${counts[key]})`;
+  });
+}
+
 function generatePosts() {
   const filtered = getFilteredPosts();
+  updateFilterCounts();
 
   const focusedWrap = document.getElementById('focusedWrap');
   const focusGrid   = document.getElementById('focusGrid');
@@ -1304,7 +1420,7 @@ function setPlatform(p) {
 function setPageFilter(f) {
   pageFilter = (pageFilter === f) ? 'all' : f;
   focusedIndex = null;
-  ['Focus','Airport','Show','After'].forEach(k => {
+  ['Focus','Airport','Preday','Dayevent','After'].forEach(k => {
     const el = document.getElementById('pf'+k);
     if (el) el.classList.toggle('active', pageFilter === k.toLowerCase());
   });
@@ -1581,16 +1697,36 @@ let deletingId  = null;
 let isFocused   = false;
 let selectedImageData = null;
 
+function isNewPost(p) {
+  const t = new Date(p.createdAt || p.created_at || 0).getTime();
+  if (!t) return false;
+  return (Date.now() - t) < 24 * 60 * 60 * 1000;
+}
+
 function renderPosts() {
   const list = document.getElementById('postList');
-  const totalTasks = posts.reduce((n, p) => n + requiredCount(p), 0);
-  document.getElementById('postCount').textContent = posts.length + ' posts · ' + totalTasks + ' tasks';
+  const searchVal = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
+  const source = searchVal
+    ? posts.filter(p => {
+        const uname = (getPostUsername(p) || '').toLowerCase();
+        const label = (p.label || '').toLowerCase();
+        return uname.includes(searchVal) || label.includes(searchVal);
+      })
+    : posts;
+  const totalTasks = source.reduce((n, p) => n + requiredCount(p), 0);
+  document.getElementById('postCount').textContent = searchVal
+    ? `${source.length} / ${posts.length} posts`
+    : `${posts.length} posts · ${totalTasks} tasks`;
 
   if (!posts.length) {
     list.innerHTML = `<div class="empty"><div class="empty-text">No posts yet</div></div>`;
     return;
   }
-  const sorted = [...posts].sort((a, b) => {
+  if (!source.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-text">No posts match "${searchVal}"</div></div>`;
+    return;
+  }
+  const sorted = [...source].sort((a, b) => {
     if (a.focused && !b.focused) return -1;
     if (!a.focused && b.focused) return 1;
     return new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0);
@@ -1609,6 +1745,7 @@ function renderPosts() {
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
+            ${isNewPost(p) ? `<span class="new-badge">New</span>` : ''}
           </div>
           ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
           ${(() => { const parts = []; if (p.likes) parts.push(`${formatNum(p.likes)} likes`); if (p.comments) parts.push(`${formatNum(p.comments)} comments`); if (p.shares) parts.push(`${formatNum(p.shares)} shares`); if (p.post_url) parts.push(`<a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>`); return parts.length ? `<div class="post-time">${parts.join(' · ')}</div>` : ''; })()}
@@ -1747,6 +1884,67 @@ function openEditModal(id) {
   document.getElementById('postModal').style.display = 'flex';
 }
 function closePostModal() { document.getElementById('postModal').style.display = 'none'; editingId = null; }
+
+function openBulkAddModal() {
+  document.getElementById('bPlatform').value  = 'ig';
+  document.getElementById('bMediaType').value = 'photo';
+  document.getElementById('bType').value      = 'all';
+  document.getElementById('bLinks').value     = '';
+  document.getElementById('bReqLike').checked    = true;
+  document.getElementById('bReqComment').checked = true;
+  document.getElementById('bReqShare').checked   = true;
+  document.getElementById('bReqSave').checked    = true;
+  document.getElementById('bulkAddModal').style.display = 'flex';
+}
+function closeBulkAddModal() { document.getElementById('bulkAddModal').style.display = 'none'; }
+
+function submitBulkAdd() {
+  const raw = document.getElementById('bLinks').value;
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!lines.length) { showToast('Paste at least one link first'); return; }
+
+  const platform  = document.getElementById('bPlatform').value;
+  const mediaType = document.getElementById('bMediaType').value;
+  const postType  = document.getElementById('bType').value;
+  const required  = {
+    requireLike:    getRequiredField('bReqLike'),
+    requireComment: getRequiredField('bReqComment'),
+    requireShare:   getRequiredField('bReqShare'),
+    requireSave:    getRequiredField('bReqSave'),
+  };
+
+  const now = new Date().toISOString();
+  let added = 0;
+  lines.forEach((line, i) => {
+    const parts = line.split('|').map(s => s.trim());
+    const hasUsername = parts.length >= 2 && parts[1];
+    const username = hasUsername ? parts[0].replace(/^@/, '') : '';
+    const url      = hasUsername ? parts[1] : parts[0];
+    if (!url) return;
+
+    const post = {
+      id: 'p_' + Date.now() + '_' + i,
+      platform, mediaType,
+      post_type: postType, type: postType,
+      label: '', username,
+      post_url: url,
+      time: now,
+      likes: 0, comments: 0, shares: 0,
+      ...required,
+      image: null, image_url: null,
+      focused: false,
+      createdAt: now, created_at: now,
+    };
+    posts.push(post);
+    added++;
+  });
+
+  if (!added) { showToast('No valid links found'); return; }
+  saveToScript();
+  renderPosts();
+  closeBulkAddModal();
+  showToast(`Added ${added} post${added > 1 ? 's' : ''}`);
+}
 function openDeleteModal(id) { deletingId = id; document.getElementById('deleteModal').style.display = 'flex'; }
 function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; deletingId = null; }
 function confirmDelete() {
