@@ -1117,8 +1117,8 @@ function cardChecklistHTML(postId, post) {
   const req = getRequired(post);
   const allItems = [
     { key:'liked',     icon:icons.heart,    label:'Like',    doneLabel:'Liked',     handler:`onclick="checklistAction('${postId}','liked')"` },
-    { key:'commented', icon:icons.comment,  label:'Comment', doneLabel:'Commented', handler:`onclick="openCommentModal('${postId}')"` },
-    { key:'shared',    icon:icons.share,    label:'Share',   doneLabel:'Shared',    handler:`onclick="openShareModal('${postId}')"` },
+    { key:'commented', icon:icons.comment,  label:'Comment', doneLabel:'Commented', handler:`onclick="checklistCommentClick('${postId}')"` },
+    { key:'shared',    icon:icons.share,    label:'Share',   doneLabel:'Shared',    handler:`onclick="checklistShareClick('${postId}')"` },
     { key:'saved',     icon:icons.bookmark, label:'Save',    doneLabel:'Saved',     handler:`onclick="checklistAction('${postId}','saved')"` },
   ];
   const items = allItems.filter(i => req[i.key]);
@@ -1129,7 +1129,7 @@ function cardChecklistHTML(postId, post) {
 
   const chips = items.map(item => {
     const done = s[item.key];
-    return `<div class="card-check-item ${done?'done':''}" id="cci-${item.key}-${postId}" ${item.handler} style="cursor:pointer">
+    return `<div class="card-check-item ${done?'done':''}" id="cci-${item.key}-${postId}" ${item.handler} style="cursor:pointer" title="${done ? 'Tap to undo' : 'Tap to mark done'}">
       <div class="cci-tick">${done?'✓':''}</div>
       <span class="cci-icon">${item.icon}</span>
       <span class="cci-label">${done ? item.doneLabel : item.label}</span>
@@ -1484,7 +1484,7 @@ function toggleLike(postId, btn) {
   s.liked = !s.liked;
   saveStates();
   syncHeaderButtons(postId);
-  if (s.liked) { spawnConfetti(); showToast('Liked!'); }
+  if (s.liked) { spawnConfetti(); showToast('Liked!'); } else { showToast('Like removed'); }
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 function toggleSave(postId, btn) {
@@ -1495,16 +1495,47 @@ function toggleSave(postId, btn) {
   showToast(s.saved ? 'Saved!' : 'Removed from saved');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
+
+// Generic toggle for the in-card checklist (Like & Save use this directly).
+// Tapping again when already done un-marks it — no more one-way lock.
 function checklistAction(postId, key) {
   const s = getState(postId);
-  if (s[key]) return;
-  s[key] = true;
+  s[key] = !s[key];
   saveStates();
   syncHeaderButtons(postId);
-  if (key === 'liked') { spawnConfetti(); showToast('Liked!'); }
-  if (key === 'saved') showToast('Saved!');
+  if (key === 'liked') { s.liked ? (spawnConfetti(), showToast('Liked!')) : showToast('Like removed'); }
+  if (key === 'saved')  { showToast(s.saved ? 'Saved!' : 'Removed from saved'); }
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
+
+// Comment checklist item: tap when not done → open picker modal as before.
+// Tap again when already done → un-mark "commented" directly (no modal needed).
+function checklistCommentClick(postId) {
+  const s = getState(postId);
+  if (s.commented) {
+    s.commented = false;
+    saveStates();
+    showToast('Comment unmarked');
+    updateProgressTracker(); refreshChecklist(postId);
+  } else {
+    openCommentModal(postId);
+  }
+}
+
+// Share checklist item: tap when not done → copy link & mark shared (as before).
+// Tap again when already done → un-mark "shared".
+function checklistShareClick(postId) {
+  const s = getState(postId);
+  if (s.shared) {
+    s.shared = false;
+    saveStates();
+    showToast('Share unmarked');
+    updateProgressTracker(); refreshChecklist(postId);
+  } else {
+    openShareModal(postId);
+  }
+}
+
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
   setTimeout(() => {
