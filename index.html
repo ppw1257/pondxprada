@@ -58,8 +58,8 @@
     .progress-actions { display: flex; gap: 4px; }
     .action-chip { min-width: 68px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border-radius: 8px; border: 1px solid var(--border); background: var(--offwhite); transition: all 0.18s; cursor: default; }
     .action-chip.done { border-color: var(--green); background: #f2fbf6; }
-    .action-chip .chip-icon { font-size: 15px; filter: grayscale(100%) opacity(0.35); transition: filter 0.2s; }
-    .action-chip.done .chip-icon { filter: none; }
+    .action-chip .chip-icon { display: none; }
+    .action-chip.done .chip-icon { display: none; }
     .action-chip .chip-label { font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
     .action-chip.done .chip-label { color: var(--green); }
     .chip-count { font-size: 11px; font-weight: 600; color: var(--black); line-height: 1; }
@@ -1011,11 +1011,7 @@ function updateProgressTracker() {
   document.getElementById('progressPct').innerHTML = pct + '<span>%</span>';
   document.getElementById('progressCompleteMsg').classList.toggle('visible', pct === 100 && totalTasks > 0);
 
-  const chipMap = { chipIconLiked:'heart', chipIconCommented:'comment', chipIconShared:'share', chipIconSaved:'bookmark' };
-  Object.keys(chipMap).forEach(elId => {
-    const el = document.getElementById(elId);
-    if (el) el.innerHTML = icons[chipMap[elId]];
-  });
+
 }
 
 // ─── HTML builders ───────────────────────────────────────────────────────────
@@ -1049,6 +1045,7 @@ function cardChecklistHTML(postId, post) {
     const done = s[item.key];
     return `<div class="card-check-item ${done?'done':''}" id="cci-${item.key}-${postId}" ${item.handler} style="cursor:pointer" title="${done ? 'Tap to undo' : 'Tap to mark done'}">
       <div class="cci-tick">${done?'✓':''}</div>
+      <span class="cci-icon">${item.icon}</span>
       <span class="cci-label">${done ? item.doneLabel : item.label}</span>
     </div>`;
   }).join('');
