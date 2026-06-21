@@ -1616,15 +1616,20 @@ function chipOpenShare() {
   if (!id) { showToast('No post selected'); return; }
   openShareModal(id);
 }
+function lockScroll() { document.body.style.overflow = 'hidden'; }
+function unlockScroll() { document.body.style.overflow = ''; }
+
 function openCommentModal(postId) {
   currentPostId = postId;
   ensureCommentPool(200);
   shuffleCommentOptions();
   document.getElementById('commentModal').style.display = 'flex';
+  lockScroll();
 }
 function closeCommentModal() {
   document.getElementById('commentModal').style.display = 'none';
   currentPostId = null;
+  unlockScroll();
 }
 function setCommentStyle() { shuffleCommentOptions(); }
 
@@ -1751,8 +1756,6 @@ function renderPosts() {
     return;
   }
   const sorted = [...source].sort((a, b) => {
-    if (a.focused && !b.focused) return -1;
-    if (!a.focused && b.focused) return 1;
     return new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0);
   });
   list.innerHTML = sorted.map(p => {
@@ -1884,6 +1887,7 @@ function openAddModal() {
   setFocusUI(false);
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
+  lockScroll();
 }
 function openEditModal(id) {
   const p = posts.find(x => x.id === id); if (!p) return;
@@ -1905,8 +1909,9 @@ function openEditModal(id) {
   setFocusUI(p.focused || false);
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
+  lockScroll();
 }
-function closePostModal() { document.getElementById('postModal').style.display = 'none'; editingId = null; }
+function closePostModal() { document.getElementById('postModal').style.display = 'none'; editingId = null; unlockScroll(); }
 
 function openBulkAddModal() {
   document.getElementById('bPlatform').value  = 'ig';
@@ -1918,8 +1923,9 @@ function openBulkAddModal() {
   document.getElementById('bReqShare').checked   = true;
   document.getElementById('bReqSave').checked    = true;
   document.getElementById('bulkAddModal').style.display = 'flex';
+  lockScroll();
 }
-function closeBulkAddModal() { document.getElementById('bulkAddModal').style.display = 'none'; }
+function closeBulkAddModal() { document.getElementById('bulkAddModal').style.display = 'none'; unlockScroll(); }
 
 function submitBulkAdd() {
   const raw = document.getElementById('bLinks').value;
@@ -1968,8 +1974,8 @@ function submitBulkAdd() {
   closeBulkAddModal();
   showToast(`Added ${added} post${added > 1 ? 's' : ''}`);
 }
-function openDeleteModal(id) { deletingId = id; document.getElementById('deleteModal').style.display = 'flex'; }
-function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; deletingId = null; }
+function openDeleteModal(id) { deletingId = id; document.getElementById('deleteModal').style.display = 'flex'; lockScroll(); }
+function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; deletingId = null; unlockScroll(); }
 function confirmDelete() {
   const idToDelete = deletingId;
   posts = posts.filter(p => p.id !== idToDelete);
