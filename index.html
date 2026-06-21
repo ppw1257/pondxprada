@@ -348,34 +348,34 @@
     #adminView .section-count { font-size: 11px; color: var(--muted); }
     #adminView .card {
       background: transparent; border: none; border-radius: 0; overflow: visible; margin-bottom: 0;
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
     }
-    @media (max-width: 860px) { #adminView .card { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 540px) { #adminView .card { grid-template-columns: 1fr; } }
+    @media (max-width: 860px) { #adminView .card { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); } }
+    @media (max-width: 540px) { #adminView .card { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; } }
     #adminView .post-item {
-      display: flex; flex-direction: column; gap: 8px; align-items: stretch;
-      padding: 10px; border: 1px solid var(--border); border-radius: 4px;
+      display: flex; flex-direction: column; gap: 6px; align-items: stretch;
+      padding: 7px; border: 1px solid var(--border); border-radius: 4px;
       background: var(--card); transition: background 0.15s, box-shadow 0.15s;
     }
     #adminView .post-item:hover { background: var(--offwhite); box-shadow: 0 3px 10px -2px rgba(0,0,0,0.10); }
-    #adminView .post-thumb { width: 100%; aspect-ratio: 1/1; border-radius: 3px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
+    #adminView .post-thumb { width: 100%; aspect-ratio: 1/1; border-radius: 3px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 18px; overflow: hidden; }
     #adminView .post-meta { flex: 1; min-width: 0; }
-    #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-    #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
-    #adminView .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 500; }
+    #adminView .post-caption { font-size: 11px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+    #adminView .post-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 2px; }
+    #adminView .tag { font-size: 8px; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 5px; border-radius: 2px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
     #adminView .tag-type { background: #fff4e0; color: #c67800; border: 1px solid #ffe0a0; }
     #adminView .tag-media { background: #f0faf4; color: #1a7a44; border: 1px solid #b2dfc5; }
-    #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
-    #adminView .new-badge { background: var(--red); color: #fff; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
+    #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; padding: 1px 5px; border-radius: 2px; font-weight: 700; }
+    #adminView .new-badge { background: var(--red); color: #fff; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; padding: 1px 5px; border-radius: 2px; font-weight: 700; }
     #adminView .focus-ring { border-left: 3px solid var(--gold) !important; }
-    #adminView .icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    #adminView .icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 24px; height: 24px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     #adminView .icon-btn:hover { border-color: var(--black); color: var(--black); }
     #adminView .icon-btn.danger:hover { border-color: var(--red); color: var(--red); }
     #adminView .icon-btn.star-on { border-color: var(--gold); color: var(--gold); background: #fffbf0; }
-    #adminView .icon-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
-    #adminView .post-time { font-size: 11px; color: var(--muted); }
-    #adminView .post-actions { display: flex; gap: 6px; flex-shrink: 0; margin-top: auto; padding-top: 4px; }
+    #adminView .icon-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; }
+    #adminView .post-time { font-size: 9px; color: var(--muted); }
+    #adminView .post-actions { display: flex; gap: 4px; flex-shrink: 0; margin-top: auto; padding-top: 2px; }
     #adminView .form-row { margin-bottom: 14px; }
     #adminView .form-label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     #adminView .form-input, #adminView .form-select, #adminView .form-textarea { width: 100%; background: var(--offwhite); border: 1px solid var(--border); border-radius: 2px; padding: 10px 12px; font-size: 14px; color: var(--black); font-family: var(--font-body); outline: none; transition: border-color 0.15s; appearance: none; }
