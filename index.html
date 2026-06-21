@@ -346,6 +346,10 @@
     #adminView .section-head:first-child { margin-top: 0; }
     #adminView .section-title { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
     #adminView .section-count { font-size: 11px; color: var(--muted); }
+    #adminView .platform-filter-pill { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 2px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-family: var(--font-body); }
+    #adminView .platform-filter-pill:hover:not(.active) { border-color: var(--gold); color: var(--black); }
+    #adminView .platform-filter-pill.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+    #adminView .platform-filter-pill .pf-count { font-size: 10px; opacity: 0.75; }
     #adminView .card {
       background: transparent; border: none; border-radius: 0; overflow: visible; margin-bottom: 0;
       display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
@@ -582,6 +586,7 @@
     </span>
     <input type="text" id="adminSearchInput" class="form-input" placeholder="Search by username or post label..." style="padding-left:32px" oninput="renderPosts()">
   </div>
+  <div id="adminPlatformFilterRow" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
   <div class="card" id="postList">
     <div class="empty"><div class="empty-text">No posts yet</div></div>
   </div>
@@ -1731,19 +1736,46 @@ let editingId   = null;
 let deletingId  = null;
 let isFocused   = false;
 let selectedImageData = null;
+let adminPlatformFilter = 'all';
+
+const ADMIN_PLATFORM_TABS = [
+  { key:'all',     label:'All' },
+  { key:'ig',      label:'Instagram' },
+  { key:'twitter', label:'Twitter / X' },
+  { key:'fb',      label:'Facebook' },
+  { key:'youtube', label:'YouTube' },
+  { key:'tiktok',  label:'TikTok' },
+];
+
+function setAdminPlatformFilter(p) {
+  adminPlatformFilter = p;
+  renderPosts();
+}
+
+function renderAdminPlatformFilters() {
+  const row = document.getElementById('adminPlatformFilterRow');
+  if (!row) return;
+  row.innerHTML = ADMIN_PLATFORM_TABS.map(tab => {
+    const count = tab.key === 'all' ? posts.length : posts.filter(p => p.platform === tab.key).length;
+    return `<button class="platform-filter-pill${adminPlatformFilter===tab.key?' active':''}" onclick="setAdminPlatformFilter('${tab.key}')">${tab.label} <span class="pf-count">(${count})</span></button>`;
+  }).join('');
+}
 
 function renderPosts() {
   const list = document.getElementById('postList');
+  renderAdminPlatformFilters();
   const searchVal = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
-  const source = searchVal
-    ? posts.filter(p => {
-        const uname = (getPostUsername(p) || '').toLowerCase();
-        const label = (p.label || '').toLowerCase();
-        return uname.includes(searchVal) || label.includes(searchVal);
-      })
-    : posts;
+  let source = adminPlatformFilter === 'all' ? posts : posts.filter(p => p.platform === adminPlatformFilter);
+  if (searchVal) {
+    source = source.filter(p => {
+      const uname = (getPostUsername(p) || '').toLowerCase();
+      const label = (p.label || '').toLowerCase();
+      return uname.includes(searchVal) || label.includes(searchVal);
+    });
+  }
+  const filterActive = !!searchVal || adminPlatformFilter !== 'all';
   const totalTasks = source.reduce((n, p) => n + requiredCount(p), 0);
-  document.getElementById('postCount').textContent = searchVal
+  document.getElementById('postCount').textContent = filterActive
     ? `${source.length} / ${posts.length} posts`
     : `${posts.length} posts · ${totalTasks} tasks`;
 
@@ -1752,7 +1784,7 @@ function renderPosts() {
     return;
   }
   if (!source.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-text">No posts match "${searchVal}"</div></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-text">No posts match these filters</div></div>`;
     return;
   }
   const sorted = [...source].sort((a, b) => {
