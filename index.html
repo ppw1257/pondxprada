@@ -127,40 +127,81 @@
     .checklist-mini-fill { height: 100%; background: linear-gradient(90deg, var(--black), var(--gold)); border-radius: 3px; transition: width 0.4s ease; }
     .card-checklist-summary.all-done-bar .checklist-mini-fill { background: linear-gradient(90deg, var(--green), #52d68a); }
 
-    /* ── Goals ── */
-
     /* ── Thumb Grid ── */
     .grid-label { font-family: var(--font-display); font-style: normal; font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 14px; }
+
+    /* ── Focus Section Header ── */
+    .section-row-label {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px; margin-top: 4px;
+    }
+    .section-row-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-row-label span {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold); white-space: nowrap;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .other-section-label {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px; margin-top: 20px;
+    }
+    .other-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .other-section-label span {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); white-space: nowrap;
+    }
+
+    /* ── Regular grid: smaller, tighter ── */
     .thumb-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-      padding: 6px 0;
-      width: 100%;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+      padding: 4px 0;
     }
-    @media (min-width: 480px)  { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 11px; } }
-    @media (min-width: 720px)  { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; } }
-    @media (min-width: 1000px) { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; } }
-    @media (min-width: 1400px) { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; } }
+    @media (min-width: 480px)  { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 9px; } }
+    @media (min-width: 720px)  { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; } }
+    @media (min-width: 1000px) { .thumb-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; } }
+
+    /* ── Thumb item BASE (no gold border for normal posts) ── */
     .thumb-item {
       width: 100%;
       cursor: pointer; position: relative;
-      border: 2px solid #c8a45c; border-radius: 3px;
-      box-shadow:
-        0 0 0 1px rgba(120,90,30,0.55),
-        0 6px 14px -6px rgba(60,40,10,0.35),
-        0 2px 4px rgba(0,0,0,0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border: 1px solid rgba(10,10,10,0.12);
+      border-radius: 3px;
+      box-shadow: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
       overflow: hidden;
       display: flex; flex-direction: column;
+      background: var(--card-bg);
     }
     .thumb-item:hover {
       transform: translateY(-2px);
-      box-shadow:
-        0 0 0 1px rgba(120,90,30,0.7),
-        0 10px 22px -8px rgba(60,40,10,0.45),
-        0 3px 6px rgba(0,0,0,0.1);
+      border-color: rgba(10,10,10,0.25);
+      box-shadow: 0 4px 12px -4px rgba(0,0,0,0.15);
     }
+
+    /* ── Focus thumb: gold border + glow ── */
+    .thumb-item.focus-thumb {
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 0 0 1px rgba(184,150,90,0.30);
+    }
+    .thumb-item.focus-thumb:hover {
+      border-color: var(--gold-light);
+      box-shadow: 0 0 0 1px rgba(184,150,90,0.45);
+    }
+    .thumb-priority-badge {
+      position: absolute; top: 4px; left: 4px; z-index: 2;
+      display: flex; align-items: center; gap: 2px;
+      background: var(--gold); color: var(--black);
+      font-size: 7px; font-weight: 700; letter-spacing: 0.03em;
+      text-transform: uppercase; line-height: 1;
+      padding: 3px 5px 3px 4px; border-radius: 2px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      white-space: nowrap;
+    }
+    .thumb-priority-badge svg { width: 8px; height: 8px; flex-shrink: 0; }
+
     .thumb-item .thumb-media {
       width: 100%; aspect-ratio: 1/1; background: #e8e2d4;
       display: flex; align-items: center; justify-content: center;
@@ -174,7 +215,7 @@
       transition: background 0.2s; display: flex;
       align-items: center; justify-content: center; pointer-events: none;
     }
-    .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.12); }
+    .thumb-item:hover .thumb-overlay { background: rgba(0,0,0,0.10); }
     .thumb-item.completed .thumb-media { opacity: 0.4; filter: grayscale(60%); }
     .thumb-item.completed .thumb-media::after { content: '✓'; font-size: 20px; font-weight: 700; color: #fff; background: rgba(39,174,96,0.9); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); position: absolute; }
     .thumb-info {
@@ -278,9 +319,6 @@
 
     .back-to-grid { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 2px; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-bottom: 14px; transition: all 0.15s; }
     .back-to-grid:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* ── Grid-only view: bigger thumbs so fans can pick easily ── */
-    .focused-wrap:empty + .editorial-divider { display: none !important; }
 
     /* ── ig-card all-done state ── */
     .ig-card.all-done .media-frame { opacity: 0.45; filter: grayscale(50%); }
@@ -434,6 +472,7 @@
   <div id="focusedWrap" class="focused-wrap"></div>
   <div class="editorial-divider" id="moreDivider" style="display:none"><span>More posts</span></div>
   <div class="grid-label" id="gridLabel" style="display:none">Tap to view</div>
+  <div id="focusGrid" class="thumb-grid"></div>
   <div id="thumbGrid" class="thumb-grid"></div>
 </div>
 
@@ -549,6 +588,7 @@
           <option value="carousel">Carousel</option>
           <option value="live">Live</option>
           <option value="short">Short / TikTok</option>
+          <option value="article">Article</option>
         </select>
       </div>
       <div>
@@ -675,7 +715,7 @@ function formatNum(n) {
 }
 
 const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
-const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short' };
+const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short', article:'Article' };
 const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
 
 // ─── SVG icon set ───────────────────────────────────────────────────────────
@@ -737,7 +777,6 @@ function isAllDone(id) {
   return Object.keys(req).every(k => !req[k] || s[k]);
 }
 
-// Per-post required actions. Backward-compat: if no flags set, all are required.
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
   if (!p) return { liked:true, commented:true, shared:true, saved:true };
@@ -771,7 +810,6 @@ function getRequiredField(id, fallback = true) {
   const el = document.getElementById(id);
   return el ? el.checked : fallback;
 }
-
 
 // ─── Username ────────────────────────────────────────────────────────────────
 let currentUsername = 'pondnaravit';
@@ -815,27 +853,26 @@ async function loadFromScript() {
     const dp = await rp.json();
     if (dp.ok && Array.isArray(dp.posts)) {
       posts = dp.posts.map(p => ({
-  ...p,
-  username:     p.username || '',           // ← add this field
-  focused:      p.focused === 'TRUE' || p.focused === true,
-  likes:        parseInt(p.likes)    || 0,
-  comments:     parseInt(p.comments) || 0,
-  shares:       parseInt(p.shares)   || 0,
-  requireLike:    p.requireLike    === 'TRUE' || p.requireLike    === true,
-  requireComment: p.requireComment === 'TRUE' || p.requireComment === true,
-  requireShare:   p.requireShare   === 'TRUE' || p.requireShare   === true,
-  requireSave:    p.requireSave    === 'TRUE' || p.requireSave    === true,
-  goalLikes:    parseInt(p.goalLikes)    || 0,
-  goalComments: parseInt(p.goalComments) || 0,
-  goalShares:   parseInt(p.goalShares)   || 0,
-}));
+        ...p,
+        username:       p.username || '',
+        focused:        p.focused === 'TRUE' || p.focused === true,
+        likes:          parseInt(p.likes)    || 0,
+        comments:       parseInt(p.comments) || 0,
+        shares:         parseInt(p.shares)   || 0,
+        requireLike:    p.requireLike    === 'TRUE' || p.requireLike    === true,
+        requireComment: p.requireComment === 'TRUE' || p.requireComment === true,
+        requireShare:   p.requireShare   === 'TRUE' || p.requireShare   === true,
+        requireSave:    p.requireSave    === 'TRUE' || p.requireSave    === true,
+        goalLikes:    parseInt(p.goalLikes)    || 0,
+        goalComments: parseInt(p.goalComments) || 0,
+        goalShares:   parseInt(p.goalShares)   || 0,
+      }));
       saveLocalData();
     }
   } catch(err) { loadLocalData(); }
   generatePosts();
 }
 
-// upsert a single post (faster than replacing the whole sheet)
 async function upsertPostToScript(post) {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -848,7 +885,6 @@ async function upsertPostToScript(post) {
   } catch(e) { console.error('upsertPost failed', e); }
 }
 
-// delete a single post from the sheet
 async function deletePostFromScript(id) {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -861,7 +897,6 @@ async function deletePostFromScript(id) {
   } catch(e) { console.error('deletePost failed', e); }
 }
 
-// fallback: sync all posts (use for migration or emergency)
 async function saveToScript() {
   saveLocalData();
   if (!APPS_SCRIPT_URL) return;
@@ -874,7 +909,6 @@ async function saveToScript() {
   } catch(e) { console.error('saveToScript failed', e); }
 }
 
-
 // ─── Filter helpers ──────────────────────────────────────────────────────────
 function getFilteredPosts() {
   return posts
@@ -885,11 +919,9 @@ function getFilteredPosts() {
       return p.post_type === pageFilter || p.type === pageFilter;
     })
     .sort((a, b) => {
-      // Completed posts go to the bottom
       const aDone = isAllDone(a.id) ? 1 : 0;
       const bDone = isAllDone(b.id) ? 1 : 0;
       if (aDone !== bDone) return aDone - bDone;
-      // Focus posts first, then sort by post time newest first
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
       const aT = new Date(a.time || a.post_time || a.createdAt || a.created_at || 0).getTime();
@@ -902,7 +934,6 @@ function getFilteredPosts() {
 // ─── Progress tracker ────────────────────────────────────────────────────────
 function updateProgressTracker() {
   const filtered = getFilteredPosts();
-  const total = filtered.length;
 
   const items = [
     { key:'liked',     chipId:'chip-liked',     countId:'chipCount-liked' },
@@ -916,7 +947,6 @@ function updateProgressTracker() {
   items.forEach(({ key, chipId, countId }) => {
     const chip = document.getElementById(chipId);
     if (!chip) return;
-    // Only posts that REQUIRE this action count towards total
     const requiringPosts = filtered.filter(p => getRequired(p)[key]);
     const totalN = requiringPosts.length;
     const doneN  = requiringPosts.reduce((n, p) => n + (getState(p.id)[key] ? 1 : 0), 0);
@@ -941,7 +971,6 @@ function updateProgressTracker() {
   });
 }
 
-
 // ─── HTML builders ───────────────────────────────────────────────────────────
 function getMediaContent(post) {
   const img = post?.image || post?.image_url;
@@ -952,8 +981,6 @@ function getMediaContent(post) {
 function focusBannerHTML(post) {
   return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
 }
-
-
 
 function cardChecklistHTML(postId, post) {
   const s = getState(postId);
@@ -970,7 +997,6 @@ function cardChecklistHTML(postId, post) {
   const doneCount = items.filter(i => s[i.key]).length;
   const pct = Math.round((doneCount / reqN) * 100);
   const allDone = doneCount === items.length && items.length > 0;
-
 
   const chips = items.map(item => {
     const done = s[item.key];
@@ -989,7 +1015,6 @@ function cardChecklistHTML(postId, post) {
     ? `<div class="card-checklist-summary all-done-bar"><span class="checklist-summary-text">All actions completed!</span><div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div></div>`
     : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/${items.length} done (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
 
-
   return `<div id="cklwrap-${postId}"><div class="card-checklist" id="ccl-${postId}">${chips}</div>${summary}</div>`;
 }
 
@@ -1007,7 +1032,6 @@ function buildFocused(idx) {
   if (!post) return '';
   const platform = currentPlatform === 'all' ? (post.platform || 'ig') : currentPlatform;
   const postId = post.id;
-  const t = (post.time || post.post_time) ? new Date(post.time || post.post_time).toLocaleString('en-US',{dateStyle:'short',timeStyle:'short'}) : '';
   const state = getState(postId);
   const postUrl = post?.post_url || post?.postUrl || '';
 
@@ -1128,9 +1152,8 @@ function buildFocused(idx) {
   return '';
 }
 
-function buildThumb(idx) {
-  const filtered = getFilteredPosts();
-  const post   = filtered[idx];
+// ─── Build thumb card ────────────────────────────────────────────────────────
+function buildThumb(post, globalIdx) {
   if (!post) return '';
   const postId = post.id;
   const done   = isAllDone(postId);
@@ -1141,15 +1164,16 @@ function buildThumb(idx) {
   const platLabel = { ig:'IG', twitter:'X', fb:'FB', youtube:'YT', tiktok:'TT' }[post.platform||'ig'] || 'IG';
   const mediaLabel = (post.mediaType||post.media_type||'photo').toUpperCase();
   const uname = getPostUsername(post);
-  const doneCheck = done ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:34px;height:34px;border-radius:50%;background:rgba(39,174,96,0.92);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">\u2713</div></div>` : '';
+  const doneCheck = done ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:34px;height:34px;border-radius:50%;background:rgba(39,174,96,0.92);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">✓</div></div>` : '';
+  const priorityBadge = (isFocus && !done) ? `<div class="thumb-priority-badge">★ Engage first</div>` : '';
+
   return `
     <div class="thumb-item${isFocus?' focus-thumb':''}"
-         onclick="selectPost(${idx})"
-         style="${isFocus?'outline:2px solid var(--gold);outline-offset:-2px;':''}">
+         onclick="selectPost(${globalIdx})">
       <div class="thumb-media" style="${done?'opacity:0.45;filter:grayscale(55%)':''}">
         ${thumbInner}
         <div class="thumb-overlay"></div>
-        ${isFocus && !done ? `<div style="position:absolute;top:6px;left:6px;background:var(--gold);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:2px;letter-spacing:0.1em;z-index:4">FOCUS</div>` : ''}
+        ${priorityBadge}
         ${doneCheck}
       </div>
       <div class="thumb-info">
@@ -1161,72 +1185,104 @@ function buildThumb(idx) {
       </div>
     </div>`;
 }
+
+// ─── Generate posts — grid-first, split focus vs others ──────────────────────
 function generatePosts() {
   const filtered = getFilteredPosts();
 
+  const focusedWrap = document.getElementById('focusedWrap');
+  const focusGrid   = document.getElementById('focusGrid');
+  const tg          = document.getElementById('thumbGrid');
+  const divider     = document.getElementById('moreDivider');
+  const gridLabel   = document.getElementById('gridLabel');
+
   if (filtered.length === 0) {
-    document.getElementById('focusedWrap').innerHTML = `
+    focusedWrap.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">${icons.camera}</div>
         <div class="empty-state-text">No posts yet</div>
         <div class="empty-state-sub">Posts added by admin will appear here</div>
       </div>`;
-    document.getElementById('thumbGrid').innerHTML = '';
-    document.getElementById('moreDivider').style.display = 'none';
-    document.getElementById('gridLabel').style.display   = 'none';
+    focusGrid.innerHTML = '';
+    tg.innerHTML = '';
+    divider.style.display   = 'none';
+    gridLabel.style.display = 'none';
     document.getElementById('progressFill').style.width = '0%';
     document.getElementById('progressPct').innerHTML = '0<span>%</span>';
     document.getElementById('progressCompleteMsg').classList.remove('visible');
     return;
   }
 
-  const focusedWrap = document.getElementById('focusedWrap');
-  const tg          = document.getElementById('thumbGrid');
-  const divider     = document.getElementById('moreDivider');
-  const gridLabel   = document.getElementById('gridLabel');
+  // ── Focused card view (single post expanded) ──
+  if (focusedIndex !== null && focusedIndex !== undefined) {
+    if (focusedIndex >= filtered.length) focusedIndex = 0;
 
-  if (focusedIndex === null || focusedIndex === undefined) {
-    // Grid-only view: fan picks a post first
-    focusedWrap.innerHTML = '';
-    tg.innerHTML = filtered.map((_, i) => buildThumb(i)).join('');
-    divider.style.display   = 'none';
-    gridLabel.style.display = filtered.length ? 'block' : 'none';
-    gridLabel.textContent   = 'Select a post to support';
-    // Show aggregate progress across ALL posts when on grid view
+    focusedWrap.innerHTML = `<button class="back-to-grid" onclick="backToGrid()">← All Posts</button>` + buildFocused(focusedIndex);
+
+    // Show all other posts as small thumbs below
+    const focusPosts  = filtered.filter((p, i) => p.focused && i !== focusedIndex);
+    const otherPosts  = filtered.filter((p, i) => !p.focused && i !== focusedIndex);
+    const hasOthers   = focusPosts.length + otherPosts.length > 0;
+
+    if (focusPosts.length) {
+      focusGrid.innerHTML =
+        `<div class="section-row-label"><span>★ Focus Posts</span></div>` +
+        focusPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+    } else {
+      focusGrid.innerHTML = '';
+    }
+
+    if (otherPosts.length) {
+      tg.innerHTML =
+        `<div class="other-section-label"><span>All Posts</span></div>` +
+        otherPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+    } else {
+      tg.innerHTML = '';
+    }
+
+    divider.style.display   = hasOthers ? 'flex' : 'none';
+    gridLabel.style.display = 'none';
     updateProgressTracker();
     return;
   }
 
-  if (focusedIndex >= filtered.length) focusedIndex = 0;
+  // ── Grid-only view: split focus vs other ──
+  focusedWrap.innerHTML = '';
 
-  focusedWrap.innerHTML = `<button class="back-to-grid" onclick="backToGrid()">← All Posts</button>` + buildFocused(focusedIndex);
+  const focusPosts = filtered.filter(p => p.focused);
+  const otherPosts = filtered.filter(p => !p.focused);
 
-  const thumbs = filtered
-    .map((_, i) => i)
-    .filter(i => i !== focusedIndex)
-    .map(i => buildThumb(i))
-    .join('');
-  tg.innerHTML = thumbs;
+  if (focusPosts.length) {
+    focusGrid.innerHTML =
+      `<div class="section-row-label"><span>★ Focus Posts — Engage First!</span></div>` +
+      focusPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+  } else {
+    focusGrid.innerHTML = '';
+  }
 
-  const hasMore = filtered.length > 1;
-  divider.style.display   = hasMore ? 'flex' : 'none';
-  gridLabel.style.display = hasMore ? 'block' : 'none';
-  gridLabel.textContent   = 'Tap to view';
+  if (otherPosts.length) {
+    const labelHTML = focusPosts.length
+      ? `<div class="other-section-label"><span>Other Posts</span></div>`
+      : '';
+    tg.innerHTML = labelHTML + otherPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+  } else {
+    tg.innerHTML = '';
+  }
+
+  divider.style.display   = 'none';
+  gridLabel.style.display = filtered.length ? 'block' : 'none';
+  gridLabel.textContent   = 'Select a post to support';
 
   updateProgressTracker();
 }
 
-// Open a post from the grid and scroll it into view
 function selectPost(idx) {
   focusedIndex = idx;
   generatePosts();
   const focusedWrap = document.getElementById('focusedWrap');
-  if (focusedWrap) {
-    focusedWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (focusedWrap) focusedWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Return to the grid view
 function backToGrid() {
   focusedIndex = null;
   generatePosts();
@@ -1246,7 +1302,6 @@ function setPlatform(p) {
 }
 
 function setPageFilter(f) {
-  // Tap again to deselect — returns to showing all
   pageFilter = (pageFilter === f) ? 'all' : f;
   focusedIndex = null;
   ['Focus','Airport','Show','After'].forEach(k => {
@@ -1302,14 +1357,14 @@ function checklistAction(postId, key) {
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
   setTimeout(() => {
-    focusedIndex = null;          // back to grid
+    focusedIndex = null;
     generatePosts();
     showToast('Done! ✓ Pick the next post');
     spawnConfetti();
   }, 400);
 }
 
-// ─── Comment Modal (pool-based generator, merged from Comment Picker) ────────
+// ─── Comment Modal ───────────────────────────────────────────────────────────
 const COMMENT_TONES = ["Praising Prada","Adoring Pond","Grateful Fan","Brand Love","Pure Pride","Emotional","Iconic Moment"];
 const COMMENT_EMOJIS = ["🖤","✨","🔥","🇹🇭","🇮🇹","💫","👑","🙌","💯","😍","🌍","🫶","🙏","💕","🤍","🖤✨","🇹🇭✨","💯🖤","👑✨","🙏🖤","🔥🖤","✨🇹🇭","🌟","💎","🫰"];
 const PRADA_PRAISE = [
@@ -1377,8 +1432,8 @@ const COMMENT_STRUCTURES = [
   () => `${_ccap(_crnd(GRATITUDE))} ${_crnd(LOCATION)}. The world now sees that ${_crnd(POND_PRAISE).toLowerCase()} {e}`,
   () => `${_crnd(PRADA_PRAISE)}, just as Pond Naravit showed us all ${_crnd(LOCATION)} {e}`,
 ];
-let commentPool = [];          // generated pool { text, tone }
-let commentUsed = new Set();   // indexes already picked
+let commentPool = [];
+let commentUsed = new Set();
 let commentPickCount = 0;
 
 function ensureCommentPool(min = 200){
@@ -1425,10 +1480,9 @@ function closeCommentModal() {
   document.getElementById('commentModal').style.display = 'none';
   currentPostId = null;
 }
-// no-op kept for backwards-compat with any leftover onclick references
 function setCommentStyle() { shuffleCommentOptions(); }
 
-let currentPickOptions = [];   // [{idx, text, tone}]
+let currentPickOptions = [];
 function shuffleCommentOptions() {
   ensureCommentPool(200);
   if (commentUsed.size >= commentPool.length) commentUsed.clear();
@@ -1483,14 +1537,13 @@ function confirmPickedComment() {
     saveStates();
     updateProgressTracker();
     refreshChecklist(currentPostId);
-   
     checkAllDone(currentPostId);
   }
   showToast('Copied! Paste it into the app');
   closeCommentModal();
 }
 
-// ─── Share (direct, no popup) ─────────────────────────────────────────────────
+// ─── Share ────────────────────────────────────────────────────────────────────
 function openShareModal(postId) {
   if (navigator.clipboard) navigator.clipboard.writeText(location.href).catch(() => {});
   if (postId) {
@@ -1528,7 +1581,6 @@ let deletingId  = null;
 let isFocused   = false;
 let selectedImageData = null;
 
-
 function renderPosts() {
   const list = document.getElementById('postList');
   const totalTasks = posts.reduce((n, p) => n + requiredCount(p), 0);
@@ -1561,7 +1613,6 @@ function renderPosts() {
           ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
           ${(() => { const parts = []; if (p.likes) parts.push(`${formatNum(p.likes)} likes`); if (p.comments) parts.push(`${formatNum(p.comments)} comments`); if (p.shares) parts.push(`${formatNum(p.shares)} shares`); if (p.post_url) parts.push(`<a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>`); return parts.length ? `<div class="post-time">${parts.join(' · ')}</div>` : ''; })()}
         </div>
-
         <div class="post-actions">
           <button class="icon-btn${p.focused?' star-on':''}" onclick="toggleFocus('${p.id}')" title="${p.focused?'Unset focus':'Set as focus'}">
             <svg viewBox="0 0 24 24" fill="${p.focused?'var(--gold)':'none'}" stroke="${p.focused?'var(--gold)':'currentColor'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -1577,7 +1628,6 @@ function renderPosts() {
   }).join('');
 }
 
-// Image picker (URL only)
 function handleImgUrl(val) {
   const url = val.trim();
   if (!url) { selectedImageData = null; document.getElementById('urlPreviewWrap').style.display = 'none'; renderPreview(); return; }
@@ -1603,7 +1653,6 @@ function resetImagePicker(existingImg) {
   }
 }
 
-// Focus toggle
 function toggleFocusPick() {
   isFocused = !isFocused;
   setFocusUI(isFocused);
@@ -1650,7 +1699,6 @@ function renderPreview() {
     ${mediaHTML}`;
 }
 
-// CRUD
 function toggleFocus(id) {
   const p = posts.find(x => x.id === id);
   if (!p) return;
@@ -1672,7 +1720,6 @@ function openAddModal() {
   document.getElementById('fComments').value = '';
   document.getElementById('fShares').value = '';
   setRequiredFields({ liked:true, commented:true, shared:true, saved:true });
-
   resetImagePicker(null);
   setFocusUI(false);
   renderPreview();
@@ -1695,7 +1742,6 @@ function openEditModal(id) {
   const r = getRequired(p);
   setRequiredFields(r);
   resetImagePicker(p.image || p.image_url || null);
-
   setFocusUI(p.focused || false);
   renderPreview();
   document.getElementById('postModal').style.display = 'flex';
@@ -1712,24 +1758,24 @@ function confirmDelete() {
 function savePost() {
   const now = new Date().toISOString();
   const record = {
-    platform:     document.getElementById('fPlatform').value,
-    mediaType:    document.getElementById('fMediaType').value,
-    post_type:    document.getElementById('fType').value,
-    type:         document.getElementById('fType').value,
-    label:        document.getElementById('fLabel').value.trim(),
-    username:     document.getElementById('fUsername').value.trim().replace(/^@/, '') || '',
-    post_url:     document.getElementById('fPostUrl').value.trim(),
-    time:         document.getElementById('fTime').value,
-    likes:        parseInt(document.getElementById('fLikes').value) || 0,
-    comments:     parseInt(document.getElementById('fComments').value) || 0,
-    shares:       parseInt(document.getElementById('fShares').value) || 0,
+    platform:       document.getElementById('fPlatform').value,
+    mediaType:      document.getElementById('fMediaType').value,
+    post_type:      document.getElementById('fType').value,
+    type:           document.getElementById('fType').value,
+    label:          document.getElementById('fLabel').value.trim(),
+    username:       document.getElementById('fUsername').value.trim().replace(/^@/, '') || '',
+    post_url:       document.getElementById('fPostUrl').value.trim(),
+    time:           document.getElementById('fTime').value,
+    likes:          parseInt(document.getElementById('fLikes').value) || 0,
+    comments:       parseInt(document.getElementById('fComments').value) || 0,
+    shares:         parseInt(document.getElementById('fShares').value) || 0,
     requireLike:    getRequiredField('fReqLike'),
     requireComment: getRequiredField('fReqComment'),
     requireShare:   getRequiredField('fReqShare'),
     requireSave:    getRequiredField('fReqSave'),
-    image:        selectedImageData || null,
-    image_url:    selectedImageData || null,
-    focused:      isFocused,
+    image:          selectedImageData || null,
+    image_url:      selectedImageData || null,
+    focused:        isFocused,
   };
 
   let savedPost;
@@ -1743,11 +1789,10 @@ function savePost() {
     showToast('Post added');
   }
   if (savedPost) upsertPostToScript(savedPost);
-  else saveToScript(); // fallback
+  else saveToScript();
   renderPosts(); closePostModal();
 }
 
-// Admin enter/exit
 async function enterAdmin() {
   document.getElementById('publicView').style.display = 'none';
   document.getElementById('adminView').style.display  = 'block';
