@@ -870,6 +870,25 @@ function isAllDone(id) {
   return Object.keys(req).every(k => !req[k] || s[k]);
 }
 
+// ─── Seen posts (per-browser "New" tracking) ─────────────────────────────────
+const SEEN_KEY = 'pond_seen_posts_v1';
+const seenPosts = new Set();
+try {
+  const rawSeen = localStorage.getItem(SEEN_KEY);
+  if (rawSeen) JSON.parse(rawSeen).forEach(id => seenPosts.add(id));
+} catch(e) {}
+function saveSeenPosts() {
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify([...seenPosts])); } catch(e) {}
+}
+function markSeen(id) {
+  if (!id || seenPosts.has(id)) return;
+  seenPosts.add(id);
+  saveSeenPosts();
+}
+function isNewPost(p) {
+  return !!(p && p.id) && !seenPosts.has(p.id);
+}
+
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
   if (!p) return { liked:true, commented:true, shared:true, saved:true };
@@ -1394,6 +1413,9 @@ function generatePosts() {
 
 function selectPost(idx) {
   focusedIndex = idx;
+  const filtered = getFilteredPosts();
+  const p = filtered[idx];
+  if (p) markSeen(p.id);
   generatePosts();
   const focusedWrap = document.getElementById('focusedWrap');
   if (focusedWrap) focusedWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1697,12 +1719,6 @@ let deletingId  = null;
 let isFocused   = false;
 let selectedImageData = null;
 
-function isNewPost(p) {
-  const t = new Date(p.createdAt || p.created_at || 0).getTime();
-  if (!t) return false;
-  return (Date.now() - t) < 24 * 60 * 60 * 1000;
-}
-
 function renderPosts() {
   const list = document.getElementById('postList');
   const searchVal = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
@@ -1745,7 +1761,6 @@ function renderPosts() {
             ${mediaLabel ? `<span class="tag tag-media">${mediaLabel}</span>` : ''}
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
-            ${isNewPost(p) ? `<span class="new-badge">New</span>` : ''}
           </div>
           ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
           ${(() => { const parts = []; if (p.likes) parts.push(`${formatNum(p.likes)} likes`); if (p.comments) parts.push(`${formatNum(p.comments)} comments`); if (p.shares) parts.push(`${formatNum(p.shares)} shares`); if (p.post_url) parts.push(`<a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>`); return parts.length ? `<div class="post-time">${parts.join(' · ')}</div>` : ''; })()}
