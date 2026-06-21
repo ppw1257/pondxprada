@@ -341,16 +341,24 @@
     #adminView .view-link { font-size: 11px; color: rgba(255,255,255,0.5); text-decoration: none; display: flex; align-items: center; gap: 5px; letter-spacing: 0.06em; cursor: pointer; }
     #adminView .view-link:hover { color: var(--gold-light); }
     #adminView .header-right { display: flex; align-items: center; gap: 12px; }
-    #adminView .admin-body { max-width: 560px; margin: 0 auto; padding: 24px 16px 60px; }
+    #adminView .admin-body { max-width: 1180px; margin: 0 auto; padding: 24px 16px 60px; }
     #adminView .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; margin-top: 28px; }
     #adminView .section-head:first-child { margin-top: 0; }
     #adminView .section-title { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
     #adminView .section-count { font-size: 11px; color: var(--muted); }
-    #adminView .card { background: var(--card); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
-    #adminView .post-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-    #adminView .post-item:last-child { border-bottom: none; }
-    #adminView .post-item:hover { background: var(--offwhite); }
-    #adminView .post-thumb { width: 52px; height: 52px; border-radius: 2px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
+    #adminView .card {
+      background: transparent; border: none; border-radius: 0; overflow: visible; margin-bottom: 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    @media (max-width: 860px) { #adminView .card { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { #adminView .card { grid-template-columns: 1fr; } }
+    #adminView .post-item {
+      display: flex; flex-direction: column; gap: 8px; align-items: stretch;
+      padding: 10px; border: 1px solid var(--border); border-radius: 4px;
+      background: var(--card); transition: background 0.15s, box-shadow 0.15s;
+    }
+    #adminView .post-item:hover { background: var(--offwhite); box-shadow: 0 3px 10px -2px rgba(0,0,0,0.10); }
+    #adminView .post-thumb { width: 100%; aspect-ratio: 1/1; border-radius: 3px; flex-shrink: 0; background: linear-gradient(135deg, #1a1a1a, #2d2210 60%, var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
     #adminView .post-meta { flex: 1; min-width: 0; }
     #adminView .post-caption { font-size: 13px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
     #adminView .post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 3px; }
@@ -367,7 +375,7 @@
     #adminView .icon-btn.star-on { border-color: var(--gold); color: var(--gold); background: #fffbf0; }
     #adminView .icon-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
     #adminView .post-time { font-size: 11px; color: var(--muted); }
-    #adminView .post-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    #adminView .post-actions { display: flex; gap: 6px; flex-shrink: 0; margin-top: auto; padding-top: 4px; }
     #adminView .form-row { margin-bottom: 14px; }
     #adminView .form-label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     #adminView .form-input, #adminView .form-select, #adminView .form-textarea { width: 100%; background: var(--offwhite); border: 1px solid var(--border); border-radius: 2px; padding: 10px 12px; font-size: 14px; color: var(--black); font-family: var(--font-body); outline: none; transition: border-color 0.15s; appearance: none; }
@@ -387,7 +395,7 @@
     #adminView .divider { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
     #adminView .divider::before, #adminView .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     #adminView .divider span { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
-    #adminView .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+    #adminView .empty { text-align: center; padding: 40px 20px; color: var(--muted); grid-column: 1 / -1; }
     #adminView .empty-text { font-family: var(--font-display); font-size: 13px; font-weight: 500; font-style: normal; letter-spacing: 0.06em; }
     #adminView .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
     #adminView .save-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
