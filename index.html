@@ -153,10 +153,34 @@
     .thumb-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-weight: 600; overflow: hidden; }
     .thumb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .thumb-text-block { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .thumb-info-user { font-size: 12px; font-weight: 600; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .thumb-info-user { font-size: 12px; font-weight: 600; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
     .thumb-chip-row { display: flex; align-items: center; gap: 4px; min-width: 0; }
     .thumb-chip-spacer { flex: 1; }
     .thumb-info-type { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .thumb-platform-badge, .platform-badge {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--gold); background: rgba(154,122,74,0.08); border: 1px solid rgba(154,122,74,0.25);
+      border-radius: 4px; padding: 1px 4px; line-height: 1;
+    }
+    /* Platform-specific badge colors (brand-inspired) */
+    .platform-badge.pf-ig, .thumb-platform-badge.pf-ig {
+      color: #fff; border-color: transparent;
+      background: linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+    }
+    .platform-badge.pf-x, .thumb-platform-badge.pf-x {
+      color: #fff; background: #000; border-color: #000;
+    }
+    .platform-badge.pf-fb, .thumb-platform-badge.pf-fb {
+      color: #fff; background: #1877F2; border-color: #1877F2;
+    }
+    .platform-badge.pf-yt, .thumb-platform-badge.pf-yt {
+      color: #fff; background: #FF0000; border-color: #FF0000;
+    }
+    .platform-badge.pf-tt, .thumb-platform-badge.pf-tt {
+      color: #fff; background: #000; border-color: #25F4EE;
+      box-shadow: -1.5px 0 0 #FE2C55, 1.5px 0 0 #25F4EE;
+    }
     .thumb-mini-star { color: var(--gold); font-size: 10px; line-height: 1; flex-shrink: 0; }
     .thumb-mini-new { background: var(--red); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em; }
     .thumb-mini-done { color: var(--green); font-size: 11px; font-weight: 700; line-height: 1; flex-shrink: 0; }
@@ -1158,6 +1182,12 @@ function refreshChecklist(postId) {
   wrap.outerHTML = cardChecklistHTML(postId, post);
 }
 
+function platformBadgeHTML(platform) {
+  const map = { ig:['IG','pf-ig'], twitter:['X','pf-x'], fb:['FB','pf-fb'], youtube:['YT','pf-yt'], tiktok:['TT','pf-tt'] };
+  const [short, cls] = map[platform] || map.ig;
+  return `<span class="platform-badge ${cls}" title="${platform}">${short}</span>`;
+}
+
 function buildFocused(idx) {
   const filtered = getFilteredPosts();
   const post = filtered[idx];
@@ -1166,6 +1196,7 @@ function buildFocused(idx) {
   const postId = post.id;
   const state = getState(postId);
   const postUrl = post?.post_url || post?.postUrl || '';
+  const platformBadge = currentPlatform === 'all' ? platformBadgeHTML(platform) : '';
 
   if (platform === 'ig') {
     const mediaLabel = post.mediaType || post.media_type ? (MEDIA_LABELS[post.mediaType||post.media_type]||post.mediaType||post.media_type) : '';
@@ -1175,7 +1206,7 @@ function buildFocused(idx) {
         <div class="ig-card-header">
           <div class="avatar">P</div>
           <div>
-            <div class="ig-username">@${getPostUsername(post)}</div>
+            <div class="ig-username" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">@${getPostUsername(post)}${platformBadge}</div>
             ${post.focused ? '<div style="margin-top:2px"><span style="font-size:10px;background:var(--gold);color:#fff;padding:1px 6px;border-radius:40px;font-weight:700">Focus</span></div>' : ''}
             <div class="ig-location">Milan, Italy${mediaLabel ? ' · ' + mediaLabel : ''}</div>
             ${post.label ? `<div style="font-size:11px;color:var(--gold);font-weight:600;margin-top:2px">${post.label}</div>` : ''}
@@ -1205,7 +1236,7 @@ function buildFocused(idx) {
         <div class="tw-header">
           <div class="avatar">P</div>
           <div class="tw-info">
-            <div class="tw-name">@${getPostUsername(post)}</div>
+            <div class="tw-name" style="display:flex;align-items:center;gap:6px">@${getPostUsername(post)}${platformBadge}</div>
           </div>
         </div>
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
@@ -1225,7 +1256,7 @@ function buildFocused(idx) {
         <div class="fb-header">
           <div class="avatar">P</div>
           <div>
-            <div class="fb-user">@${getPostUsername(post)}</div>
+            <div class="fb-user" style="display:flex;align-items:center;gap:6px">@${getPostUsername(post)}${platformBadge}</div>
             <div class="fb-time">Public</div>
           </div>
         </div>
@@ -1246,6 +1277,7 @@ function buildFocused(idx) {
         ${focusBannerHTML(post)}
         <div class="media-frame media-frame-wide" ${postUrl?`onclick="window.open('${postUrl}','_blank','noopener')"`:''}>${getMediaContent(post)}</div>
         <div class="yt-info">
+          ${platformBadge ? `<div style="margin-bottom:4px">${platformBadge}</div>` : ''}
           <div class="yt-title">${post.label || post.caption || ''}</div>
           <div class="yt-meta">${post.likes ? formatNum(post.likes) + ' views' : ''}</div>
         </div>
@@ -1266,6 +1298,7 @@ function buildFocused(idx) {
           <div class="play-overlay">${icons.play}</div>
           <div class="tk-overlay" style="justify-content:space-between;align-items:flex-end">
             <div class="tk-left">
+              ${platformBadge ? `<div style="margin-bottom:4px">${platformBadge}</div>` : ''}
               <div class="tk-username">@${getPostUsername(post)}</div>
               ${post.label ? `<div class="tk-desc">${post.label}</div>` : ''}
             </div>
@@ -1293,7 +1326,8 @@ function buildThumb(post, globalIdx) {
   const isFocus = !!post.focused;
   const reqKeys = ['liked','commented','shared','saved'].filter(k => req[k]);
   const isCompleted = reqKeys.length > 0 && reqKeys.every(k => (s[k]||0) > 0);
-  const platLabel = { ig:'IG', twitter:'X', fb:'FB', youtube:'YT', tiktok:'TT' }[post.platform||'ig'] || 'IG';
+  const pfMap = { ig:['IG','pf-ig'], twitter:['X','pf-x'], fb:['FB','pf-fb'], youtube:['YT','pf-yt'], tiktok:['TT','pf-tt'] };
+  const [platLabel, platClass] = pfMap[post.platform||'ig'] || pfMap.ig;
   const mediaLabel = (post.mediaType||post.media_type||'photo').toUpperCase();
   const uname = getPostUsername(post);
   const starEl = isFocus ? `<span class="thumb-mini-star">★</span>` : '';
@@ -1311,7 +1345,7 @@ function buildThumb(post, globalIdx) {
          onclick="selectPost(${globalIdx})">
       <div class="thumb-avatar">${avatarInner}</div>
       <div class="thumb-text-block">
-        <div class="thumb-info-user">${platLabel} · @${uname}</div>
+        <div class="thumb-info-user"><span class="thumb-platform-badge ${platClass}">${platLabel}</span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;">@${uname}</span></div>
         <div class="thumb-chip-row">
           <span class="thumb-info-type">${mediaLabel}</span>
           <span class="thumb-chip-spacer"></span>
