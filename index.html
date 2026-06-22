@@ -32,7 +32,6 @@
     .header-title { font-size: 18px; font-weight: 500; color: #fff; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
     .header-title em { font-style: normal; color: var(--gold); }
     .header-sub { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px; }
-    .header-username-row { display: none; }
 
     /* ── Tabs & Filters ── */
     .tab-bar { background: #111; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: center; gap: 0; padding: 0 16px; overflow-x: auto; }
@@ -49,8 +48,6 @@
     .platform-label { text-align: center; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); padding: 16px 0 8px; }
     .progress-banner { background: #fff; border-bottom: 1px solid var(--border); padding: 14px 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
     @media (min-width: 600px) { .progress-divider { display: block !important; } }
-    .progress-header { display: none; }
-    .progress-title { display: none; }
     .progress-pct { font-size: 26px; font-weight: 300; color: var(--black); line-height: 1; letter-spacing: -0.03em; }
     .progress-pct span { font-size: 13px; color: var(--muted); font-weight: 300; }
     .progress-track { height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 0; }
@@ -90,7 +87,6 @@
     .media-frame-wide { aspect-ratio: 16/9; }
     .media-frame-tall { aspect-ratio: 9/16; max-height: 420px; }
     .play-overlay { position: absolute; width: 44px; height: 44px; background: rgba(0,0,0,0.45); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.55); color: #fff; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 4px; }
     .ig-actions { display: flex; align-items: center; gap: 10px; padding: 9px 12px 6px; }
     .ig-action-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); transition: color 0.15s; }
     .ig-action-btn:hover { color: var(--black); }
@@ -102,7 +98,6 @@
     .ig-action-btn.reposted svg { stroke: var(--green); }
     .ig-save { margin-left: auto; }
     .ig-likes { padding: 0 12px 4px; font-size: 12px; font-weight: 600; }
-    .ig-caption { padding: 0 12px 12px; font-size: 12px; color: var(--black); line-height: 1.5; }
 
     /* ── Card Checklist ── */
     .card-checklist { display: flex; border-top: 1px solid var(--border); background: var(--offwhite); border-radius: 0 0 9px 9px; overflow: hidden; }
@@ -186,15 +181,12 @@
     .thumb-mini-star { color: var(--gold); font-size: 10px; line-height: 1; flex-shrink: 0; }
     .thumb-mini-new { background: var(--red); color: #fff; font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.03em; }
     .thumb-mini-done { color: var(--green); font-size: 11px; font-weight: 700; line-height: 1; flex-shrink: 0; }
-    .thumb-more-btn { flex-shrink: 0; color: var(--muted); font-size: 16px; line-height: 1; background: none; border: none; cursor: pointer; padding: 0 2px; }
 
     /* ── Platform cards ── */
     .tw-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
     .tw-card .focus-banner { margin: -14px -14px 12px; border-radius: 9px 9px 0 0; }
     .tw-header { display: flex; gap: 9px; margin-bottom: 10px; }
     .tw-info .tw-name { font-size: 13px; font-weight: 600; }
-    .tw-info .tw-handle { font-size: 11px; color: var(--muted); }
-    .tw-text { font-size: 14px; line-height: 1.55; margin-bottom: 10px; }
     .tw-actions { display: flex; gap: 16px; border-top: 1px solid var(--border); padding-top: 10px; }
     .tw-action { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; transition: color 0.15s; }
     .tw-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
@@ -204,7 +196,6 @@
     .fb-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
     .fb-user { font-size: 12px; font-weight: 600; }
     .fb-time { font-size: 10px; color: var(--muted); }
-    .fb-text { padding: 10px 12px; font-size: 13px; line-height: 1.5; }
     .fb-reactions { padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; gap: 8px; }
     .fb-actions { display: flex; border-top: 1px solid var(--border); }
     .fb-act { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px; font-size: 11px; font-weight: 500; color: var(--muted); cursor: pointer; background: none; border: none; border-right: 1px solid var(--border); transition: background 0.15s; }
@@ -250,28 +241,7 @@
     .modal-box { background: #fff; border-radius: 12px; padding: 28px 24px 24px; max-width: 92%; width: 380px; text-align: center; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
     .modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
     .modal-title { font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 18px; }
-    .comment-filter-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
-    .c-pill { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.15s; }
-    .c-pill.active { background: var(--black); border-color: var(--black); color: #fff; }
-    .comment-box { background: var(--offwhite); border-radius: 8px; padding: 16px; font-size: 14px; line-height: 1.65; color: var(--black); min-height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid var(--border); }
-    .comment-pick-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .comment-pick { background: var(--offwhite); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.55; color: var(--black); cursor: pointer; text-align: left; transition: all 0.15s; position: relative; }
-    .comment-pick:hover { border-color: var(--black); background: #fff; }
-    .comment-pick.picked { border-color: var(--black); background: #fff; }
-    .comment-pick.picked::after { content: '✓'; position: absolute; top: 8px; right: 10px; width: 18px; height: 18px; background: var(--black); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    .comment-pick-hint { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 10px; font-weight: 500; }
-    .modal-actions { display: flex; gap: 8px; }
-    .btn-primary { flex: 1; background: var(--black); color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity 0.15s; }
-    .btn-primary:hover { opacity: 0.85; }
-    .btn-gold { flex: 1; background: var(--gold); color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
-    .btn-gold:hover { opacity: 0.85; }
-    .btn-outline { flex: 1; background: transparent; color: var(--black); border: 1px solid var(--border); padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s; }
-    .btn-outline:hover { border-color: var(--black); }
-    .share-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; margin-bottom: 8px; }
-    .share-btn:last-child { margin-bottom: 0; }
-    .share-btn.gold { background: var(--black); color: #fff; border: none; }
-    .share-btn.outline { background: transparent; color: var(--black); border: 1px solid var(--border); }
-    .share-btn:hover { opacity: 0.8; }
+
 
     /* ── Toast ── */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--black); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 999; white-space: nowrap; }
@@ -280,10 +250,6 @@
 
     .back-to-grid { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 20px; font-family: var(--font); font-size: 11px; font-weight: 500; cursor: pointer; margin-bottom: 14px; transition: all 0.15s; }
     .back-to-grid:hover { border-color: var(--black); color: var(--black); }
-
-    /* ── ig-card all-done state ── */
-    .ig-card.all-done .media-frame { opacity: 0.4; filter: grayscale(40%); }
-    .ig-card.all-done::after { content: 'Completed!'; display: block; text-align: center; font-size: 11px; font-weight: 600; color: var(--green); padding: 7px; background: #f2fbf6; letter-spacing: 0.04em; }
 
     /* ── Admin View ── */
     #adminView .admin-header { background: #fff; border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
@@ -310,14 +276,12 @@
     #adminView .post-item:hover { border-color: rgba(0,0,0,0.15); box-shadow: 0 2px 10px -2px rgba(0,0,0,0.10); }
     #adminView .post-thumb { width: 100%; aspect-ratio: 1/1; border-radius: 7px; flex-shrink: 0; background: var(--offwhite); display: flex; align-items: center; justify-content: center; font-size: 18px; overflow: hidden; }
     #adminView .post-meta { flex: 1; min-width: 0; }
-    #adminView .post-caption { font-size: 11px; font-weight: 500; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
     #adminView .post-tags { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 2px; }
     #adminView .tag { font-size: 8px; letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 5px; border-radius: 3px; font-weight: 500; }
     #adminView .tag-platform { background: var(--offwhite); color: var(--muted); border: 1px solid var(--border); }
     #adminView .tag-type { background: #fef9ec; color: #8a5500; border: 1px solid #f5e0a0; }
     #adminView .tag-media { background: #f2fbf6; color: #1a7a44; border: 1px solid #b2dfc5; }
     #adminView .focus-badge { background: var(--gold); color: #fff; font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
-    #adminView .new-badge { background: var(--red); color: #fff; font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
     #adminView .focus-ring { border-left: 3px solid var(--gold) !important; }
     #adminView .icon-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     #adminView .icon-btn:hover { border-color: var(--black); color: var(--black); }
@@ -332,7 +296,6 @@
     #adminView .form-input:focus, #adminView .form-select:focus, #adminView .form-textarea:focus { border-color: var(--black); background: #fff; }
     #adminView .form-textarea { min-height: 80px; resize: vertical; }
     #adminView .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    #adminView .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     #adminView .btn-row { display: flex; gap: 8px; margin-top: 18px; }
     #adminView .btn { padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; display: flex; align-items: center; gap: 6px; }
     #adminView .btn-black { background: var(--black); color: #fff; }
@@ -347,8 +310,6 @@
     #adminView .divider span { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
     #adminView .empty { text-align: center; padding: 40px 20px; color: var(--muted); grid-column: 1 / -1; }
     #adminView .empty-text { font-size: 13px; font-weight: 500; }
-    #adminView .save-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
-    #adminView .save-status { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
     #adminView .username-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
     #adminView .username-card-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; font-family: var(--font); flex-shrink: 0; }
     #adminView .btn-danger { background: var(--red); color: #fff; }
@@ -874,11 +835,6 @@ const icons = {
   extLink:`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
 };
 
-function thumbImgError(img) {
-  const p = img.parentElement;
-  if (p) p.innerHTML = icons.camera;
-}
-
 // ─── State ───────────────────────────────────────────────────────────────────
 let currentPlatform = 'all';
 let pageFilter      = 'all';
@@ -939,7 +895,6 @@ function isNewPost(p) {
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
   if (!p) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
-  if (p.focused) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
   const has = ['requireLike','requireComment','requireShare','requireSave','requireRepost','require_like','require_comment','require_share','require_save','require_repost']
     .some(k => p[k] !== undefined);
   if (!has) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
@@ -977,7 +932,6 @@ function getRequiredField(id, fallback = true) {
 let currentUsername = 'pondnaravit';
 try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
 
-function getUsername() { return currentUsername; }
 function getPostUsername(post) { return (post && post.username) ? post.username : currentUsername; }
 
 function updateUsernamePreview(val) {
@@ -1877,15 +1831,6 @@ function closeCommentModal(){
   currentPostId = null;
   unlockScroll();
 }
-
-// Back-compat shims for older callsites
-function shuffleCommentOptions(){ cpPick(); }
-function confirmPickedComment(){ cpCopyIt(); closeCommentModal(); }
-function pickComment(){ cpPick(); }
-function randomizeComment(){ cpPick(); }
-function copyAndClose(){ confirmPickedComment(); }
-function setCommentStyle(){ /* no-op */ }
-function ensureCommentPool(){ if (commentPool.length === 0) cpGenerateBatch(); }
 
 // ─── Share ────────────────────────────────────────────────────────────────────
 function openShareModal(postId) {
