@@ -128,7 +128,7 @@
     .grid-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 16px; }
 
     /* ── Section Labels ── */
-    .section-row-label { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; margin-top: 4px; }
+    .section-row-label { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; margin-top: 4px; grid-column: 1 / -1; }
     .section-row-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .section-row-label span { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); white-space: nowrap; display: flex; align-items: center; gap: 5px; }
 
@@ -1073,6 +1073,36 @@ async function saveToScript() {
 }
 
 // ─── Filter helpers ──────────────────────────────────────────────────────────
+
+// Media outlet priority for Focus filter (Prada SS27 coverage tier)
+const OUTLET_PRIORITY = (() => {
+  const map = {};
+  // Priority 0 (Main — Pond Naravit official accounts, always first)
+  ['pondnaravit','ppnaravit','pond naravit'].forEach(n => { map[n] = 0; });
+  // Priority 1 (Tier A+)
+  ['prada','vogue','voguerunway','vogue runway','wwด','wwd','harpersbazaar','harpers bazaar','harper\'s bazaar','bazaar'].forEach(n => { map[n] = 1; });
+  // Priority 2 (Tier A)
+  ['elle','gq','lofficiel','l\'officiel','bof','businessoffashion','business of fashion'].forEach(n => { map[n] = 2; });
+  // Priority 3 (Tier A-)
+  ['esquire','grazia','marieclaire','marie claire','numero','numéro','tatler','vanityfair','vanity fair','cosmopolitan','cosmo'].forEach(n => { map[n] = 3; });
+  // Priority 4 (Digital)
+  ['fashionista','theimpression','the impression','crfashionbook','cr fashion book','purplemagazine','purple magazine','dazed'].forEach(n => { map[n] = 4; });
+  return map;
+})();
+
+function getOutletPriority(post) {
+  const raw = (getPostUsername(post) || post.label || '').toLowerCase().replace(/[@\s_\-\.]/g, '');
+  // Priority 0: ppnaravit / pondnaravit always first
+  if (raw.includes('ppnaravit') || raw.includes('pondnaravit')) return 0;
+  // Priority 1: anything containing "bazaar"
+  if (raw.includes('bazaar')) return 1;
+  // direct lookup
+  for (const key of Object.keys(OUTLET_PRIORITY)) {
+    if (raw.includes(key.replace(/\s/g, ''))) return OUTLET_PRIORITY[key];
+  }
+  return 99;
+}
+
 function getFilteredPosts() {
   return posts
     .filter(p => {
@@ -1084,6 +1114,12 @@ function getFilteredPosts() {
     .sort((a, b) => {
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
+      // When in Focus filter, sort by outlet priority
+      if (pageFilter === 'focus' || (a.focused && b.focused)) {
+        const pa = getOutletPriority(a);
+        const pb = getOutletPriority(b);
+        if (pa !== pb) return pa - pb;
+      }
       const aName = getPostUsername(a) || '';
       const bName = getPostUsername(b) || '';
       const cmp = aName.localeCompare(bName, 'th', { sensitivity: 'base', numeric: true });
@@ -1468,9 +1504,35 @@ function generatePosts() {
     const sortedFocus = focusPosts.slice().sort((a, b) => {
       return (isPostCompleted(a) ? 1 : 0) - (isPostCompleted(b) ? 1 : 0);
     });
-    focusGrid.innerHTML =
-      `<div class="section-row-label"><span>★ Focus Posts — Engage First!</span></div>` +
-      sortedFocus.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+
+    // If in focus filter, group by priority tier with section labels
+    if (pageFilter === 'focus') {
+      const tierLabels = {
+        0: '⭐ Pond Naravit — Official',
+        1: '🥇 Priority 1',
+        2: '🥈 Priority 2',
+        3: '🥉 Priority 3',
+        4: '📱 Priority 4',
+        99: '★ Focus Posts',
+      };
+      const tiers = {};
+      sortedFocus.forEach(p => {
+        const tier = getOutletPriority(p);
+        if (!tiers[tier]) tiers[tier] = [];
+        tiers[tier].push(p);
+      });
+      let html = '';
+      Object.keys(tiers).sort((a,b) => Number(a)-Number(b)).forEach(tier => {
+        const label = tierLabels[tier] || '★ Focus Posts';
+        html += `<div class="section-row-label"><span>${label}</span></div>`;
+        html += tiers[tier].map(p => buildThumb(p, filtered.indexOf(p))).join('');
+      });
+      focusGrid.innerHTML = html;
+    } else {
+      focusGrid.innerHTML =
+        `<div class="section-row-label"><span>★ Focus Posts — Engage First!</span></div>` +
+        sortedFocus.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+    }
   } else {
     focusGrid.innerHTML = '';
   }
