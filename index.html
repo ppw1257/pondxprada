@@ -629,7 +629,7 @@
 
     <div class="form-row">
       <label class="form-label">Platform</label>
-      <select class="form-select" id="fPlatform" onchange="renderPreview()">
+      <select class="form-select" id="fPlatform" onchange="renderPreview(); updateRequiredCheckboxesByPlatform(this.value)">
         <option value="ig">Instagram</option>
         <option value="twitter">Twitter / X</option>
         <option value="fb">Facebook</option>
@@ -709,12 +709,12 @@
     <!-- Required Actions -->
     <div class="form-row">
       <label class="form-label">Required Actions</label>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqLike" checked> Like</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqComment" checked> Comment</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqShare" checked> Share</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqSave" checked> Save</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqRepost" checked> Repost</label>
+      <div id="fReqGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+        <label id="fReqLikeWrap" style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqLike"> Like</label>
+        <label id="fReqCommentWrap" style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqComment"> Comment</label>
+        <label id="fReqShareWrap" style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqShare"> Share</label>
+        <label id="fReqSaveWrap" style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqSave"> Save</label>
+        <label id="fReqRepostWrap" style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqRepost"> Repost</label>
       </div>
     </div>
 
@@ -806,11 +806,11 @@
     <div class="form-row">
       <label class="form-label">Required Actions</label>
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqLike" checked> Like</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqComment" checked> Comment</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqShare" checked> Share</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqSave" checked> Save</label>
-        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqRepost" checked> Repost</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqLike"> Like</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqComment"> Comment</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqShare"> Share</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqSave"> Save</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqRepost"> Repost</label>
       </div>
     </div>
 
@@ -938,11 +938,10 @@ function isNewPost(p) {
 
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
-  if (!p) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
-  if (p.focused) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
+  if (!p) return { liked:false, commented:false, shared:false, saved:false, reposted:false };
   const has = ['requireLike','requireComment','requireShare','requireSave','requireRepost','require_like','require_comment','require_share','require_save','require_repost']
     .some(k => p[k] !== undefined);
-  if (!has) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
+  if (!has) return { liked:false, commented:false, shared:false, saved:false, reposted:false };
   return {
     liked:    _truthy(p.requireLike    ?? p.require_like),
     commented:_truthy(p.requireComment ?? p.require_comment),
@@ -973,7 +972,40 @@ function getRequiredField(id, fallback = true) {
   return el ? el.checked : fallback;
 }
 
-// ─── Username ────────────────────────────────────────────────────────────────
+// ─── Platform-available actions ──────────────────────────────────────────────
+// Define which actions each platform actually supports
+const PLATFORM_ACTIONS = {
+  ig:      { like:true,  comment:true,  share:true,  save:true,  repost:true  },
+  twitter: { like:true,  comment:true,  share:true,  save:false, repost:true  },  // share = RT quote, no save
+  fb:      { like:true,  comment:true,  share:true,  save:true,  repost:false },
+  youtube: { like:true,  comment:true,  share:true,  save:true,  repost:false },
+  tiktok:  { like:true,  comment:true,  share:true,  save:true,  repost:true  },
+};
+
+function updateRequiredCheckboxesByPlatform(platform) {
+  const avail = PLATFORM_ACTIONS[platform] || { like:true, comment:true, share:true, save:true, repost:true };
+  const map = [
+    ['fReqLikeWrap',    avail.like,    'fReqLike'],
+    ['fReqCommentWrap', avail.comment, 'fReqComment'],
+    ['fReqShareWrap',   avail.share,   'fReqShare'],
+    ['fReqSaveWrap',    avail.save,    'fReqSave'],
+    ['fReqRepostWrap',  avail.repost,  'fReqRepost'],
+  ];
+  map.forEach(([wrapId, supported, cbId]) => {
+    const wrap = document.getElementById(wrapId);
+    const cb   = document.getElementById(cbId);
+    if (!wrap || !cb) return;
+    if (supported) {
+      wrap.style.display = '';
+      wrap.style.opacity = '1';
+      wrap.style.pointerEvents = '';
+    } else {
+      wrap.style.display = 'none';
+      cb.checked = false;  // auto-untick hidden ones
+    }
+  });
+}
+
 let currentUsername = 'pondnaravit';
 try { const u = localStorage.getItem('pond_username'); if (u) currentUsername = u; } catch(e) {}
 
@@ -2087,8 +2119,8 @@ function toggleFocus(id) {
   const p = posts.find(x => x.id === id);
   if (!p) return;
   p.focused = !p.focused;
-  saveToScript(); renderPosts();
-  showToast(p.focused ? 'Set as focus' : 'Unset focus');
+  upsertPostToScript(p); renderPosts();
+  showToast(p.focused ? '⭐ Set as focus' : 'Unset focus');
 }
 function openAddModal() {
   editingId = null;
@@ -2103,7 +2135,8 @@ function openAddModal() {
   document.getElementById('fLikes').value = '';
   document.getElementById('fComments').value = '';
   document.getElementById('fShares').value = '';
-  setRequiredFields({ liked:true, commented:true, shared:true, saved:true, reposted:true });
+  setRequiredFields({ liked:false, commented:false, shared:false, saved:false, reposted:false });
+  updateRequiredCheckboxesByPlatform('ig');
   resetImagePicker(null);
   setFocusUI(false);
   renderPreview();
@@ -2126,6 +2159,7 @@ function openEditModal(id) {
   document.getElementById('fShares').value    = p.shares || '';
   const r = getRequired(p);
   setRequiredFields(r);
+  updateRequiredCheckboxesByPlatform(p.platform || 'ig');
   resetImagePicker(p.image || p.image_url || null);
   setFocusUI(p.focused || false);
   renderPreview();
