@@ -146,7 +146,9 @@
     .thumb-item { width: 100%; cursor: pointer; border: 1px solid var(--border); border-radius: 10px; transition: box-shadow 0.18s, border-color 0.18s; display: flex; flex-direction: row; align-items: center; gap: 10px; background: #fff; padding: 10px 12px; min-height: 56px; }
     .thumb-item:hover { border-color: rgba(0,0,0,0.15); box-shadow: 0 2px 10px -2px rgba(0,0,0,0.10); }
     .thumb-item.focus-thumb { border-color: var(--gold); }
-    .thumb-item.completed { opacity: 0.45; }
+    .thumb-item.completed { background: #eaf5ee; border-color: rgba(45,158,107,0.35); opacity: 0.75; }
+    .thumb-item.completed .thumb-info-user, .thumb-item.completed .thumb-info-type { color: var(--green); }
+    .thumb-mini-check { font-size: 11px; font-weight: 700; color: var(--green); margin-left: 4px; }
 
     .thumb-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-weight: 600; overflow: hidden; }
     .thumb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
@@ -326,6 +328,47 @@
     #adminView .btn-danger { background: var(--red); color: #fff; }
     #adminView .btn-danger:hover { opacity: 0.85; }
     #adminView .confirm-text { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 20px; }
+
+    /* ── Comment Picker (from index_4) ── */
+    .cp-shell { width: 100%; }
+    .cp-stats-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cp-stat { font-size: 11px; color: #999; background: #f7f7f6; border-radius: 999px; padding: 4px 12px; }
+    .cp-stat span { color: #111; font-weight: 500; }
+    .cp-card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1.4rem 1.1rem; margin-bottom: 0.85rem; min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.7rem; }
+    .cp-comment-text { font-size: 14px; color: #aaa; text-align: center; line-height: 1.65; }
+    .cp-comment-text.active { color: #111; font-size: 15px; }
+    .cp-tag-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .cp-tag { font-size: 11px; letter-spacing: 0.05em; padding: 4px 11px; border-radius: 999px; border: 0.5px solid #e0e0e0; color: #aaa; background: #f7f7f6; }
+    .cp-tag.on { border-color: #bbb; color: #555; }
+    .cp-btn-row { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .cp-btn-pick { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; padding: 11px 22px; border-radius: 8px; background: #111; color: #fff; border: none; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+    .cp-btn-pick:hover { opacity: 0.82; }
+    .cp-btn-pick:active { transform: scale(0.97); }
+    .cp-btn-pick:disabled { opacity: 0.45; cursor: not-allowed; }
+    .cp-btn-copy { font-size: 13px; padding: 10px 16px; border-radius: 8px; background: transparent; color: #555; border: 0.5px solid #bbb; cursor: pointer; display: none; align-items: center; gap: 6px; transition: background 0.15s; }
+    .cp-btn-copy:hover { background: #f7f7f6; }
+    .cp-btn-copy.show { display: inline-flex; }
+    .cp-hashtag-box { margin-top: 1.2rem; border-top: 0.5px solid #e0e0e0; padding-top: 1rem; }
+    .cp-hashtag-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #aaa; margin-bottom: 0.55rem; text-align: left; }
+    .cp-hashtag-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cp-pill { font-size: 12px; padding: 5px 12px; border-radius: 999px; border: 0.5px solid #e0e0e0; color: #555; background: #f7f7f6; cursor: pointer; transition: background 0.15s, border-color 0.15s; user-select: none; }
+    .cp-pill:hover { background: #eee; border-color: #bbb; }
+    .cp-pill.copied { background: #111; color: #fff; border-color: #111; }
+    .cp-pill.mention { background: #fff; color: #111; border-color: #c8c8c8; }
+    .cp-copy-all-btn { font-size: 12px; margin-top: 0.6rem; padding: 7px 14px; border-radius: 8px; background: transparent; color: #555; border: 0.5px solid #bbb; cursor: pointer; transition: background 0.15s; }
+    .cp-copy-all-btn:hover { background: #f7f7f6; }
+    .cp-gen-bar { margin-top: 1.2rem; border-top: 0.5px solid #e0e0e0; padding-top: 1rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; text-align: left; }
+    .cp-gen-info { font-size: 11px; color: #aaa; line-height: 1.55; }
+    .cp-gen-info strong { color: #555; font-weight: 500; display: block; margin-bottom: 2px; }
+    .cp-btn-gen { font-size: 12px; padding: 8px 14px; border-radius: 8px; background: transparent; color: #555; border: 0.5px solid #bbb; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 0.15s; }
+    .cp-btn-gen:hover { background: #f7f7f6; }
+    .cp-btn-gen:disabled { opacity: 0.4; cursor: not-allowed; }
+    .cp-progress { height: 2px; background: #eee; border-radius: 1px; margin-top: 0.7rem; overflow: hidden; display: none; }
+    .cp-progress-bar { height: 100%; background: #555; border-radius: 1px; width: 0%; transition: width 0.3s ease; }
+    @keyframes cp-fadein { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .cp-animate-in { animation: cp-fadein 0.3s ease-out; }
+    #commentModal .modal-box { width: 440px; max-width: 94%; text-align: left; }
+
   </style>
 </head>
 <body>
@@ -406,7 +449,7 @@
   </div>
 </div>
 
-<div class="platform-label" id="platformLabel">Instagram</div>
+<div class="platform-label" id="platformLabel" style="display:none">All Platforms</div>
 
 <div class="main-layout">
   <div id="focusedWrap" class="focused-wrap"></div>
@@ -416,21 +459,57 @@
   <div id="thumbGrid" class="thumb-grid"></div>
 </div>
 
-<!-- Comment Modal -->
+<!-- Comment Modal (Prada SS27 Comment Picker) -->
 <div id="commentModal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeCommentModal()">
   <div class="modal-box">
     <button class="modal-close" onclick="closeCommentModal()">✕</button>
-    <div class="modal-title">Random Comment</div>
-    <div class="comment-filter-row" style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:600">
-      Pool: <span id="commentPoolCount" style="color:var(--gold);margin-left:4px">0</span>&nbsp;·&nbsp;Picked: <span id="commentPickedCount" style="color:var(--gold);margin-left:4px">0</span>
-    </div>
-    <div class="comment-pick-list" id="commentPickList"></div>
-    <div class="modal-actions">
-      <button class="btn-outline" onclick="shuffleCommentOptions()">Shuffle</button>
-      <button class="btn-primary" id="commentConfirmBtn" onclick="confirmPickedComment()" disabled style="opacity:0.45;cursor:not-allowed">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        Copy & Done
-      </button>
+    <div class="modal-title" style="text-align:center">Comment <em style="font-style:italic;color:var(--gold)">picker</em></div>
+
+    <div class="cp-shell">
+      <div class="cp-stats-row">
+        <div class="cp-stat">Pool: <span id="commentPoolCount">0</span></div>
+        <div class="cp-stat">Picked: <span id="commentPickedCount">0</span></div>
+        <div class="cp-stat">Remaining: <span id="cp-remain-count">0</span></div>
+      </div>
+
+      <div class="cp-card">
+        <p class="cp-comment-text" id="cp-result">Generate comments first, then pick</p>
+      </div>
+
+      <div class="cp-tag-row">
+        <span class="cp-tag" id="cp-tag-tone">—</span>
+        <span class="cp-tag" id="cp-tag-num">—</span>
+      </div>
+
+      <div class="cp-btn-row">
+        <button class="cp-btn-pick" id="cp-btn-pick" onclick="cpPick()" disabled>&#8635; Pick a comment</button>
+        <button class="cp-btn-copy" id="cp-copy-btn" onclick="cpCopyIt()">&#10697; <span id="cp-copy-label">Copy with hashtags</span></button>
+      </div>
+
+      <div class="cp-hashtag-box">
+        <p class="cp-hashtag-label">Instagram hashtags</p>
+        <div class="cp-hashtag-pills">
+          <span class="cp-pill mention" onclick="cpCopyPill(this, '@ppnaravit')">@ppnaravit</span>
+          <span class="cp-pill mention" onclick="cpCopyPill(this, '@prada')">@prada</span>
+          <span class="cp-pill" onclick="cpCopyPill(this, '#PradaSS27xPond')">#PradaSS27xPond</span>
+          <span class="cp-pill" onclick="cpCopyPill(this, '#ppnaravit')">#ppnaravit</span>
+          <span class="cp-pill" onclick="cpCopyPill(this, '#PradaSS27')">#PradaSS27</span>
+          <span class="cp-pill" onclick="cpCopyPill(this, '#Prada')">#Prada</span>
+          <span class="cp-pill" onclick="cpCopyPill(this, '#PondNaravit')">#PondNaravit</span>
+        </div>
+        <button class="cp-copy-all-btn" onclick="cpCopyAllHashtags()">&#10697; Copy all hashtags</button>
+      </div>
+
+      <div class="cp-gen-bar">
+        <div class="cp-gen-info">
+          <strong id="cp-gen-status">Ready to generate</strong>
+          Click to generate 500 comments. Keep clicking to grow the pool to 10,000+.
+        </div>
+        <button class="cp-btn-gen" id="cp-btn-gen" onclick="cpGenerateBatch()">&#10024; Generate 500</button>
+      </div>
+      <div class="cp-progress" id="cp-progress">
+        <div class="cp-progress-bar" id="cp-progress-bar"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -780,7 +859,11 @@ try {
   const raw = localStorage.getItem(STATES_KEY);
   if (raw) {
     const obj = JSON.parse(raw);
-    Object.keys(obj).forEach(k => postStates.set(k, { liked:false, saved:false, commented:false, shared:false, ...obj[k] }));
+    Object.keys(obj).forEach(k => {
+      const v = obj[k] || {};
+      const toCount = x => (typeof x === 'number') ? x : (x ? 1 : 0);
+      postStates.set(k, { liked:toCount(v.liked), saved:toCount(v.saved), commented:toCount(v.commented), shared:toCount(v.shared) });
+    });
   }
 } catch(e) {}
 function saveStates() {
@@ -791,14 +874,14 @@ function saveStates() {
   } catch(e) {}
 }
 function getState(id) {
-  if (!postStates.has(id)) postStates.set(id, { liked:false, saved:false, commented:false, shared:false });
+  if (!postStates.has(id)) postStates.set(id, { liked:0, saved:0, commented:0, shared:0 });
   return postStates.get(id);
 }
 function isAllDone(id) {
   const s = getState(id);
   const p = posts.find(x => x.id === id);
   const req = getRequired(p);
-  return Object.keys(req).every(k => !req[k] || s[k]);
+  return Object.keys(req).every(k => !req[k] || s[k] > 0);
 }
 
 // ─── Seen posts (per-browser "New" tracking) ─────────────────────────────────
@@ -823,6 +906,7 @@ function isNewPost(p) {
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
   if (!p) return { liked:true, commented:true, shared:true, saved:true };
+  if (p.focused) return { liked:true, commented:true, shared:true, saved:true };
   const has = ['requireLike','requireComment','requireShare','requireSave','require_like','require_comment','require_share','require_save']
     .some(k => p[k] !== undefined);
   if (!has) return { liked:true, commented:true, shared:true, saved:true };
@@ -962,9 +1046,6 @@ function getFilteredPosts() {
       return p.post_type === pageFilter || p.type === pageFilter;
     })
     .sort((a, b) => {
-      const aDone = isAllDone(a.id) ? 1 : 0;
-      const bDone = isAllDone(b.id) ? 1 : 0;
-      if (aDone !== bDone) return aDone - bDone;
       if (a.focused && !b.focused) return -1;
       if (!a.focused && b.focused) return 1;
       const aName = getPostUsername(a) || '';
@@ -996,7 +1077,7 @@ function updateProgressTracker() {
     if (!chip) return;
     const requiringPosts = filtered.filter(p => getRequired(p)[key]);
     const totalN = requiringPosts.length;
-    const doneN  = requiringPosts.reduce((n, p) => n + (getState(p.id)[key] ? 1 : 0), 0);
+    const doneN  = requiringPosts.reduce((n, p) => n + ((getState(p.id)[key] > 0) ? 1 : 0), 0);
     doneSum    += doneN;
     totalTasks += totalN;
     const allDone = totalN > 0 && doneN === totalN;
@@ -1030,23 +1111,31 @@ function cardChecklistHTML(postId, post) {
   const postUrl = post?.post_url || post?.postUrl || '';
   const req = getRequired(post);
   const allItems = [
-    { key:'liked',     icon:icons.heart,    label:'Like',    doneLabel:'Liked',     handler:`onclick="checklistAction('${postId}','liked')"` },
-    { key:'commented', icon:icons.comment,  label:'Comment', doneLabel:'Commented', handler:`onclick="checklistCommentClick('${postId}')"` },
-    { key:'shared',    icon:icons.share,    label:'Share',   doneLabel:'Shared',    handler:`onclick="checklistShareClick('${postId}')"` },
-    { key:'saved',     icon:icons.bookmark, label:'Save',    doneLabel:'Saved',     handler:`onclick="checklistAction('${postId}','saved')"` },
+    { key:'liked',     icon:icons.heart,    label:'Like',    handler:`onclick="checklistAction('${postId}','liked')"` },
+    { key:'commented', icon:icons.comment,  label:'Comment', handler:`onclick="checklistCommentClick('${postId}')"` },
+    { key:'shared',    icon:icons.share,    label:'Share',   handler:`onclick="checklistShareClick('${postId}')"` },
+    { key:'saved',     icon:icons.bookmark, label:'Save',    handler:`onclick="checklistAction('${postId}','saved')"` },
   ];
   const items = allItems.filter(i => req[i.key]);
-  const reqN = items.length || 1;
-  const doneCount = items.filter(i => s[i.key]).length;
-  const pct = Math.round((doneCount / reqN) * 100);
+  const doneCount = items.filter(i => (s[i.key]||0) > 0).length;
+  const totalEngagements = items.reduce((n,i) => n + (s[i.key]||0), 0);
+  const pct = Math.round((doneCount / (items.length || 1)) * 100);
   const allDone = doneCount === items.length && items.length > 0;
 
+  const isFocus = !!post?.focused;
   const chips = items.map(item => {
-    const done = s[item.key];
-    return `<div class="card-check-item ${done?'done':''}" id="cci-${item.key}-${postId}" ${item.handler} style="cursor:pointer" title="${done ? 'Tap to undo' : 'Tap to mark done'}">
+    const count = s[item.key] || 0;
+    const done = count > 0;
+    // Focus posts: Like & Save are one-time. Once done, lock them. Only Comment/Share can be re-engaged.
+    const locked = isFocus && done && (item.key === 'liked' || item.key === 'saved');
+    const labelText = count > 0 ? `${item.label} ×${count}` : item.label;
+    const handler = locked ? '' : item.handler;
+    const cursor = locked ? 'default' : 'pointer';
+    const title = locked ? 'Already done' : 'Tap to engage again';
+    return `<div class="card-check-item ${done?'done':''}${locked?' locked':''}" id="cci-${item.key}-${postId}" ${handler} style="cursor:${cursor}" title="${title}">
       <div class="cci-tick">${done?'✓':''}</div>
       <span class="cci-icon">${item.icon}</span>
-      <span class="cci-label">${done ? item.doneLabel : item.label}</span>
+      <span class="cci-label">${labelText}</span>
     </div>`;
   }).join('');
 
@@ -1055,8 +1144,8 @@ function cardChecklistHTML(postId, post) {
     : '';
 
   const summary = allDone
-    ? `<div class="card-checklist-summary all-done-bar"><span class="checklist-summary-text">All actions completed!</span><div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div></div>`
-    : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/${items.length} done (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
+    ? `<div class="card-checklist-summary all-done-bar"><span class="checklist-summary-text">${totalEngagements} total engagements — keep going!</span><div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:100%"></div></div></div>`
+    : `<div class="card-checklist-summary"><span class="checklist-summary-text">${doneCount}/${items.length} started (${pct}%)</span><div style="display:flex;align-items:center;gap:8px">${openLinkBtn}<div class="checklist-mini-bar"><div class="checklist-mini-fill" style="width:${pct}%"></div></div></div></div>`;
 
   return `<div id="cklwrap-${postId}"><div class="card-checklist" id="ccl-${postId}">${chips}</div>${summary}</div>`;
 }
@@ -1080,9 +1169,8 @@ function buildFocused(idx) {
 
   if (platform === 'ig') {
     const mediaLabel = post.mediaType || post.media_type ? (MEDIA_LABELS[post.mediaType||post.media_type]||post.mediaType||post.media_type) : '';
-    const allDone = isAllDone(postId);
     return `
-      <div class="ig-card${allDone?' all-done':''}" data-post-id="${postId}">
+      <div class="ig-card" data-post-id="${postId}">
         ${focusBannerHTML(post)}
         <div class="ig-card-header">
           <div class="avatar">P</div>
@@ -1199,14 +1287,19 @@ function buildFocused(idx) {
 function buildThumb(post, globalIdx) {
   if (!post) return '';
   const postId = post.id;
-  const done   = isAllDone(postId);
+  const s = getState(postId);
+  const req = getRequired(post);
+  const totalCount = Object.keys(req).reduce((n,k) => n + (req[k] ? (s[k]||0) : 0), 0);
   const isFocus = !!post.focused;
+  const reqKeys = ['liked','commented','shared','saved'].filter(k => req[k]);
+  const isCompleted = reqKeys.length > 0 && reqKeys.every(k => (s[k]||0) > 0);
   const platLabel = { ig:'IG', twitter:'X', fb:'FB', youtube:'YT', tiktok:'TT' }[post.platform||'ig'] || 'IG';
   const mediaLabel = (post.mediaType||post.media_type||'photo').toUpperCase();
   const uname = getPostUsername(post);
-  const starEl = (isFocus && !done) ? `<span class="thumb-mini-star">★</span>` : '';
-  const newEl  = (isNewPost(post) && !done) ? `<span class="thumb-mini-new">NEW</span>` : '';
-  const doneEl = done ? `<span class="thumb-mini-done">✓</span>` : '';
+  const starEl = isFocus ? `<span class="thumb-mini-star">★</span>` : '';
+  const newEl  = isNewPost(post) ? `<span class="thumb-mini-new">NEW</span>` : '';
+  const doneEl = (isFocus && totalCount > 0) ? `<span class="thumb-mini-done">✓ ×${totalCount}</span>` : '';
+  const checkEl = (!isFocus && isCompleted) ? `<span class="thumb-mini-check">✓</span>` : '';
 
   const img = post && (post.image || post.image_url);
   const avatarInner = img
@@ -1214,7 +1307,7 @@ function buildThumb(post, globalIdx) {
     : uname.charAt(0).toUpperCase();
 
   return `
-    <div class="thumb-item${isFocus?' focus-thumb':''}${done?' completed':''}"
+    <div class="thumb-item${isFocus?' focus-thumb':''}${(!isFocus && isCompleted)?' completed':''}"
          onclick="selectPost(${globalIdx})">
       <div class="thumb-avatar">${avatarInner}</div>
       <div class="thumb-text-block">
@@ -1222,7 +1315,7 @@ function buildThumb(post, globalIdx) {
         <div class="thumb-chip-row">
           <span class="thumb-info-type">${mediaLabel}</span>
           <span class="thumb-chip-spacer"></span>
-          ${starEl}${newEl}${doneEl}
+          ${starEl}${newEl}${doneEl}${checkEl}
         </div>
       </div>
 
@@ -1312,10 +1405,21 @@ function generatePosts() {
   const focusPosts = filtered.filter(p => p.focused);
   const otherPosts = filtered.filter(p => !p.focused);
 
+  // Shared completion check (used to drop done posts to the bottom)
+  const isPostCompleted = (p) => {
+    const s = getState(p.id);
+    const r = getRequired(p);
+    const keys = ['liked','commented','shared','saved'].filter(k => r[k]);
+    return keys.length > 0 && keys.every(k => (s[k]||0) > 0);
+  };
+
   if (focusPosts.length) {
+    const sortedFocus = focusPosts.slice().sort((a, b) => {
+      return (isPostCompleted(a) ? 1 : 0) - (isPostCompleted(b) ? 1 : 0);
+    });
     focusGrid.innerHTML =
       `<div class="section-row-label"><span>★ Focus Posts — Engage First!</span></div>` +
-      focusPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+      sortedFocus.map(p => buildThumb(p, filtered.indexOf(p))).join('');
   } else {
     focusGrid.innerHTML = '';
   }
@@ -1324,7 +1428,10 @@ function generatePosts() {
     const labelHTML = focusPosts.length
       ? `<div class="other-section-label"><span>Other Posts</span></div>`
       : '';
-    tg.innerHTML = labelHTML + otherPosts.map(p => buildThumb(p, filtered.indexOf(p))).join('');
+    const sortedOthers = otherPosts.slice().sort((a, b) => {
+      return (isPostCompleted(a) ? 1 : 0) - (isPostCompleted(b) ? 1 : 0);
+    });
+    tg.innerHTML = labelHTML + sortedOthers.map(p => buildThumb(p, filtered.indexOf(p))).join('');
   } else {
     tg.innerHTML = '';
   }
@@ -1356,7 +1463,9 @@ function backToGrid() {
 function setPlatform(p) {
   currentPlatform = p;
   focusedIndex = null;
-  document.getElementById('platformLabel').textContent = platformNames[p];
+  const _pl=document.getElementById('platformLabel');
+  _pl.textContent = platformNames[p];
+  _pl.style.display = (p === 'all') ? 'none' : '';
   const tabAll = document.getElementById('tabAll');
   if (tabAll) tabAll.classList.toggle('active', p === 'all');
   const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK' };
@@ -1391,74 +1500,66 @@ function syncHeaderButtons(postId) {
     saveBtn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
   }
 }
+function isFocusPost(postId) {
+  const p = posts.find(x => x.id === postId);
+  return !!(p && p.focused);
+}
 function toggleLike(postId, btn) {
   const s = getState(postId);
-  s.liked = !s.liked;
+  if (isFocusPost(postId) && (s.liked||0) > 0) { showToast('Already liked'); return; }
+  s.liked = (s.liked || 0) + 1;
   saveStates();
   syncHeaderButtons(postId);
-  if (s.liked) { spawnConfetti(); showToast('Liked!'); } else { showToast('Like removed'); }
+  spawnConfetti();
+  showToast('Liked! (×' + s.liked + ')');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 function toggleSave(postId, btn) {
   const s = getState(postId);
-  s.saved = !s.saved;
+  if (isFocusPost(postId) && (s.saved||0) > 0) { showToast('Already saved'); return; }
+  s.saved = (s.saved || 0) + 1;
   saveStates();
   syncHeaderButtons(postId);
-  showToast(s.saved ? 'Saved!' : 'Removed from saved');
+  showToast('Saved! (×' + s.saved + ')');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 
-// Generic toggle for the in-card checklist (Like & Save use this directly).
-// Tapping again when already done un-marks it — no more one-way lock.
+// Generic counter for the in-card checklist (Like & Save use this directly).
+// Tapping always adds +1 — the count shown is how many times you've engaged.
 function checklistAction(postId, key) {
   const s = getState(postId);
-  s[key] = !s[key];
+  if (isFocusPost(postId) && (key === 'liked' || key === 'saved') && (s[key]||0) > 0) {
+    showToast(key === 'liked' ? 'Already liked' : 'Already saved');
+    return;
+  }
+  s[key] = (s[key] || 0) + 1;
   saveStates();
   syncHeaderButtons(postId);
-  if (key === 'liked') { s.liked ? (spawnConfetti(), showToast('Liked!')) : showToast('Like removed'); }
-  if (key === 'saved')  { showToast(s.saved ? 'Saved!' : 'Removed from saved'); }
+  if (key === 'liked') { spawnConfetti(); showToast('Liked! (×' + s.liked + ')'); }
+  if (key === 'saved')  { showToast('Saved! (×' + s.saved + ')'); }
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 
-// Comment checklist item: tap when not done → open picker modal as before.
-// Tap again when already done → un-mark "commented" directly (no modal needed).
+// Comment checklist item: always opens the picker so you can grab a fresh comment.
 function checklistCommentClick(postId) {
-  const s = getState(postId);
-  if (s.commented) {
-    s.commented = false;
-    saveStates();
-    showToast('Comment unmarked');
-    updateProgressTracker(); refreshChecklist(postId);
-  } else {
-    openCommentModal(postId);
-  }
+  openCommentModal(postId);
 }
 
-// Share checklist item: tap when not done → copy link & mark shared (as before).
-// Tap again when already done → un-mark "shared".
+// Share checklist item: always copies the link again and bumps the counter.
 function checklistShareClick(postId) {
-  const s = getState(postId);
-  if (s.shared) {
-    s.shared = false;
-    saveStates();
-    showToast('Share unmarked');
-    updateProgressTracker(); refreshChecklist(postId);
-  } else {
-    openShareModal(postId);
-  }
+  openShareModal(postId);
 }
 
+const celebratedPosts = new Set();
 function checkAllDone(postId) {
   if (!isAllDone(postId)) return;
-  setTimeout(() => {
-    focusedIndex = null;
-    generatePosts();
-    showToast('Done! ✓ Pick the next post');
-    spawnConfetti();
-  }, 400);
+  if (celebratedPosts.has(postId)) return;
+  celebratedPosts.add(postId);
+  showToast('All required actions covered — keep engaging! ✨');
+  spawnConfetti();
 }
 
-// ─── Comment Modal ───────────────────────────────────────────────────────────
+// ─── Comment Modal (Prada SS27 Comment Picker — full port) ─────────────────
 const COMMENT_TONES = ["Praising Prada","Adoring Pond","Grateful Fan","Brand Love","Pure Pride","Emotional","Iconic Moment"];
 const COMMENT_EMOJIS = ["🖤","✨","🔥","🇹🇭","🇮🇹","💫","👑","🙌","💯","😍","🌍","🫶","🙏","💕","🤍","🖤✨","🇹🇭✨","💯🖤","👑✨","🙏🖤","🔥🖤","✨🇹🇭","🌟","💎","🫰"];
 const PRADA_PRAISE = [
@@ -1526,127 +1627,207 @@ const COMMENT_STRUCTURES = [
   () => `${_ccap(_crnd(GRATITUDE))} ${_crnd(LOCATION)}. The world now sees that ${_crnd(POND_PRAISE).toLowerCase()} {e}`,
   () => `${_crnd(PRADA_PRAISE)}, just as Pond Naravit showed us all ${_crnd(LOCATION)} {e}`,
 ];
+
 let commentPool = [];
 let commentUsed = new Set();
 let commentPickCount = 0;
+let cpSelected = null;
+let cpBatchNum = 0;
+let cpGenerating = false;
 
-function ensureCommentPool(min = 200){
+const CP_HASHTAGS = '@ppnaravit @prada #PradaSS27xPond #ppnaravit #PradaSS27 #Prada #PondNaravit';
+
+function cpUpdateStats(){
+  const pc = document.getElementById('commentPoolCount');
+  const pk = document.getElementById('commentPickedCount');
+  const rm = document.getElementById('cp-remain-count');
+  if (pc) pc.textContent = commentPool.length.toLocaleString();
+  if (pk) pk.textContent = commentPickCount.toLocaleString();
+  if (rm) rm.textContent = (commentPool.length - commentUsed.size).toLocaleString();
+}
+
+function cpGenerateBatch(){
+  if (cpGenerating) return;
+  cpGenerating = true;
+  cpBatchNum++;
+
+  const btn = document.getElementById('cp-btn-gen');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const prog = document.getElementById('cp-progress');
+  const bar = document.getElementById('cp-progress-bar');
+  prog.style.display = 'block';
+  bar.style.width = '5%';
+  document.getElementById('cp-gen-status').textContent = 'Generating batch ' + cpBatchNum + '…';
+
   const seen = new Set(commentPool.map(c => c.text));
+  const batch = [];
   let attempts = 0;
-  while (commentPool.length < min && attempts < min * 30){
-    attempts++;
-    const fn = _crnd(COMMENT_STRUCTURES);
-    let text = fn().replace('{e}', Math.random() > 0.3 ? _crnd(COMMENT_EMOJIS) : '').trim();
-    text = text.replace(/\s+/g,' ');
-    if (!seen.has(text)){ seen.add(text); commentPool.push({ text, tone: _crnd(COMMENT_TONES) }); }
+  const target = 500;
+
+  function step(){
+    const chunk = 50;
+    for (let i = 0; i < chunk && batch.length < target; i++){
+      attempts++;
+      const fn = _crnd(COMMENT_STRUCTURES);
+      let text = fn().replace('{e}', '').trim();
+      text = text.replace(/\s+/g, ' ');
+      if (!seen.has(text)){ seen.add(text); batch.push({ text, tone: _crnd(COMMENT_TONES) }); }
+      if (attempts > target * 20) break;
+    }
+    const pct = Math.min(95, Math.round((batch.length / target) * 95));
+    bar.style.width = pct + '%';
+
+    if (batch.length < target && attempts <= target * 20){
+      setTimeout(step, 0);
+    } else {
+      commentPool = commentPool.concat(batch);
+      bar.style.width = '100%';
+      setTimeout(() => { prog.style.display = 'none'; bar.style.width = '0%'; }, 500);
+      cpUpdateStats();
+      document.getElementById('cp-btn-pick').disabled = false;
+      document.getElementById('cp-gen-status').textContent = 'Batch ' + cpBatchNum + ' done — ' + batch.length + ' comments added';
+      btn.disabled = false;
+      btn.textContent = '✨ Generate 500 more';
+      cpGenerating = false;
+    }
   }
-  updateCommentPoolStats();
-}
-function updateCommentPoolStats(){
-  const a = document.getElementById('commentPoolCount');
-  const b = document.getElementById('commentPickedCount');
-  if (a) a.textContent = commentPool.length.toLocaleString();
-  if (b) b.textContent = commentPickCount.toLocaleString();
+  setTimeout(step, 50);
 }
 
-function getCurrentFocusedPostId() {
+function cpPick(){
+  if (!commentPool.length) return;
+  if (commentUsed.size >= commentPool.length) commentUsed.clear();
+  let idx;
+  do { idx = Math.floor(Math.random() * commentPool.length); } while (commentUsed.has(idx));
+  commentUsed.add(idx);
+  cpSelected = commentPool[idx];
+  commentPickCount++;
+
+  const el = document.getElementById('cp-result');
+  el.classList.remove('cp-animate-in');
+  void el.offsetWidth;
+  el.textContent = cpSelected.text;
+  el.className = 'cp-comment-text active cp-animate-in';
+  document.getElementById('cp-tag-tone').textContent = cpSelected.tone;
+  document.getElementById('cp-tag-tone').className = 'cp-tag on';
+  document.getElementById('cp-tag-num').textContent = '#' + commentPickCount;
+  document.getElementById('cp-tag-num').className = 'cp-tag on';
+  document.getElementById('cp-copy-btn').classList.add('show');
+  document.getElementById('cp-copy-label').textContent = 'Copy with hashtags';
+  cpUpdateStats();
+}
+
+// Clipboard helper (works on mobile / non-secure contexts)
+function cpLegacyCopy(text){
+  return new Promise(function(resolve){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly','');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:2em;height:2em;opacity:0;pointer-events:none';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    resolve();
+  });
+}
+function cpCopyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).catch(function(){ return cpLegacyCopy(text); });
+  }
+  return cpLegacyCopy(text);
+}
+
+function cpCopyIt(){
+  if (!cpSelected) return;
+  var full = cpSelected.text + '\n\n' + CP_HASHTAGS;
+  cpCopyText(full).then(function(){
+    document.getElementById('cp-copy-label').textContent = 'Copied!';
+    setTimeout(function(){
+      document.getElementById('cp-copy-label').textContent = 'Copy with hashtags';
+    }, 1800);
+    // bump tracker comment count for the current post
+    if (typeof currentPostId !== 'undefined' && currentPostId){
+      try {
+        const s = getState(currentPostId);
+        s.commented = (s.commented || 0) + 1;
+        saveStates();
+        updateProgressTracker();
+        refreshChecklist(currentPostId);
+        checkAllDone(currentPostId);
+      } catch(e){}
+    }
+    if (typeof showToast === 'function') showToast('Copied! Paste it into the app');
+  });
+}
+
+function cpCopyPill(el, tag){
+  cpCopyText(tag).then(function(){
+    el.classList.add('copied');
+    var orig = el.textContent;
+    el.textContent = '✓ Copied';
+    setTimeout(function(){ el.textContent = orig; el.classList.remove('copied'); }, 1500);
+  });
+}
+function cpCopyAllHashtags(){
+  cpCopyText(CP_HASHTAGS).then(function(){
+    var btn = document.querySelector('#commentModal .cp-copy-all-btn');
+    if (!btn) return;
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(function(){ btn.textContent = orig; }, 1800);
+  });
+}
+
+function getCurrentFocusedPostId(){
   const filtered = getFilteredPosts();
   const post = filtered[focusedIndex] || null;
   return post ? post.id : null;
 }
-function chipOpenComment() {
+function chipOpenComment(){
   const id = getCurrentFocusedPostId();
-  if (!id) { showToast('No post selected'); return; }
+  if (!id){ showToast('No post selected'); return; }
   openCommentModal(id);
 }
-function chipOpenShare() {
+function chipOpenShare(){
   const id = getCurrentFocusedPostId();
-  if (!id) { showToast('No post selected'); return; }
+  if (!id){ showToast('No post selected'); return; }
   openShareModal(id);
 }
-function lockScroll() { document.body.style.overflow = 'hidden'; }
-function unlockScroll() { document.body.style.overflow = ''; }
+function lockScroll(){ document.body.style.overflow = 'hidden'; }
+function unlockScroll(){ document.body.style.overflow = ''; }
 
-function openCommentModal(postId) {
+function openCommentModal(postId){
   currentPostId = postId;
-  ensureCommentPool(200);
-  shuffleCommentOptions();
   document.getElementById('commentModal').style.display = 'flex';
+  cpUpdateStats();
+  // auto-generate first batch if pool is empty
+  if (commentPool.length === 0) cpGenerateBatch();
   lockScroll();
 }
-function closeCommentModal() {
+function closeCommentModal(){
   document.getElementById('commentModal').style.display = 'none';
   currentPostId = null;
   unlockScroll();
 }
-function setCommentStyle() { shuffleCommentOptions(); }
 
-let currentPickOptions = [];
-function shuffleCommentOptions() {
-  ensureCommentPool(200);
-  if (commentUsed.size >= commentPool.length) commentUsed.clear();
-  const picks = [];
-  const localUsed = new Set();
-  let guard = 0;
-  while (picks.length < 3 && guard < 500 && (commentUsed.size + localUsed.size) < commentPool.length){
-    guard++;
-    const idx = Math.floor(Math.random() * commentPool.length);
-    if (commentUsed.has(idx) || localUsed.has(idx)) continue;
-    localUsed.add(idx);
-    picks.push({ idx, ...commentPool[idx] });
-  }
-  currentPickOptions = picks;
-  currentComment = '';
-  renderCommentPicks();
-  const btn = document.getElementById('commentConfirmBtn');
-  if (btn) { btn.disabled = true; btn.style.opacity = '0.45'; btn.style.cursor = 'not-allowed'; }
-}
-function renderCommentPicks() {
-  const wrap = document.getElementById('commentPickList');
-  if (!wrap) return;
-  if (!currentPickOptions.length) {
-    wrap.innerHTML = '<div class="comment-box">No comments available.</div>';
-    return;
-  }
-  wrap.innerHTML = '<div class="comment-pick-hint">Pick 1 comment · Pool ' + commentPool.length.toLocaleString() + '</div>' +
-    currentPickOptions.map((c, i) =>
-      `<div class="comment-pick" data-idx="${i}" onclick="pickComment(${i})">${c.text}<div style="margin-top:6px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${c.tone}</div></div>`
-    ).join('');
-}
-function pickComment(i) {
-  const opt = currentPickOptions[i];
-  if (!opt) return;
-  currentComment = opt.text;
-  commentUsed.add(opt.idx);
-  document.querySelectorAll('#commentPickList .comment-pick').forEach((el, idx) => {
-    el.classList.toggle('picked', idx === i);
-  });
-  const btn = document.getElementById('commentConfirmBtn');
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
-}
-function randomizeComment() { shuffleCommentOptions(); }
-function copyAndClose() { confirmPickedComment(); }
-function confirmPickedComment() {
-  if (!currentComment) { showToast('Please select a comment first'); return; }
-  const tagMap = { ig:' #Prada #MilanFashionWeek #SS27 #PondNaravit', twitter:' #Prada #MFW', fb:' #Prada #MilanFashionWeek', youtube:'', tiktok:' #prada #ss27 #milanfashionweek' };
-  const full = currentComment + (tagMap[currentPlatform] || '');
-  if (navigator.clipboard) navigator.clipboard.writeText(full).catch(() => {});
-  if (currentPostId) {
-    getState(currentPostId).commented = true;
-    saveStates();
-    updateProgressTracker();
-    refreshChecklist(currentPostId);
-    checkAllDone(currentPostId);
-  }
-  showToast('Copied! Paste it into the app');
-  closeCommentModal();
-}
+// Back-compat shims for older callsites
+function shuffleCommentOptions(){ cpPick(); }
+function confirmPickedComment(){ cpCopyIt(); closeCommentModal(); }
+function pickComment(){ cpPick(); }
+function randomizeComment(){ cpPick(); }
+function copyAndClose(){ confirmPickedComment(); }
+function setCommentStyle(){ /* no-op */ }
+function ensureCommentPool(){ if (commentPool.length === 0) cpGenerateBatch(); }
 
 // ─── Share ────────────────────────────────────────────────────────────────────
 function openShareModal(postId) {
   if (navigator.clipboard) navigator.clipboard.writeText(location.href).catch(() => {});
   if (postId) {
-    getState(postId).shared = true;
+    const s = getState(postId);
+    s.shared = (s.shared || 0) + 1;
     saveStates();
     updateProgressTracker();
     refreshChecklist(postId);
