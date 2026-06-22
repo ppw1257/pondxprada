@@ -98,6 +98,8 @@
     .ig-action-btn.liked svg { fill: var(--red); stroke: var(--red); color: var(--red); }
     .ig-action-btn.liked { color: var(--red); }
     .ig-action-btn.saved { color: var(--black); }
+    .ig-action-btn.reposted { color: var(--green); }
+    .ig-action-btn.reposted svg { stroke: var(--green); }
     .ig-save { margin-left: auto; }
     .ig-likes { padding: 0 12px 4px; font-size: 12px; font-weight: 600; }
     .ig-caption { padding: 0 12px 12px; font-size: 12px; color: var(--black); line-height: 1.5; }
@@ -468,6 +470,11 @@
         <span class="chip-label">Save</span>
         <div class="chip-count" id="chipCount-saved">0<span class="chip-count-total">/0</span></div>
       </div>
+      <div class="action-chip" id="chip-reposted">
+        <span class="chip-icon" id="chipIconReposted"></span>
+        <span class="chip-label">Repost</span>
+        <div class="chip-count" id="chipCount-reposted">0<span class="chip-count-total">/0</span></div>
+      </div>
     </div>
 
   </div>
@@ -507,7 +514,7 @@
 
       <div class="cp-btn-row">
         <button class="cp-btn-pick" id="cp-btn-pick" onclick="cpPick()" disabled>&#8635; Pick a comment</button>
-        <button class="cp-btn-copy" id="cp-copy-btn" onclick="cpCopyIt()">&#10697; <span id="cp-copy-label">Copy with hashtags</span></button>
+        <button class="cp-btn-copy" id="cp-copy-btn" onclick="cpCopyIt()">&#10697; <span id="cp-copy-label">Copy comment</span></button>
       </div>
 
       <div class="cp-hashtag-box">
@@ -707,6 +714,7 @@
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqComment" checked> Comment</label>
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqShare" checked> Share</label>
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqSave" checked> Save</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="fReqRepost" checked> Repost</label>
       </div>
     </div>
 
@@ -802,6 +810,7 @@
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqComment" checked> Comment</label>
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqShare" checked> Share</label>
         <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqSave" checked> Save</label>
+        <label style="display:flex;align-items:center;gap:8px;background:var(--offwhite);border:1px solid var(--border);border-radius:3px;padding:10px 12px;font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="bReqRepost" checked> Repost</label>
       </div>
     </div>
 
@@ -886,7 +895,7 @@ try {
     Object.keys(obj).forEach(k => {
       const v = obj[k] || {};
       const toCount = x => (typeof x === 'number') ? x : (x ? 1 : 0);
-      postStates.set(k, { liked:toCount(v.liked), saved:toCount(v.saved), commented:toCount(v.commented), shared:toCount(v.shared) });
+      postStates.set(k, { liked:toCount(v.liked), saved:toCount(v.saved), commented:toCount(v.commented), shared:toCount(v.shared), reposted:toCount(v.reposted) });
     });
   }
 } catch(e) {}
@@ -898,7 +907,7 @@ function saveStates() {
   } catch(e) {}
 }
 function getState(id) {
-  if (!postStates.has(id)) postStates.set(id, { liked:0, saved:0, commented:0, shared:0 });
+  if (!postStates.has(id)) postStates.set(id, { liked:0, saved:0, commented:0, shared:0, reposted:0 });
   return postStates.get(id);
 }
 function isAllDone(id) {
@@ -929,21 +938,22 @@ function isNewPost(p) {
 
 function _truthy(v) { return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
 function getRequired(p) {
-  if (!p) return { liked:true, commented:true, shared:true, saved:true };
-  if (p.focused) return { liked:true, commented:true, shared:true, saved:true };
-  const has = ['requireLike','requireComment','requireShare','requireSave','require_like','require_comment','require_share','require_save']
+  if (!p) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
+  if (p.focused) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
+  const has = ['requireLike','requireComment','requireShare','requireSave','requireRepost','require_like','require_comment','require_share','require_save','require_repost']
     .some(k => p[k] !== undefined);
-  if (!has) return { liked:true, commented:true, shared:true, saved:true };
+  if (!has) return { liked:true, commented:true, shared:true, saved:true, reposted:true };
   return {
     liked:    _truthy(p.requireLike    ?? p.require_like),
     commented:_truthy(p.requireComment ?? p.require_comment),
     shared:   _truthy(p.requireShare   ?? p.require_share),
     saved:    _truthy(p.requireSave    ?? p.require_save),
+    reposted: _truthy(p.requireRepost  ?? p.require_repost),
   };
 }
 function requiredCount(p) {
   const r = getRequired(p);
-  return (r.liked?1:0)+(r.commented?1:0)+(r.shared?1:0)+(r.saved?1:0);
+  return (r.liked?1:0)+(r.commented?1:0)+(r.shared?1:0)+(r.saved?1:0)+(r.reposted?1:0);
 }
 function setRequiredFields(required) {
   const fields = [
@@ -951,6 +961,7 @@ function setRequiredFields(required) {
     ['fReqComment', 'commented'],
     ['fReqShare', 'shared'],
     ['fReqSave', 'saved'],
+    ['fReqRepost', 'reposted'],
   ];
   fields.forEach(([id, key]) => {
     const el = document.getElementById(id);
@@ -1014,6 +1025,7 @@ async function loadFromScript() {
         requireComment: p.requireComment === 'TRUE' || p.requireComment === true,
         requireShare:   p.requireShare   === 'TRUE' || p.requireShare   === true,
         requireSave:    p.requireSave    === 'TRUE' || p.requireSave    === true,
+        requireRepost:  p.requireRepost  === 'TRUE' || p.requireRepost  === true,
         goalLikes:    parseInt(p.goalLikes)    || 0,
         goalComments: parseInt(p.goalComments) || 0,
         goalShares:   parseInt(p.goalShares)   || 0,
@@ -1092,6 +1104,7 @@ function updateProgressTracker() {
     { key:'commented', chipId:'chip-commented', countId:'chipCount-commented' },
     { key:'shared',    chipId:'chip-shared',    countId:'chipCount-shared' },
     { key:'saved',     chipId:'chip-saved',     countId:'chipCount-saved' },
+    { key:'reposted',  chipId:'chip-reposted',  countId:'chipCount-reposted' },
   ];
 
   let doneSum = 0;
@@ -1127,7 +1140,7 @@ function getMediaContent(post) {
 }
 
 function focusBannerHTML(post) {
-  return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share & Save!</div>' : '';
+  return post?.focused ? '<div class="focus-banner">Focus Post — Like, Comment, Share, Save & Repost!</div>' : '';
 }
 
 function cardChecklistHTML(postId, post) {
@@ -1139,6 +1152,7 @@ function cardChecklistHTML(postId, post) {
     { key:'commented', icon:icons.comment,  label:'Comment', handler:`onclick="checklistCommentClick('${postId}')"` },
     { key:'shared',    icon:icons.share,    label:'Share',   handler:`onclick="checklistShareClick('${postId}')"` },
     { key:'saved',     icon:icons.bookmark, label:'Save',    handler:`onclick="checklistAction('${postId}','saved')"` },
+    { key:'reposted',  icon:icons.repeat,   label:'Repost',  handler:`onclick="checklistAction('${postId}','reposted')"` },
   ];
   const items = allItems.filter(i => req[i.key]);
   const doneCount = items.filter(i => (s[i.key]||0) > 0).length;
@@ -1151,7 +1165,7 @@ function cardChecklistHTML(postId, post) {
     const count = s[item.key] || 0;
     const done = count > 0;
     // Focus posts: Like & Save are one-time. Once done, lock them. Only Comment/Share can be re-engaged.
-    const locked = isFocus && done && (item.key === 'liked' || item.key === 'saved');
+    const locked = isFocus && done && (item.key === 'liked' || item.key === 'saved' || item.key === 'reposted');
     const labelText = count > 0 ? `${item.label} ×${count}` : item.label;
     const handler = locked ? '' : item.handler;
     const cursor = locked ? 'default' : 'pointer';
@@ -1222,6 +1236,9 @@ function buildFocused(idx) {
           <button class="ig-action-btn" onclick="openShareModal('${postId}')"   title="Share">${icons.share}</button>
           <button class="ig-action-btn ig-save ${state.saved?'saved':''}" id="saveBtn-${postId}" onclick="toggleSave('${postId}',this)" title="Save">
             ${state.saved ? icons.bookmarkFilled : icons.bookmark}
+          </button>
+          <button class="ig-action-btn ig-repost ${state.reposted?'reposted':''}" id="repostBtn-${postId}" onclick="toggleRepost('${postId}',this)" title="Repost">
+            ${icons.repeat}
           </button>
         </div>
         ${post.likes ? `<div class="ig-likes">${formatNum(post.likes)} likes</div>` : ''}
@@ -1324,7 +1341,7 @@ function buildThumb(post, globalIdx) {
   const req = getRequired(post);
   const totalCount = Object.keys(req).reduce((n,k) => n + (req[k] ? (s[k]||0) : 0), 0);
   const isFocus = !!post.focused;
-  const reqKeys = ['liked','commented','shared','saved'].filter(k => req[k]);
+  const reqKeys = ['liked','commented','shared','saved','reposted'].filter(k => req[k]);
   const isCompleted = reqKeys.length > 0 && reqKeys.every(k => (s[k]||0) > 0);
   const pfMap = { ig:['IG','pf-ig'], twitter:['X','pf-x'], fb:['FB','pf-fb'], youtube:['YT','pf-yt'], tiktok:['TT','pf-tt'] };
   const [platLabel, platClass] = pfMap[post.platform||'ig'] || pfMap.ig;
@@ -1443,7 +1460,7 @@ function generatePosts() {
   const isPostCompleted = (p) => {
     const s = getState(p.id);
     const r = getRequired(p);
-    const keys = ['liked','commented','shared','saved'].filter(k => r[k]);
+    const keys = ['liked','commented','shared','saved','reposted'].filter(k => r[k]);
     return keys.length > 0 && keys.every(k => (s[k]||0) > 0);
   };
 
@@ -1533,6 +1550,10 @@ function syncHeaderButtons(postId) {
     saveBtn.classList.toggle('saved', !!s.saved);
     saveBtn.innerHTML = s.saved ? icons.bookmarkFilled : icons.bookmark;
   }
+  const repostBtn = document.getElementById('repostBtn-' + postId);
+  if (repostBtn) {
+    repostBtn.classList.toggle('reposted', !!s.reposted);
+  }
 }
 function isFocusPost(postId) {
   const p = posts.find(x => x.id === postId);
@@ -1557,13 +1578,22 @@ function toggleSave(postId, btn) {
   showToast('Saved! (×' + s.saved + ')');
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
+function toggleRepost(postId, btn) {
+  const s = getState(postId);
+  if (isFocusPost(postId) && (s.reposted||0) > 0) { showToast('Already reposted'); return; }
+  s.reposted = (s.reposted || 0) + 1;
+  saveStates();
+  syncHeaderButtons(postId);
+  showToast('Reposted! (×' + s.reposted + ')');
+  updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
+}
 
 // Generic counter for the in-card checklist (Like & Save use this directly).
 // Tapping always adds +1 — the count shown is how many times you've engaged.
 function checklistAction(postId, key) {
   const s = getState(postId);
-  if (isFocusPost(postId) && (key === 'liked' || key === 'saved') && (s[key]||0) > 0) {
-    showToast(key === 'liked' ? 'Already liked' : 'Already saved');
+  if (isFocusPost(postId) && (key === 'liked' || key === 'saved' || key === 'reposted') && (s[key]||0) > 0) {
+    showToast(key === 'liked' ? 'Already liked' : (key === 'saved' ? 'Already saved' : 'Already reposted'));
     return;
   }
   s[key] = (s[key] || 0) + 1;
@@ -1571,6 +1601,7 @@ function checklistAction(postId, key) {
   syncHeaderButtons(postId);
   if (key === 'liked') { spawnConfetti(); showToast('Liked! (×' + s.liked + ')'); }
   if (key === 'saved')  { showToast('Saved! (×' + s.saved + ')'); }
+  if (key === 'reposted') { showToast('Reposted! (×' + s.reposted + ')'); }
   updateProgressTracker(); refreshChecklist(postId); checkAllDone(postId);
 }
 
@@ -1749,7 +1780,7 @@ function cpPick(){
   document.getElementById('cp-tag-num').textContent = '#' + commentPickCount;
   document.getElementById('cp-tag-num').className = 'cp-tag on';
   document.getElementById('cp-copy-btn').classList.add('show');
-  document.getElementById('cp-copy-label').textContent = 'Copy with hashtags';
+  document.getElementById('cp-copy-label').textContent = 'Copy comment';
   cpUpdateStats();
 }
 
@@ -1776,11 +1807,11 @@ function cpCopyText(text){
 
 function cpCopyIt(){
   if (!cpSelected) return;
-  var full = cpSelected.text + '\n\n' + CP_HASHTAGS;
+  var full = cpSelected.text;
   cpCopyText(full).then(function(){
     document.getElementById('cp-copy-label').textContent = 'Copied!';
     setTimeout(function(){
-      document.getElementById('cp-copy-label').textContent = 'Copy with hashtags';
+      document.getElementById('cp-copy-label').textContent = 'Copy comment';
     }, 1800);
     // bump tracker comment count for the current post
     if (typeof currentPostId !== 'undefined' && currentPostId){
@@ -1963,7 +1994,7 @@ function renderPosts() {
             ${typeLabel  ? `<span class="tag tag-type">${typeLabel}</span>` : ''}
             ${p.focused  ? `<span class="focus-badge">Focus</span>` : ''}
           </div>
-          ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
+          ${(() => { const r = getRequired(p); const labels = [r.liked&&'Like',r.commented&&'Comment',r.shared&&'Share',r.saved&&'Save',r.reposted&&'Repost'].filter(Boolean); return `<div style="display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 3px">${labels.length ? labels.map(l => `<span style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:40px;background:#fffbf0;color:var(--gold);border:1px solid rgba(184,150,90,0.3);font-weight:600">${l}</span>`).join('') : '<span style="font-size:10px;color:var(--muted);font-style:italic">No required tasks</span>'}</div>`; })()}
           ${(() => { const parts = []; if (p.likes) parts.push(`${formatNum(p.likes)} likes`); if (p.comments) parts.push(`${formatNum(p.comments)} comments`); if (p.shares) parts.push(`${formatNum(p.shares)} shares`); if (p.post_url) parts.push(`<a href="${p.post_url}" target="_blank" rel="noopener" style="color:var(--gold)">View post</a>`); return parts.length ? `<div class="post-time">${parts.join(' · ')}</div>` : ''; })()}
         </div>
         <div class="post-actions">
@@ -2072,7 +2103,7 @@ function openAddModal() {
   document.getElementById('fLikes').value = '';
   document.getElementById('fComments').value = '';
   document.getElementById('fShares').value = '';
-  setRequiredFields({ liked:true, commented:true, shared:true, saved:true });
+  setRequiredFields({ liked:true, commented:true, shared:true, saved:true, reposted:true });
   resetImagePicker(null);
   setFocusUI(false);
   renderPreview();
@@ -2112,6 +2143,7 @@ function openBulkAddModal() {
   document.getElementById('bReqComment').checked = true;
   document.getElementById('bReqShare').checked   = true;
   document.getElementById('bReqSave').checked    = true;
+  document.getElementById('bReqRepost').checked  = true;
   document.getElementById('bulkAddModal').style.display = 'flex';
   lockScroll();
 }
@@ -2130,6 +2162,7 @@ function submitBulkAdd() {
     requireComment: getRequiredField('bReqComment'),
     requireShare:   getRequiredField('bReqShare'),
     requireSave:    getRequiredField('bReqSave'),
+    requireRepost:  getRequiredField('bReqRepost'),
   };
 
   const now = new Date().toISOString();
@@ -2190,6 +2223,7 @@ function savePost() {
     requireComment: getRequiredField('fReqComment'),
     requireShare:   getRequiredField('fReqShare'),
     requireSave:    getRequiredField('fReqSave'),
+    requireRepost:  getRequiredField('fReqRepost'),
     image:          selectedImageData || null,
     image_url:      selectedImageData || null,
     focused:        isFocused,
