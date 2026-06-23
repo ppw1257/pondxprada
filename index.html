@@ -281,6 +281,55 @@
     .back-to-grid { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 20px; font-family: var(--font); font-size: 11px; font-weight: 500; cursor: pointer; margin-bottom: 14px; transition: all 0.15s; }
     .back-to-grid:hover { border-color: var(--black); color: var(--black); }
 
+    /* ── Article View ── */
+    #articleView { display: none; padding: 0 12px 48px; }
+    @media (min-width: 600px)  { #articleView { padding: 0 20px 56px; } }
+    @media (min-width: 900px)  { #articleView { padding: 0 24px 64px; } }
+    .article-grid { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 16px 0; }
+    @media (min-width: 600px)  { .article-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px)  { .article-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1200px) { .article-grid { grid-template-columns: repeat(4, 1fr); } }
+    .article-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.18s, border-color 0.18s, transform 0.15s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .article-card:hover {
+      border-color: rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px -4px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .article-card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #eee;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+    .article-card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .article-card-body { padding: 12px 14px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .article-card-outlet {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 5px;
+    }
+    .article-card-title { font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--black); flex: 1; }
+    .article-card-meta { font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 4px; }
+    .article-card-link-icon { margin-left: auto; font-size: 12px; color: var(--muted); }
+    .article-empty { text-align: center; padding: 64px 20px; color: var(--muted); }
+    .article-empty-icon { font-size: 36px; opacity: 0.2; margin-bottom: 12px; }
+    .article-empty-text { font-size: 13px; font-weight: 500; }
+    .article-empty-sub { font-size: 12px; margin-top: 4px; }
+
     /* ── ig-card all-done state ── */
     .ig-card.all-done .media-frame { opacity: 0.4; filter: grayscale(40%); }
     .ig-card.all-done::after { content: 'Completed!'; display: block; text-align: center; font-size: 11px; font-weight: 600; color: var(--green); padding: 7px; background: #f2fbf6; letter-spacing: 0.04em; }
@@ -415,6 +464,7 @@
   <button class="tab-btn"        id="tabFB"      onclick="setPlatform('fb')">FB</button>
   <button class="tab-btn"        id="tabYT"      onclick="setPlatform('youtube')">YT</button>
   <button class="tab-btn"        id="tabTK"      onclick="setPlatform('tiktok')">TikTok</button>
+  <button class="tab-btn"        id="tabArticle" onclick="setPlatform('article')">Articles</button>
 </div>
 
 <div class="filter-bar">
@@ -482,12 +532,16 @@
 
 <div class="platform-label" id="platformLabel" style="display:none">All Platforms</div>
 
-<div class="main-layout">
+<div class="main-layout" id="mainLayout">
   <div id="focusedWrap" class="focused-wrap"></div>
   <div class="editorial-divider" id="moreDivider" style="display:none"><span>More posts</span></div>
   <div class="grid-label" id="gridLabel" style="display:none">Tap to view</div>
   <div id="focusGrid" class="thumb-grid"></div>
   <div id="thumbGrid" class="thumb-grid"></div>
+</div>
+
+<div id="articleView">
+  <div id="articleGrid" class="article-grid"></div>
 </div>
 
 <!-- Comment Modal (Prada SS27 Comment Picker) -->
@@ -635,6 +689,7 @@
         <option value="fb">Facebook</option>
         <option value="youtube">YouTube</option>
         <option value="tiktok">TikTok</option>
+        <option value="article">Articles</option>
       </select>
     </div>
 
@@ -768,6 +823,7 @@
         <option value="fb">Facebook</option>
         <option value="youtube">YouTube</option>
         <option value="tiktok">TikTok</option>
+        <option value="article">Articles</option>
       </select>
     </div>
 
@@ -850,9 +906,9 @@ function formatNum(n) {
   return n.toString();
 }
 
-const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const platformNames = { all:'All Platforms', ig:'Instagram', twitter:'Twitter / X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok', article:'Articles' };
 const MEDIA_LABELS  = { photo:'Photo', video:'Video', reel:'Reel', story:'Story', carousel:'Carousel', live:'Live', short:'Short', article:'Article' };
-const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok' };
+const PLATFORMS     = { ig:'Instagram', twitter:'Twitter/X', fb:'Facebook', youtube:'YouTube', tiktok:'TikTok', article:'Articles' };
 
 // ─── SVG icon set ───────────────────────────────────────────────────────────
 const icons = {
@@ -1426,7 +1482,56 @@ function updateFilterCounts() {
   });
 }
 
+function generateArticleView() {
+  const articlePosts = posts.filter(p => p.platform === 'article');
+  const grid = document.getElementById('articleGrid');
+  if (!grid) return;
+  if (!articlePosts.length) {
+    grid.innerHTML = `<div class="article-empty" style="grid-column:1/-1">
+      <div class="article-empty-icon">📰</div>
+      <div class="article-empty-text">No articles yet</div>
+      <div class="article-empty-sub">Articles added by admin will appear here</div>
+    </div>`;
+    return;
+  }
+  const sorted = [...articlePosts].sort((a, b) =>
+    new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0)
+  );
+  grid.innerHTML = sorted.map(p => {
+    const title    = p.label || p.username || 'Article';
+    const outlet   = p.username || '';
+    const url      = p.post_url || '#';
+    const imgSrc   = p.image || p.image_url || '';
+    const thumb    = imgSrc
+      ? `<img src="${imgSrc}" onerror="this.parentElement.innerHTML='📰'">`
+      : `📰`;
+    const timeStr  = p.time ? new Date(p.time).toLocaleDateString('th-TH', { year:'numeric', month:'short', day:'numeric' }) : '';
+    return `
+      <a class="article-card" href="${url}" target="_blank" rel="noopener noreferrer">
+        <div class="article-card-thumb">${thumb}</div>
+        <div class="article-card-body">
+          ${outlet ? `<div class="article-card-outlet">📝 ${outlet}</div>` : ''}
+          <div class="article-card-title">${title}</div>
+          <div class="article-card-meta">
+            ${timeStr ? `<span>${timeStr}</span>` : ''}
+            <span class="article-card-link-icon">↗</span>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+}
+
 function generatePosts() {
+  // Article tab: show article grid instead
+  if (currentPlatform === 'article') {
+    document.getElementById('mainLayout').style.display  = 'none';
+    document.getElementById('articleView').style.display = 'block';
+    generateArticleView();
+    return;
+  }
+  document.getElementById('mainLayout').style.display  = '';
+  document.getElementById('articleView').style.display = 'none';
+
   const filtered = getFilteredPosts();
   updateFilterCounts();
 
@@ -1581,8 +1686,13 @@ function setPlatform(p) {
   _pl.style.display = (p === 'all') ? 'none' : '';
   const tabAll = document.getElementById('tabAll');
   if (tabAll) tabAll.classList.toggle('active', p === 'all');
-  const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK' };
-  ['IG','TW','FB','YT','TK'].forEach(k => document.getElementById('tab'+k).classList.toggle('active', tabMap[p] === k));
+  const tabMap = { ig:'IG', twitter:'TW', fb:'FB', youtube:'YT', tiktok:'TK', article:'Article' };
+  ['IG','TW','FB','YT','TK','Article'].forEach(k => { const el = document.getElementById('tab'+k); if(el) el.classList.toggle('active', tabMap[p] === k); });
+  const isArticle = (p === 'article');
+  const filterBar = document.querySelector('.filter-bar');
+  const progWrap  = document.querySelector('.progress-banner') && document.querySelector('.progress-banner').closest('div');
+  if (filterBar) filterBar.style.display = isArticle ? 'none' : '';
+  if (progWrap)  progWrap.style.display  = isArticle ? 'none' : '';
   generatePosts();
 }
 
@@ -1996,6 +2106,7 @@ const ADMIN_PLATFORM_TABS = [
   { key:'fb',      label:'Facebook' },
   { key:'youtube', label:'YouTube' },
   { key:'tiktok',  label:'TikTok' },
+  { key:'article', label:'Articles' },
 ];
 
 function setAdminPlatformFilter(p) {
